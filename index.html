@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Silje & Kjeld</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Cinzel:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #1E1812;
+      min-height: 100vh;
+      font-family: 'Cinzel', serif;
+      overflow: hidden;
+    }
+
+    #pw-screen {
+      position: fixed;
+      inset: 0;
+      background: #1E1812;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .logo {
+      width: 150px;
+      max-width: 70vw;
+      height: auto;
+    }
+
+    #pw-input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #B08D57;
+      padding: 0.8rem 0;
+      width: 220px;
+      text-align: center;
+      color: #D4B896;
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.25em;
+      outline: none;
+    }
+
+    #pw-input::placeholder {
+      color: #5a4a38;
+    }
+
+    #pw-enter {
+      background: transparent;
+      border: 1px solid #B08D57;
+      color: #B08D57;
+      padding: 0.9rem 2.2rem;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      transition: all 0.25s ease;
+    }
+
+    #pw-enter:hover {
+      background: #B08D57;
+      color: #1E1812;
+    }
+
+    #pw-error {
+      color: #c97a5a;
+      visibility: hidden;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      min-height: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="pw-screen">
+
+    <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 130">
+      <defs>
+        <linearGradient id="pwg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#D4A84B"/>
+          <stop offset="50%" stop-color="#B08D57"/>
+          <stop offset="100%" stop-color="#7A6035"/>
+        </linearGradient>
+      </defs>
+
+      <text x="34" y="82"
+        font-family="Cormorant Garamond, serif"
+        font-size="78"
+        font-style="italic"
+        font-weight="300"
+        fill="url(#pwg)"
+        text-anchor="middle">S</text>
+
+      <path d="M 82,50 C 82,44 86,40 91,40 C 96,40 100,44 100,50 C 100,44 104,40 109,40 C 114,40 118,44 118,50 C 118,58 109,66 100,72 C 91,66 82,58 82,50 Z"
+        fill="none"
+        stroke="url(#pwg)"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+
+      <text x="146" y="82"
+        font-family="Cormorant Garamond, serif"
+        font-size="78"
+        font-style="italic"
+        font-weight="300"
+        fill="url(#pwg)"
+        text-anchor="middle">K</text>
+
+      <line x1="30" y1="96" x2="150" y2="96"
+        stroke="url(#pwg)"
+        stroke-width="0.6"
+        opacity="0.6"/>
+
+      <polygon points="90,93 93,96 90,99 87,96"
+        fill="url(#pwg)"
+        opacity="0.85"/>
+
+      <text x="90" y="116"
+        font-family="Cinzel, serif"
+        font-size="9.5"
+        fill="url(#pwg)"
+        text-anchor="middle"
+        letter-spacing="5"
+        opacity="0.85">2027</text>
+    </svg>
+
+    <input
+      id="pw-input"
+      type="password"
+      placeholder="PASSWORD"
+      autocomplete="off"
+      onkeydown="if(event.key === 'Enter') pwCheck()"
+    />
+
+    <button id="pw-enter" onclick="pwCheck()">ENTER</button>
+
+    <p id="pw-error">Wrong password</p>
+
+  </div>
+
+  <script>
+    function pwCheck() {
+      var password = document.getElementById('pw-input').value;
+      var error = document.getElementById('pw-error');
+
+      if (password === 'SiljeogKjeld') {
+        window.location.href = 'home.html';
+      } else {
+        error.style.visibility = 'visible';
+        document.getElementById('pw-input').value = '';
+
+        setTimeout(function() {
+          error.style.visibility = 'hidden';
+        }, 2000);
+      }
+    }
+  </script>
+
+</body>
+</html>
