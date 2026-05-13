@@ -471,20 +471,8 @@
       color: var(--brass);
       font-size: 0.6rem;
       letter-spacing: 0.5em;
-      margin-bottom: 3.5rem;
+      margin-bottom: 5rem;
       opacity: 0.5;
-    }
-
-    /* The poetic intro — italic, dust-colored, intimate */
-    .hero-intro {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-weight: 300;
-      font-size: clamp(1rem, 2.2vw, 1.25rem);
-      color: var(--dust);
-      margin-bottom: 4rem;
-      letter-spacing: 0.015em;
-      line-height: 1.5;
     }
 
     /* The names — the hero of the hero */
@@ -545,12 +533,68 @@
 
     @media (max-width: 768px) {
       #hjem { padding: 7rem 1.5rem 5rem; }
-      .hero-ornament { margin-bottom: 2.5rem; }
-      .hero-intro { margin-bottom: 3rem; }
+      .hero-ornament { margin-bottom: 4rem; }
       .hero-names { gap: 0.25em; }
       .hero-amp { font-size: 1.3em; }
       .hero-line { margin: 3rem auto 1.75rem; }
       .hero-meta { font-size: 0.7rem; letter-spacing: 0.35em; }
+    }
+
+    /* ============================================
+       ✦  THE LETTER — Step 2 redesign
+       ============================================ */
+    #brevet {
+      background: var(--paper);
+      padding: 10rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .letter-content {
+      max-width: 520px;
+      width: 100%;
+    }
+
+    .letter-ornament {
+      color: var(--brass);
+      font-size: 0.55rem;
+      letter-spacing: 0.5em;
+      margin-bottom: 4rem;
+      opacity: 0.5;
+    }
+
+    .letter-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+      color: var(--ink-soft);
+      line-height: 1.8;
+      margin-bottom: 1.8rem;
+      letter-spacing: 0.01em;
+    }
+
+    .letter-body:last-of-type {
+      margin-bottom: 4rem;
+    }
+
+    .letter-signature {
+      font-family: 'Italianno', cursive;
+      font-size: clamp(2.5rem, 6vw, 3.5rem);
+      color: var(--brass);
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: 0.02em;
+    }
+
+    @media (max-width: 768px) {
+      #brevet { padding: 6rem 1.5rem; }
+      .letter-ornament { margin-bottom: 3rem; }
+      .letter-body { font-size: 1.15rem; line-height: 1.7; }
+      .letter-body:last-of-type { margin-bottom: 3rem; }
     }
 
     /* ============================================
@@ -1126,10 +1170,6 @@
 ```
   <div class="hero-ornament">✦</div>
 
-  <p class="hero-intro" data-text="hero-intro">
-    vi reiser hjem til Svartehavet
-  </p>
-
   <h1 class="hero-names" aria-label="Silje og Kjeld">
     <span class="hero-name">Silje</span>
     <span class="hero-amp" aria-hidden="true">&amp;</span>
@@ -1143,6 +1183,38 @@
     <span class="hero-meta-dot">·</span>
     <span data-text="hero-meta-place">Bulgaria</span>
   </p>
+
+</div>
+```
+
+  </section>
+
+  <!-- ╔══════════════════════════════════════════╗ -->
+
+  <!-- ║          ✦  BREVET  ✦                    ║ -->
+
+  <!-- ╚══════════════════════════════════════════╝ -->
+
+  <section id="brevet">
+    <div class="letter-content">
+
+```
+  <div class="letter-ornament">✦</div>
+
+  <p class="letter-body" data-text="letter-1">
+    Silje sin mor er fra Bulgaria,
+    og derfor har dette landet alltid betydd noe for oss.
+  </p>
+
+  <p class="letter-body" data-text="letter-2">
+    Det er en ro her — en ro som er blitt en del av livet vårt.
+  </p>
+
+  <p class="letter-body" data-text="letter-3">
+    Vi vil dele det med vennene og de nærmeste vi er glade i.
+  </p>
+
+  <div class="letter-signature">Silje &amp; Kjeld</div>
 
 </div>
 ```
@@ -1488,9 +1560,11 @@
         'nav-activities': 'Opplevelser',
         'nav-map': 'Kart',
         'nav-rsvp': 'Påmelding',
-        'hero-intro': 'vi reiser hjem til Svartehavet',
         'hero-meta-date': 'Sensommer 2027',
         'hero-meta-place': 'Bulgaria',
+        'letter-1': 'Silje sin mor er fra Bulgaria, og derfor har dette landet alltid betydd noe for oss.',
+        'letter-2': 'Det er en ro her — en ro som er blitt en del av livet vårt.',
+        'letter-3': 'Vi vil dele det med vennene og de nærmeste vi er glade i.',
         'destination-eyebrow': 'Området',
         'destination-title': 'Svartehavskysten i Bulgaria',
         'destination-text': 'Vi ønsker å samle familie og venner ved vakre Svartehavskysten i Bulgaria, omgitt av sjø, varme sommerkvelder og avslappet strandliv.',
@@ -1589,9 +1663,11 @@
         'nav-activities': 'Experiences',
         'nav-map': 'Map',
         'nav-rsvp': 'RSVP',
-        'hero-intro': 'we are returning home to the Black Sea',
         'hero-meta-date': 'Late summer 2027',
         'hero-meta-place': 'Bulgaria',
+        'letter-1': "Silje's mother is from Bulgaria, and so this country has always meant something to us.",
+        'letter-2': 'There is a stillness here — a stillness that has become part of our lives.',
+        'letter-3': 'We want to share it with the friends and loved ones closest to us.',
         'destination-eyebrow': 'The area',
         'destination-title': "Bulgaria's Black Sea Coast",
         'destination-text': 'We want to gather family and friends along the beautiful Black Sea coast in Bulgaria, surrounded by the sea, warm summer evenings, and relaxed beach life.',
@@ -1690,9 +1766,11 @@
         'nav-activities': 'Изживявания',
         'nav-map': 'Карта',
         'nav-rsvp': 'RSVP',
-        'hero-intro': 'връщаме се у дома, на Черно море',
         'hero-meta-date': 'Късно лято 2027',
         'hero-meta-place': 'България',
+        'letter-1': 'Майката на Силе е от България — затова тази страна винаги е била скъпа за нас.',
+        'letter-2': 'Има едно спокойствие тук — спокойствие, което е станало част от живота ни.',
+        'letter-3': 'Искаме да го споделим с приятелите и най-близките ни хора.',
         'destination-eyebrow': 'Района',
         'destination-title': 'Черноморското крайбрежие на България',
         'destination-text': 'Искаме да съберем семейство и приятели на красивото Черноморско крайбрежие в България, заобиколени от морето, топли летни вечери и спокоен плажен живот.',
