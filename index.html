@@ -1,176 +1,1936 @@
 <!DOCTYPE html>
+
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Silje & Kjeld — Bulgaria 2027</title>
 
-  <title>Silje & Kjeld</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;500&family=Italianno&display=swap" rel="stylesheet" />
 
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Cinzel:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <style>
+    :root {
+      /* REFINED LUX PALETTE */
+      --cream: #F4EDE2;          /* deeper, richer cream */
+      --cream-warm: #EBE3D5;     /* secondary surface */
+      --paper: #FAF6EE;          /* lightest for cards */
+      --ink: #2A2520;            /* primary text */
+      --ink-soft: #3D3530;       /* body text */
+      --dust: #6C625B;           /* subtle/secondary text */
+      --brass: #9B7C42;          /* antique brass — replaces "gold" */
+      --brass-light: #C4A874;    /* lighter brass for accents */
+      --brass-dark: #6E5728;     /* deep brass for hover/contrast */
+      --line: rgba(155, 124, 66, 0.25);
+
+      /* Legacy aliases for non-redesigned sections */
+      --gold: var(--brass);
+      --gold-light: var(--brass-light);
+      --gold-dark: var(--brass-dark);
+      --ivory: var(--paper);
+      --ivory-dark: var(--cream);
+      --stone: var(--ink-soft);
+      --stone-light: var(--dust);
+      --deep: var(--ink);
+      --rose: #9C7B6B;
+      --terracotta: #B07854;
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      overflow-wrap: break-word;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
     }
 
     body {
-      background: #1E1812;
-      min-height: 100vh;
-      font-family: 'Cinzel', serif;
-      overflow: hidden;
+      font-family: 'EB Garamond', serif;
+      background: var(--cream);
+      color: var(--ink-soft);
+      overflow-x: hidden;
+      max-width: 100vw;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
+    body.locked { overflow: hidden; }
+
+    /* ============================================
+       PASSWORD SCREEN — kept as-is, beautiful
+       ============================================ */
     #pw-screen {
       position: fixed;
       inset: 0;
-      background: #1E1812;
+      z-index: 99999;
+      background: #0F0B08;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 2rem;
+      gap: 1.5rem;
       padding: 2rem;
+      transition: opacity 0.6s ease;
+      overflow: hidden;
     }
 
-    .logo {
-      width: 150px;
-      max-width: 70vw;
-      height: auto;
+    #pw-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
     }
 
-    #pw-input {
+    #pw-screen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(155,124,66,0.10) 0%, transparent 60%);
+      pointer-events: none;
+      opacity: 0;
+      animation: glow-in 2s ease 0.3s forwards;
+    }
+
+    @keyframes glow-in { to { opacity: 1; } }
+
+    .pw-particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .pw-particles span {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: var(--brass);
+      border-radius: 50%;
+      opacity: 0;
+      box-shadow: 0 0 6px var(--brass);
+      animation: float-particle 12s infinite ease-in-out;
+    }
+
+    .pw-particles span:nth-child(1)  { top: 15%; left: 12%; animation-delay: 1.0s; animation-duration: 10s; }
+    .pw-particles span:nth-child(2)  { top: 28%; left: 82%; animation-delay: 2.5s; animation-duration: 14s; }
+    .pw-particles span:nth-child(3)  { top: 70%; left: 18%; animation-delay: 4.0s; animation-duration: 11s; }
+    .pw-particles span:nth-child(4)  { top: 45%; left: 88%; animation-delay: 1.8s; animation-duration: 13s; }
+    .pw-particles span:nth-child(5)  { top: 85%; left: 60%; animation-delay: 3.2s; animation-duration: 12s; }
+    .pw-particles span:nth-child(6)  { top: 20%; left: 55%; animation-delay: 5.0s; animation-duration: 15s; }
+    .pw-particles span:nth-child(7)  { top: 60%; left: 75%; animation-delay: 2.0s; animation-duration: 13s; }
+    .pw-particles span:nth-child(8)  { top: 38%; left: 8%;  animation-delay: 6.0s; animation-duration: 11s; }
+    .pw-particles span:nth-child(9)  { top: 78%; left: 92%; animation-delay: 3.5s; animation-duration: 14s; }
+    .pw-particles span:nth-child(10) { top: 12%; left: 35%; animation-delay: 4.5s; animation-duration: 12s; }
+    .pw-particles span:nth-child(11) { top: 88%; left: 30%; animation-delay: 5.5s; animation-duration: 13s; }
+    .pw-particles span:nth-child(12) { top: 52%; left: 45%; animation-delay: 7.0s; animation-duration: 14s; }
+
+    @keyframes float-particle {
+      0%   { opacity: 0; transform: translateY(0) translateX(0); }
+      20%  { opacity: 0.7; }
+      80%  { opacity: 0.5; }
+      100% { opacity: 0; transform: translateY(-40px) translateX(15px); }
+    }
+
+    .pw-logo {
+      position: relative;
+      z-index: 2;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4.2rem;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--brass);
+      letter-spacing: 0.04em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25em;
+    }
+
+    .pw-letter { display: inline-block; opacity: 0; }
+    .pw-letter-s { transform: translateX(-25px); animation: slide-in-left 1.4s cubic-bezier(0.25,0.1,0.25,1) 1.6s forwards; }
+    .pw-letter-k { transform: translateX(25px); animation: slide-in-right 1.4s cubic-bezier(0.25,0.1,0.25,1) 1.6s forwards; }
+
+    @keyframes slide-in-left  { to { opacity: 1; transform: translateX(0); } }
+    @keyframes slide-in-right { to { opacity: 1; transform: translateX(0); } }
+
+    .pw-heart-wrap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      animation: heart-pulse 3s ease-in-out 3.5s infinite;
+    }
+
+    @keyframes heart-pulse {
+      0%, 100% { transform: scale(1); }
+      50%      { transform: scale(1.08); }
+    }
+
+    .pw-heart {
+      width: 0.65em;
+      height: 0.65em;
+      stroke-width: 1.1;
+    }
+
+    .pw-heart path {
+      stroke-dasharray: 80;
+      stroke-dashoffset: 80;
+      animation: draw-heart 1.8s ease-out 1.0s forwards;
+    }
+
+    @keyframes draw-heart { to { stroke-dashoffset: 0; } }
+
+    .pw-input {
+      width: 240px;
+      padding: 1rem;
+      border: 1px solid var(--brass);
       background: transparent;
-      border: none;
-      border-bottom: 1px solid #B08D57;
-      padding: 0.8rem 0;
-      width: 220px;
+      color: var(--brass-light);
+      font-family: 'EB Garamond', serif;
+      font-size: 1rem;
       text-align: center;
-      color: #D4B896;
-      font-family: 'Cinzel', serif;
-      font-size: 0.85rem;
-      letter-spacing: 0.25em;
       outline: none;
+      transition: border-color 0.2s;
+      position: relative;
+      z-index: 2;
     }
 
-    #pw-input::placeholder {
-      color: #5a4a38;
+    .pw-input::placeholder { color: rgba(196, 168, 116, 0.5); }
+    .pw-input:focus { border-color: var(--brass-light); }
+
+    .pw-fade-in {
+      opacity: 0;
+      transform: translateY(15px);
+      animation: fade-up 1s ease 3.2s forwards;
     }
+    .pw-fade-in-late { animation-delay: 3.5s; }
+
+    @keyframes fade-up { to { opacity: 1; transform: translateY(0); } }
 
     #pw-enter {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--brass);
       background: transparent;
-      border: 1px solid #B08D57;
-      color: #B08D57;
-      padding: 0.9rem 2.2rem;
+      border: 1px solid var(--brass);
+      width: 3.5rem;
+      height: 3.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
+      transition: all 0.25s;
+      line-height: 1;
+      position: relative;
+      z-index: 2;
+    }
+
+    #pw-enter:hover { background: var(--brass); color: #0F0B08; }
+
+    .pw-error {
+      color: #C97B7B;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .pw-error.show { opacity: 1; }
+
+    /* ============================================
+       NAVIGATION
+       ============================================ */
+    .lang-switcher { display: none; }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      background: rgba(244, 237, 226, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.1rem 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1;
+      color: var(--brass-dark);
+      text-decoration: none;
+    }
+
+    .nav-logo-main {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35em;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-style: italic;
+      letter-spacing: 0.05em;
+      font-weight: 400;
+    }
+
+    .nav-logo-year {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.5em;
+      margin-top: 0.4rem;
+      color: var(--brass);
+      text-transform: uppercase;
+    }
+
+    .heart-icon {
+      display: inline-block;
+      width: 0.85em;
+      height: 0.85em;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vertical-align: middle;
+      margin-bottom: 0.05em;
+    }
+
+    .menu-toggle {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 32px;
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--brass-dark);
+      transition: all 0.3s;
+    }
+
+    .menu-toggle:hover span { background: var(--brass); }
+
+    /* ============================================
+       FULLSCREEN MENU OVERLAY
+       ============================================ */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: #0F0B08;
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    .menu-overlay.open { opacity: 1; visibility: visible; }
+
+    .menu-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      background: transparent;
+      border: 1px solid var(--brass);
+      color: var(--brass);
+      font-size: 1.4rem;
+      font-family: 'Cormorant Garamond', serif;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .menu-close:hover { background: var(--brass); color: #0F0B08; }
+
+    .menu-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-style: italic;
+      color: var(--brass);
+      letter-spacing: 0.05em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35em;
+    }
+
+    .menu-logo .heart-icon {
+      width: 0.7em;
+      height: 0.7em;
+      stroke-width: 1.3;
+    }
+
+    .menu-links-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+      text-align: center;
+    }
+
+    .menu-links-list a {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.7rem;
+      color: var(--brass-light);
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      transition: color 0.3s;
+    }
+
+    .menu-links-list a:hover { color: var(--brass); }
+
+    .menu-langs {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+
+    .menu-langs .lang-btn {
+      padding: 0.55rem 1rem;
+      border: 1px solid var(--brass);
+      background: transparent;
+      color: var(--brass);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .menu-langs .lang-btn:hover,
+    .menu-langs .lang-btn.active { background: var(--brass); color: #0F0B08; }
+
+    /* ============================================
+       ✦  LUX HERO  ✦  — Step 1 redesign
+       ============================================ */
+    #hjem {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 6rem;
+      position: relative;
+      background: var(--cream);
+      overflow: hidden;
+    }
+
+    /* Subtle radial warmth — no frames, no borders */
+    #hjem::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 50% 40% at 50% 35%, rgba(155, 124, 66, 0.07), transparent 70%),
+        radial-gradient(ellipse 70% 50% at 50% 100%, rgba(155, 124, 66, 0.04), transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      width: 100%;
+      animation: hero-rise 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s both;
+    }
+
+    @keyframes hero-rise {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Tiny top ornament — restrained */
+    .hero-ornament {
+      color: var(--brass);
+      font-size: 0.6rem;
+      letter-spacing: 0.5em;
+      margin-bottom: 3.5rem;
+      opacity: 0.5;
+    }
+
+    /* The poetic intro — italic, dust-colored, intimate */
+    .hero-intro {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(1rem, 2.2vw, 1.25rem);
+      color: var(--dust);
+      margin-bottom: 4rem;
+      letter-spacing: 0.015em;
+      line-height: 1.5;
+    }
+
+    /* The names — the hero of the hero */
+    .hero-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(3.8rem, 12vw, 7.5rem);
+      line-height: 1;
+      color: var(--ink);
+      letter-spacing: 0.005em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35em;
+      margin: 0;
+    }
+
+    .hero-name { display: inline-block; }
+
+    /* The script ampersand — the signature moment */
+    .hero-amp {
+      font-family: 'Italianno', cursive;
+      font-weight: 400;
+      font-size: 1.4em;
+      color: var(--brass);
+      font-style: normal;
+      line-height: 0.7;
+      transform: translateY(-0.05em);
+      letter-spacing: 0;
+    }
+
+    /* Thin gold line — quiet separator */
+    .hero-line {
+      width: 60px;
+      height: 1px;
+      background: var(--brass);
+      margin: 3.5rem auto 2rem;
+      opacity: 0.65;
+    }
+
+    /* Date + place — Garamond caps, wide tracking (not Cinzel) */
+    .hero-meta {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: 0.78rem;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--brass-dark);
+      line-height: 2;
+    }
+
+    .hero-meta-dot {
+      display: inline-block;
+      margin: 0 0.5em;
+      color: var(--brass);
+      transform: translateY(-0.1em);
+    }
+
+    @media (max-width: 768px) {
+      #hjem { padding: 7rem 1.5rem 5rem; }
+      .hero-ornament { margin-bottom: 2.5rem; }
+      .hero-intro { margin-bottom: 3rem; }
+      .hero-names { gap: 0.25em; }
+      .hero-amp { font-size: 1.3em; }
+      .hero-line { margin: 3rem auto 1.75rem; }
+      .hero-meta { font-size: 0.7rem; letter-spacing: 0.35em; }
+    }
+
+    /* ============================================
+       SECTIONS — kept as legacy for now
+       (Will be redesigned section by section)
+       ============================================ */
+    section { padding: 6rem 1.5rem; }
+    section:nth-child(even) { background: var(--cream-warm); }
+    .section-wrap { max-width: 920px; margin: 0 auto; }
+
+    .section-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--brass);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 8vw, 3.8rem);
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+
+    .divider-icon { color: var(--brass); font-size: 1.2rem; }
+
+    .section-sub {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--dust);
+      max-width: 680px;
+      margin: 2rem auto;
+      text-align: center;
+    }
+
+    .ornament { color: var(--brass); letter-spacing: 0.3em; }
+
+    /* BALCHIK / AREA section */
+    .balchik-hero {
+      width: 100%;
+      max-width: 920px;
+      margin: 3rem auto;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 30px rgba(155,124,66,0.10);
+    }
+    .balchik-hero img { width: 100%; height: auto; display: block; }
+
+    .balchik-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .balchik-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .balchik-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(155,124,66,0.15);
+    }
+
+    .balchik-card-image { width: 100%; height: 220px; object-fit: cover; display: block; }
+    .balchik-card-content { padding: 1.5rem; }
+    .balchik-card-content h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      color: var(--ink);
+      margin-bottom: 0.6rem;
+    }
+    .balchik-card-content p {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--dust);
+    }
+
+    /* VENUE section */
+    #venue { background: var(--cream-warm); position: relative; }
+
+    .venue-intro {
+      max-width: 720px;
+      margin: 2rem auto;
+      text-align: center;
+      font-size: 1.15rem;
+      line-height: 1.8;
+      color: var(--ink-soft);
+    }
+
+    .venue-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(2.5rem, 7vw, 4rem);
+      color: var(--brass-dark);
+      text-align: center;
+      margin: 1rem 0 0.5rem;
+      font-weight: 400;
+    }
+
+    .venue-tagline {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--brass);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .venue-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3.5rem;
+    }
+
+    .venue-feature {
+      background: var(--paper);
+      padding: 2.5rem 2rem;
+      border: 1px solid var(--line);
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .venue-feature:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(155,124,66,0.15);
+    }
+
+    .venue-feature-icon {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 2.2rem;
+      color: var(--brass);
+      margin-bottom: 0.5rem;
+    }
+
+    .venue-feature-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--brass-dark);
+      margin-bottom: 1rem;
+    }
+
+    .venue-feature h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      color: var(--ink);
+      margin-bottom: 1rem;
+    }
+
+    .venue-feature p {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--dust);
+    }
+
+    .venue-link, .tripadvisor-link {
+      display: inline-block;
+      margin-top: 3rem;
+      padding: 1rem 2.4rem;
+      border: 1px solid var(--brass);
+      color: var(--brass);
       font-family: 'Cinzel', serif;
       font-size: 0.65rem;
       letter-spacing: 0.25em;
       text-transform: uppercase;
-      transition: all 0.25s ease;
+      text-decoration: none;
+      transition: all 0.3s;
     }
 
-    #pw-enter:hover {
-      background: #B08D57;
-      color: #1E1812;
+    .venue-link:hover, .tripadvisor-link:hover { background: var(--brass); color: #fff; }
+
+    /* ACTIVITIES */
+    #aktiviteter { background: var(--paper); }
+
+    .activities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
     }
 
-    #pw-error {
-      color: #c97a5a;
-      visibility: hidden;
-      font-size: 0.65rem;
+    .activity-card {
+      padding: 2.2rem 1.8rem;
+      background: var(--cream-warm);
+      border: 1px solid var(--line);
+      border-top: 2px solid var(--brass);
+      transition: all 0.3s;
+    }
+
+    .activity-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(155,124,66,0.15);
+    }
+
+    .activity-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--brass);
+      margin-bottom: 0.8rem;
+    }
+
+    .activity-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      color: var(--ink);
+      margin-bottom: 1rem;
+      line-height: 1.3;
+    }
+
+    .activity-card p {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--dust);
+    }
+
+    /* MAP */
+    #kart { background: var(--cream-warm); }
+
+    .map-container {
+      width: 100%;
+      height: 520px;
+      margin: 3rem 0 2rem;
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 30px rgba(155,124,66,0.10);
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 768px) { .map-container { height: 420px; } }
+
+    .leaflet-container { font-family: 'EB Garamond', serif; background: #F4EDE2; }
+    .leaflet-popup-content-wrapper {
+      border-radius: 0;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    }
+    .leaflet-popup-tip { background: var(--paper); border: 1px solid var(--line); }
+    .leaflet-popup-content {
+      margin: 1rem 1.2rem;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      color: var(--ink-soft);
+    }
+    .leaflet-popup-content .popup-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      color: var(--ink);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+    .leaflet-popup-content .popup-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--brass);
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+    .leaflet-popup-content .popup-desc { color: var(--dust); font-size: 0.9rem; }
+
+    .sk-marker { background: transparent !important; border: none !important; }
+    .sk-marker .pin {
+      width: 100%;
+      height: 100%;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      border: 2px solid #fff;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sk-marker .pin-inner {
+      transform: rotate(45deg);
+      color: #fff;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 14px;
+      line-height: 1;
+    }
+    .sk-marker-venue .pin { background: var(--brass-dark); }
+    .sk-marker-venue .pin-inner { font-size: 16px; }
+    .sk-marker-town .pin { background: var(--brass); }
+    .sk-marker-sight .pin { background: var(--rose); }
+    .sk-marker-restaurant .pin { background: var(--terracotta); }
+
+    .map-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.8rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .legend-item { display: flex; align-items: center; gap: 0.6rem; }
+    .legend-marker {
+      width: 14px;
+      height: 18px;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      display: inline-block;
+      border: 1.5px solid #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .legend-venue { background: var(--brass-dark); }
+    .legend-town { background: var(--brass); }
+    .legend-sight { background: var(--rose); }
+    .legend-restaurant { background: var(--terracotta); }
+
+    /* RESTAURANTS */
+    #restauranter { background: var(--paper); }
+    .restaurants-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .restaurant-card {
+      padding: 2rem 1.6rem;
+      background: var(--cream-warm);
+      border: 1px solid var(--line);
+      border-top: 2px solid var(--terracotta);
+      transition: all 0.3s;
+    }
+    .restaurant-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(176,120,84,0.18);
+    }
+    .restaurant-type {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 0.6rem;
+    }
+    .restaurant-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      color: var(--ink);
+      margin-bottom: 0.3rem;
+    }
+    .restaurant-location {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--dust);
+      margin-bottom: 0.8rem;
+    }
+    .restaurant-card p { font-size: 0.92rem; line-height: 1.6; color: var(--ink-soft); }
+
+    /* FORM */
+    .rsvp-step { max-width: 600px; margin: 0 auto; }
+    .form-grid { display: grid; gap: 2rem; }
+    .form-group { text-align: left; }
+    .form-person-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--brass);
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .form-radio-group { display: flex; flex-direction: column; gap: 1rem; }
+    .form-radio { display: flex; align-items: center; gap: 0.8rem; cursor: pointer; font-size: 1rem; }
+    .form-radio input[type="radio"] { cursor: pointer; width: 18px; height: 18px; accent-color: var(--brass); }
+    .form-label {
+      display: block;
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      min-height: 1rem;
+      color: var(--brass);
+      margin-bottom: 0.6rem;
     }
+    .form-input {
+      width: 100%;
+      padding: 0.9rem;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      font-family: 'EB Garamond', serif;
+      font-size: 1rem;
+      color: var(--ink-soft);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: var(--brass); }
+    .form-textarea { resize: vertical; min-height: 120px; }
+    .allergy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .allergy-item { display: flex; align-items: center; gap: 0.6rem; cursor: pointer; font-size: 0.95rem; }
+    .allergy-item input[type="checkbox"] { cursor: pointer; accent-color: var(--brass); }
+    .allergy-item--wide { grid-column: 1 / -1; }
+    .form-submit {
+      width: 100%;
+      padding: 1.1rem;
+      background: var(--brass);
+      color: #fff;
+      border: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 1rem;
+    }
+    .form-submit:hover { background: var(--brass-dark); }
+
+    /* FOOTER */
+    footer {
+      background: var(--ink);
+      color: var(--paper);
+      text-align: center;
+      padding: 3.5rem 1.5rem;
+    }
+    .footer-names {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4em;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-style: italic;
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+    }
+    .footer-names .heart-icon {
+      color: var(--brass-light);
+      width: 0.7em;
+      height: 0.7em;
+      stroke-width: 1.3;
+    }
+    footer .ornament { color: var(--brass-light); }
+
+    @media (max-width: 768px) {
+      section { padding: 4rem 1.25rem; }
+      .section-wrap { padding: 0 0.25rem; }
+      .venue-name { font-size: clamp(2rem, 8vw, 3.5rem); }
+      .section-title { font-size: clamp(1.8rem, 7vw, 3rem); }
+    }
+
+    .hidden { display: none !important; }
   </style>
+
 </head>
 
-<body>
+<body class="locked">
+
+  <!-- PASSWORD SCREEN -->
 
   <div id="pw-screen">
+    <div class="pw-particles" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
 
-    <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 130">
-      <defs>
-        <linearGradient id="pwg" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#D4A84B"/>
-          <stop offset="50%" stop-color="#B08D57"/>
-          <stop offset="100%" stop-color="#7A6035"/>
-        </linearGradient>
-      </defs>
-
-      <text x="34" y="82"
-        font-family="Cormorant Garamond, serif"
-        font-size="78"
-        font-style="italic"
-        font-weight="300"
-        fill="url(#pwg)"
-        text-anchor="middle">S</text>
-
-      <path d="M 82,50 C 82,44 86,40 91,40 C 96,40 100,44 100,50 C 100,44 104,40 109,40 C 114,40 118,44 118,50 C 118,58 109,66 100,72 C 91,66 82,58 82,50 Z"
-        fill="none"
-        stroke="url(#pwg)"
-        stroke-width="1.8"
-        stroke-linecap="round"
-        stroke-linejoin="round"/>
-
-      <text x="146" y="82"
-        font-family="Cormorant Garamond, serif"
-        font-size="78"
-        font-style="italic"
-        font-weight="300"
-        fill="url(#pwg)"
-        text-anchor="middle">K</text>
-
-      <line x1="30" y1="96" x2="150" y2="96"
-        stroke="url(#pwg)"
-        stroke-width="0.6"
-        opacity="0.6"/>
-
-      <polygon points="90,93 93,96 90,99 87,96"
-        fill="url(#pwg)"
-        opacity="0.85"/>
-
-      <text x="90" y="116"
-        font-family="Cinzel, serif"
-        font-size="9.5"
-        fill="url(#pwg)"
-        text-anchor="middle"
-        letter-spacing="5"
-        opacity="0.85">2027</text>
+```
+<div class="pw-logo">
+  <span class="pw-letter pw-letter-s">S</span>
+  <span class="pw-heart-wrap">
+    <svg class="heart-icon pw-heart" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
     </svg>
+  </span>
+  <span class="pw-letter pw-letter-k">K</span>
+</div>
 
-    <input
-      id="pw-input"
-      type="password"
-      placeholder="PASSWORD"
-      autocomplete="off"
-      onkeydown="if(event.key === 'Enter') pwCheck()"
-    />
-
-    <button id="pw-enter" onclick="pwCheck()">ENTER</button>
-
-    <p id="pw-error">Wrong password</p>
+<input type="password" id="pw-input" class="pw-input pw-fade-in" placeholder="Password" />
+<button id="pw-enter" class="pw-fade-in pw-fade-in-late" aria-label="Open" onclick="openWeddingSite()">→</button>
+<p id="pw-error" class="pw-error" data-text="wrong-password">Feil passord</p>
+```
 
   </div>
 
+  <!-- NAV -->
+
+  <nav>
+    <div class="nav-inner">
+      <a href="#hjem" class="nav-logo">
+        <span class="nav-logo-main">
+          S
+          <svg class="heart-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          K
+        </span>
+        <span class="nav-logo-year">2 0 2 7</span>
+      </a>
+
+```
+  <button class="menu-toggle" aria-label="Meny" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</div>
+```
+
+  </nav>
+
+  <!-- FULLSCREEN MENU OVERLAY -->
+
+  <div class="menu-overlay" id="menu-overlay">
+    <button class="menu-close" onclick="toggleMenu()" aria-label="Lukk">×</button>
+
+```
+<div class="menu-logo">
+  S
+  <svg class="heart-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+  </svg>
+  K
+</div>
+
+<ul class="menu-links-list">
+  <li><a href="#hjem" data-text="nav-home" onclick="toggleMenu()">Hjem</a></li>
+  <li><a href="#omradet" data-text="nav-destination" onclick="toggleMenu()">Området</a></li>
+  <li><a href="#venue" data-text="nav-venue" onclick="toggleMenu()">Vårt sted</a></li>
+  <li><a href="#aktiviteter" data-text="nav-activities" onclick="toggleMenu()">Opplevelser</a></li>
+  <li><a href="#kart" data-text="nav-map" onclick="toggleMenu()">Kart</a></li>
+  <li><a href="#paamelding" data-text="nav-rsvp" onclick="toggleMenu()">Påmelding</a></li>
+</ul>
+
+<div class="menu-langs">
+  <button class="lang-btn active" data-lang="no">NO</button>
+  <button class="lang-btn" data-lang="en">EN</button>
+  <button class="lang-btn" data-lang="bg">BG</button>
+</div>
+```
+
+  </div>
+
+  <!-- ╔══════════════════════════════════════════╗ -->
+
+  <!-- ║          ✦  LUX HERO  ✦                  ║ -->
+
+  <!-- ╚══════════════════════════════════════════╝ -->
+
+  <section id="hjem">
+    <div class="hero-content">
+
+```
+  <div class="hero-ornament">✦</div>
+
+  <p class="hero-intro" data-text="hero-intro">
+    vi reiser hjem til Svartehavet
+  </p>
+
+  <h1 class="hero-names" aria-label="Silje og Kjeld">
+    <span class="hero-name">Silje</span>
+    <span class="hero-amp" aria-hidden="true">&amp;</span>
+    <span class="hero-name">Kjeld</span>
+  </h1>
+
+  <div class="hero-line" aria-hidden="true"></div>
+
+  <p class="hero-meta">
+    <span data-text="hero-meta-date">Sensommer 2027</span>
+    <span class="hero-meta-dot">·</span>
+    <span data-text="hero-meta-place">Bulgaria</span>
+  </p>
+
+</div>
+```
+
+  </section>
+
+  <!-- OMRÅDET (kept from previous version) -->
+
+  <section id="omradet">
+    <div class="section-wrap">
+      <p class="section-eyebrow" data-text="destination-eyebrow">Området</p>
+      <h2 class="section-title" data-text="destination-title">Svartehavskysten i Bulgaria</h2>
+      <div class="divider"><span class="divider-icon">✦</span></div>
+
+```
+  <div class="balchik-hero">
+    <img src="images/balchik-panorama.webp" alt="Balchik panorama ved solnedgang" loading="lazy" />
+  </div>
+
+  <p class="section-sub" data-text="destination-text">
+    Vi ønsker å samle familie og venner ved vakre Svartehavskysten i Bulgaria,
+    omgitt av sjø, varme sommerkvelder og avslappet strandliv.
+  </p>
+
+  <div class="balchik-gallery">
+    <div class="balchik-card">
+      <img class="balchik-card-image" src="images/balchik-palace.jpg" alt="Dronning Marias palass" loading="lazy" />
+      <div class="balchik-card-content">
+        <h3 data-text="balchik-palace-title">Dronning Marias palass</h3>
+        <p data-text="balchik-palace-desc">
+          Romantisk slott med en av Sør-Øst-Europas vakreste botaniske hager.
+        </p>
+      </div>
+    </div>
+
+    <div class="balchik-card">
+      <img class="balchik-card-image" src="images/balchik-pier.jpg" alt="Brygge med hvite klipper" loading="lazy" />
+      <div class="balchik-card-content">
+        <h3 data-text="balchik-pier-title">Den hvite kysten</h3>
+        <p data-text="balchik-pier-desc">
+          Hvitkalkede hus i kalkstein-klippene, med koselig sjøpromenade.
+        </p>
+      </div>
+    </div>
+
+    <div class="balchik-card">
+      <img class="balchik-card-image" src="images/balchik-beach.png" alt="Strand med strå-parasoller" loading="lazy" />
+      <div class="balchik-card-content">
+        <h3 data-text="balchik-beach-title">Stranden og sjøen</h3>
+        <p data-text="balchik-beach-desc">
+          Sandstrender, krystallklart vann og spektakulære solnedganger.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+  </section>
+
+  <!-- VENUE -->
+
+  <section id="venue">
+    <div class="section-wrap" style="text-align:center;">
+      <p class="section-eyebrow" data-text="venue-eyebrow">Vielsen og festen</p>
+      <h2 class="section-title" data-text="venue-title">Vårt sted</h2>
+      <div class="divider"><span class="divider-icon">✦</span></div>
+
+```
+  <p class="venue-tagline" data-text="venue-tagline">Hvor vi sier ja</p>
+  <h3 class="venue-name">Black Sea Rama</h3>
+  <p class="venue-tagline" data-text="venue-subtitle" style="margin-top:0;">Golf & Villas Resort</p>
+
+  <p class="venue-intro" data-text="venue-intro">
+    Black Sea Rama ligger 7 km fra Balchik, 200 meter over havet.
+    Et eksklusivt resort med spektakulær utsikt og Bulgarias første mesterskapsgolfbane.
+  </p>
+
+  <div class="venue-features">
+    <div class="venue-feature">
+      <div class="venue-feature-icon">✦</div>
+      <p class="venue-feature-label" data-text="venue-location-label">Beliggenhet</p>
+      <h3 data-text="venue-location-title">200 m over Svartehavet</h3>
+      <p data-text="venue-location-desc">Luksusvillaer, fire restauranter og endeløs utsikt mot Kaliakra-kappen.</p>
+    </div>
+
+    <div class="venue-feature">
+      <div class="venue-feature-icon">♡</div>
+      <p class="venue-feature-label" data-text="venue-ceremony-label">Vielsen</p>
+      <h3 data-text="venue-ceremony-title">Utendørs amfiteater</h3>
+      <p data-text="venue-ceremony-desc">Vi sier "ja" i resortens vakre amfiteater – med havet og himmelen som ramme.</p>
+    </div>
+
+    <div class="venue-feature">
+      <div class="venue-feature-icon">✧</div>
+      <p class="venue-feature-label" data-text="venue-reception-label">Festen</p>
+      <h3 data-text="venue-reception-title">EVENTUM-salen</h3>
+      <p data-text="venue-reception-desc">Et stort, lyst festlokale med utsikt over hav og golfbane.</p>
+    </div>
+  </div>
+
+  <a class="venue-link" href="https://www.blacksearama.com" target="_blank" rel="noopener" data-text="venue-link-text">Besøk Black Sea Rama →</a>
+</div>
+```
+
+  </section>
+
+  <!-- AKTIVITETER -->
+
+  <section id="aktiviteter">
+    <div class="section-wrap">
+      <p class="section-eyebrow" data-text="activities-eyebrow">Eksklusive opplevelser</p>
+      <h2 class="section-title" data-text="activities-title">Det beste av området</h2>
+      <div class="divider"><span class="divider-icon">✦</span></div>
+
+```
+  <p class="section-sub" data-text="activities-intro">
+    Noen håndplukkede høydepunkter med fokus på tradisjon, kultur og fine opplevelser.
+  </p>
+
+  <div class="activities-grid">
+    <div class="activity-card">
+      <p class="activity-label" data-text="exp-wine-label">Varna · Vinsmaking</p>
+      <h3 data-text="exp-wine-title">Privat bulgarsk vinsmaking</h3>
+      <p data-text="exp-wine-desc">Smak Bulgarias beste viner med en personlig sommelier i Varna.</p>
+    </div>
+
+    <div class="activity-card">
+      <p class="activity-label" data-text="exp-cruise-label">Balchik · Sjøen</p>
+      <h3 data-text="exp-cruise-title">Svartehavscruise</h3>
+      <p data-text="exp-cruise-desc">4-timers seiltur fra Balchik med lunsj og drikke om bord.</p>
+    </div>
+
+    <div class="activity-card">
+      <p class="activity-label" data-text="exp-palace-label">Balchik · Kultur</p>
+      <h3 data-text="exp-palace-title">Palasset & Kaliakra</h3>
+      <p data-text="exp-palace-desc">Dronning Marias palass, botanisk hage og den dramatiske kappen Kaliakra.</p>
+    </div>
+
+    <div class="activity-card">
+      <p class="activity-label" data-text="exp-monastery-label">Varna · Historie</p>
+      <h3 data-text="exp-monastery-title">Aladzha-klosteret</h3>
+      <p data-text="exp-monastery-desc">Middelalder-kloster hugget inn i fjellveggen, med guidet omvisning.</p>
+    </div>
+
+    <div class="activity-card">
+      <p class="activity-label" data-text="exp-stones-label">Varna · Natur</p>
+      <h3 data-text="exp-stones-title">Steinskogen ved solnedgang</h3>
+      <p data-text="exp-stones-desc">Mystisk steinformasjon i magisk kveldslys – en uforglemmelig opplevelse.</p>
+    </div>
+
+    <div class="activity-card">
+      <p class="activity-label" data-text="exp-folk-label">Tradisjon · Kveld</p>
+      <h3 data-text="exp-folk-title">Bulgarsk folkeaften</h3>
+      <p data-text="exp-folk-desc">Tradisjonell folkemusikk, dans og lokal mat i autentisk atmosfære.</p>
+    </div>
+  </div>
+
+  <div style="text-align:center;">
+    <a class="tripadvisor-link" href="https://www.getyourguide.com/varna-l1116/" target="_blank" rel="noopener" data-text="getyourguide-link">Utforsk flere på GetYourGuide →</a>
+  </div>
+</div>
+```
+
+  </section>
+
+  <!-- KART -->
+
+  <section id="kart">
+    <div class="section-wrap">
+      <p class="section-eyebrow" data-text="map-eyebrow">Området</p>
+      <h2 class="section-title" data-text="map-title">På kartet</h2>
+      <div class="divider"><span class="divider-icon">✦</span></div>
+
+```
+  <p class="section-sub" data-text="map-intro">Klikk på markørene for å se hva som er hvor.</p>
+
+  <div id="map" class="map-container"></div>
+
+  <div class="map-legend">
+    <div class="legend-item"><span class="legend-marker legend-venue"></span><span data-text="legend-venue">Vårt sted</span></div>
+    <div class="legend-item"><span class="legend-marker legend-town"></span><span data-text="legend-town">Byer & resorter</span></div>
+    <div class="legend-item"><span class="legend-marker legend-sight"></span><span data-text="legend-sight">Severdigheter</span></div>
+    <div class="legend-item"><span class="legend-marker legend-restaurant"></span><span data-text="legend-restaurant">Restauranter</span></div>
+  </div>
+</div>
+```
+
+  </section>
+
+  <!-- RESTAURANTER -->
+
+  <section id="restauranter">
+    <div class="section-wrap" style="text-align:center;">
+      <p class="section-eyebrow" data-text="rest-eyebrow">Spisesteder</p>
+      <h2 class="section-title" data-text="rest-title">Anbefalte restauranter</h2>
+      <div class="divider"><span class="divider-icon">✦</span></div>
+
+```
+  <p class="section-sub" data-text="rest-intro">Noen favoritter for fersk fisk, lokal mat og spektakulær sjøutsikt.</p>
+
+  <div class="restaurants-grid" style="text-align:left;">
+    <div class="restaurant-card">
+      <p class="restaurant-type" data-text="rest-1-type">Skjellfarm & restaurant</p>
+      <h3>Dalboka</h3>
+      <p class="restaurant-location" data-text="rest-1-loc">Kaliakra-bukten</p>
+      <p data-text="rest-1-desc">Berømt skjellfarm med restaurant rett ved bukten. Ferske skjell og sjømat med spektakulær utsikt – en må-oppleve i området.</p>
+    </div>
+
+    <div class="restaurant-card">
+      <p class="restaurant-type" data-text="rest-2-type">Fiskerestaurant</p>
+      <h3>Captain Cook</h3>
+      <p class="restaurant-location" data-text="rest-2-loc">Golden Sands</p>
+      <p data-text="rest-2-desc">Ved bryggen i Golden Sands. Black Sea-fisk, sjømat og utsikt mot småbåter og marina.</p>
+    </div>
+
+    <div class="restaurant-card">
+      <p class="restaurant-type" data-text="rest-3-type">Sjøpromenade</p>
+      <h3 data-text="rest-3-title">Tavernaer i Balchik</h3>
+      <p class="restaurant-location" data-text="rest-3-loc">Balchik sjøfront</p>
+      <p data-text="rest-3-desc">Koselige lokale tavernaer langs sjøpromenaden. Fersk fisk, bulgarske retter og rolig stemning.</p>
+    </div>
+  </div>
+
+  <a class="tripadvisor-link" href="https://www.tripadvisor.com/Restaurants-g616071-c33-Varna_Province.html" target="_blank" rel="noopener" data-text="tripadvisor-link">Flere tips på TripAdvisor →</a>
+</div>
+```
+
+  </section>
+
+  <!-- RSVP -->
+
+  <section id="paamelding">
+    <div class="section-wrap">
+      <p class="section-eyebrow" data-text="rsvp-eyebrow">Påmelding</p>
+      <h2 class="section-title" data-text="rsvp-title">Meld deg på</h2>
+      <div class="divider"><span class="divider-icon">✦</span></div>
+
+```
+  <p class="section-sub" data-text="rsvp-text">
+    Fyll inn skjemaet nedenfor. Vi er takknemlige om du melder fra så snart du vet om du kan komme.
+  </p>
+
+  <form name="paamelding" method="POST" data-netlify="true" action="/thank-you.html" id="rsvp-form" class="rsvp-step">
+    <input type="hidden" name="form-name" value="paamelding" />
+    <input type="hidden" name="registrert_fra" value="Wedding Website" />
+
+    <div class="form-grid">
+      <div class="form-group">
+        <p class="form-person-label" data-text="form-attending">KOMMER DU?</p>
+        <div class="form-radio-group">
+          <label class="form-radio">
+            <input type="radio" name="deltar" value="ja" onchange="toggleAttendance()" required />
+            <span data-text="form-yes">Ja, jeg kommer</span>
+          </label>
+          <label class="form-radio">
+            <input type="radio" name="deltar" value="nei" onchange="toggleAttendance()" required />
+            <span data-text="form-no">Nei, jeg kan dessverre ikke komme</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="navn" data-text="form-name">NAVN</label>
+        <input class="form-input" id="navn" type="text" name="navn" required placeholder="Ditt navn" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="epost" data-text="form-email">MAIL</label>
+        <input class="form-input" id="epost" type="email" name="epost" required placeholder="din@mail.no" />
+      </div>
+
+      <div id="attending-fields" style="display:none;">
+        <div class="form-grid" style="margin-top:0;">
+          <div class="form-group">
+            <label class="form-label" for="telefon" data-text="form-phone">TELEFON</label>
+            <input class="form-input" id="telefon" type="tel" name="telefon" placeholder="+47 000 00 000" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="folge_navn" data-text="form-companion">FØLGETS NAVN</label>
+            <input class="form-input" id="folge_navn" type="text" name="folge_navn" placeholder="Hvis du kommer med følge" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" data-text="form-allergi">ALLERGI / KOSTHOLD</label>
+            <div class="allergy-grid">
+              <label class="allergy-item"><input type="checkbox" name="allergi_ingen" value="Ingen allergi" /> <span data-text="allergy-none">Ingen allergi</span></label>
+              <label class="allergy-item"><input type="checkbox" name="allergi_melk" value="Melk/laktose" /> <span data-text="allergy-dairy">Melk / laktose</span></label>
+              <label class="allergy-item"><input type="checkbox" name="allergi_egg" value="Egg" /> <span data-text="allergy-egg">Egg</span></label>
+              <label class="allergy-item"><input type="checkbox" name="allergi_notter" value="Nøtter" /> <span data-text="allergy-nuts">Nøtter</span></label>
+              <label class="allergy-item"><input type="checkbox" name="allergi_gluten" value="Gluten" /> <span data-text="allergy-gluten">Gluten</span></label>
+              <label class="allergy-item"><input type="checkbox" name="allergi_fisk" value="Fisk" /> <span data-text="allergy-fish">Fisk</span></label>
+              <label class="allergy-item"><input type="checkbox" name="allergi_skalldyr" value="Skalldyr" /> <span data-text="allergy-shellfish">Skalldyr</span></label>
+              <label class="allergy-item allergy-item--wide"><input type="checkbox" name="allergi_vegetar" value="Vegetar" /> <span data-text="allergy-vegetarian">Vegetar</span></label>
+            </div>
+            <input class="form-input" style="margin-top:0.7rem;" type="text" name="allergi_annet" placeholder="Annet / merknad til kjøkken" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="melding" data-text="form-message">MELDING TIL BRUDEPARET</label>
+            <textarea class="form-input form-textarea" id="melding" name="melding" placeholder="Noe du vil si til Silje og Kjeld?"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div id="not-attending-fields" style="display:none;">
+        <div class="form-group">
+          <label class="form-label" for="melding_kommer_ikke" data-text="form-message-no">MELDING TIL BRUDEPARET</label>
+          <textarea class="form-input form-textarea" id="melding_kommer_ikke" name="melding_kommer_ikke" placeholder="Skriv gjerne en kort hilsen"></textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button type="submit" class="form-submit" data-text="form-submit">Send svar</button>
+      </div>
+    </div>
+  </form>
+</div>
+```
+
+  </section>
+
+  <footer>
+    <div class="footer-names">
+      S
+      <svg class="heart-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+      K
+    </div>
+    <span class="ornament">✦ &nbsp; ✦ &nbsp; ✦</span>
+    <p style="margin-top:1rem;font-size:0.95rem;">Bulgaria · 2027</p>
+  </footer>
+
   <script>
-    function pwCheck() {
-      var password = document.getElementById('pw-input').value;
-      var error = document.getElementById('pw-error');
+    const translations = {
+      no: {
+        'wrong-password': 'Feil passord',
+        'nav-home': 'Hjem',
+        'nav-venue': 'Vårt sted',
+        'nav-destination': 'Området',
+        'nav-activities': 'Opplevelser',
+        'nav-map': 'Kart',
+        'nav-rsvp': 'Påmelding',
+        'hero-intro': 'vi reiser hjem til Svartehavet',
+        'hero-meta-date': 'Sensommer 2027',
+        'hero-meta-place': 'Bulgaria',
+        'destination-eyebrow': 'Området',
+        'destination-title': 'Svartehavskysten i Bulgaria',
+        'destination-text': 'Vi ønsker å samle familie og venner ved vakre Svartehavskysten i Bulgaria, omgitt av sjø, varme sommerkvelder og avslappet strandliv.',
+        'balchik-palace-title': 'Dronning Marias palass',
+        'balchik-palace-desc': 'Romantisk slott med en av Sør-Øst-Europas vakreste botaniske hager.',
+        'balchik-pier-title': 'Den hvite kysten',
+        'balchik-pier-desc': 'Hvitkalkede hus i kalkstein-klippene, med koselig sjøpromenade.',
+        'balchik-beach-title': 'Stranden og sjøen',
+        'balchik-beach-desc': 'Sandstrender, krystallklart vann og spektakulære solnedganger.',
+        'venue-eyebrow': 'Vielsen og festen',
+        'venue-title': 'Vårt sted',
+        'venue-tagline': 'Hvor vi sier ja',
+        'venue-subtitle': 'Golf & Villas Resort',
+        'venue-intro': 'Black Sea Rama ligger 7 km fra Balchik, 200 meter over havet. Et eksklusivt resort med spektakulær utsikt og Bulgarias første mesterskapsgolfbane.',
+        'venue-location-label': 'Beliggenhet',
+        'venue-location-title': '200 m over Svartehavet',
+        'venue-location-desc': 'Luksusvillaer, fire restauranter og endeløs utsikt mot Kaliakra-kappen.',
+        'venue-ceremony-label': 'Vielsen',
+        'venue-ceremony-title': 'Utendørs amfiteater',
+        'venue-ceremony-desc': 'Vi sier "ja" i resortens vakre amfiteater – med havet og himmelen som ramme.',
+        'venue-reception-label': 'Festen',
+        'venue-reception-title': 'EVENTUM-salen',
+        'venue-reception-desc': 'Et stort, lyst festlokale med utsikt over hav og golfbane.',
+        'venue-link-text': 'Besøk Black Sea Rama →',
+        'activities-eyebrow': 'Eksklusive opplevelser',
+        'activities-title': 'Det beste av området',
+        'activities-intro': 'Noen håndplukkede høydepunkter med fokus på tradisjon, kultur og fine opplevelser.',
+        'exp-wine-label': 'Varna · Vinsmaking',
+        'exp-wine-title': 'Privat bulgarsk vinsmaking',
+        'exp-wine-desc': 'Smak Bulgarias beste viner med en personlig sommelier i Varna.',
+        'exp-cruise-label': 'Balchik · Sjøen',
+        'exp-cruise-title': 'Svartehavscruise',
+        'exp-cruise-desc': '4-timers seiltur fra Balchik med lunsj og drikke om bord.',
+        'exp-palace-label': 'Balchik · Kultur',
+        'exp-palace-title': 'Palasset & Kaliakra',
+        'exp-palace-desc': 'Dronning Marias palass, botanisk hage og den dramatiske kappen Kaliakra.',
+        'exp-monastery-label': 'Varna · Historie',
+        'exp-monastery-title': 'Aladzha-klosteret',
+        'exp-monastery-desc': 'Middelalder-kloster hugget inn i fjellveggen, med guidet omvisning.',
+        'exp-stones-label': 'Varna · Natur',
+        'exp-stones-title': 'Steinskogen ved solnedgang',
+        'exp-stones-desc': 'Mystisk steinformasjon i magisk kveldslys – en uforglemmelig opplevelse.',
+        'exp-folk-label': 'Tradisjon · Kveld',
+        'exp-folk-title': 'Bulgarsk folkeaften',
+        'exp-folk-desc': 'Tradisjonell folkemusikk, dans og lokal mat i autentisk atmosfære.',
+        'getyourguide-link': 'Utforsk flere på GetYourGuide →',
+        'map-eyebrow': 'Området',
+        'map-title': 'På kartet',
+        'map-intro': 'Klikk på markørene for å se hva som er hvor.',
+        'legend-venue': 'Vårt sted',
+        'legend-town': 'Byer & resorter',
+        'legend-sight': 'Severdigheter',
+        'legend-restaurant': 'Restauranter',
+        'rest-eyebrow': 'Spisesteder',
+        'rest-title': 'Anbefalte restauranter',
+        'rest-intro': 'Noen favoritter for fersk fisk, lokal mat og spektakulær sjøutsikt.',
+        'rest-1-type': 'Skjellfarm & restaurant',
+        'rest-1-loc': 'Kaliakra-bukten',
+        'rest-1-desc': 'Berømt skjellfarm med restaurant rett ved bukten. Ferske skjell og sjømat med spektakulær utsikt – en må-oppleve i området.',
+        'rest-2-type': 'Fiskerestaurant',
+        'rest-2-loc': 'Golden Sands',
+        'rest-2-desc': 'Ved bryggen i Golden Sands. Black Sea-fisk, sjømat og utsikt mot småbåter og marina.',
+        'rest-3-type': 'Sjøpromenade',
+        'rest-3-title': 'Tavernaer i Balchik',
+        'rest-3-loc': 'Balchik sjøfront',
+        'rest-3-desc': 'Koselige lokale tavernaer langs sjøpromenaden. Fersk fisk, bulgarske retter og rolig stemning.',
+        'tripadvisor-link': 'Flere tips på TripAdvisor →',
+        'rsvp-eyebrow': 'Påmelding',
+        'rsvp-title': 'Meld deg på',
+        'rsvp-text': 'Fyll inn skjemaet nedenfor. Vi er takknemlige om du melder fra så snart du vet om du kan komme.',
+        'form-attending': 'KOMMER DU?',
+        'form-yes': 'Ja, jeg kommer',
+        'form-no': 'Nei, jeg kan dessverre ikke komme',
+        'form-name': 'NAVN',
+        'form-email': 'MAIL',
+        'form-phone': 'TELEFON',
+        'form-companion': 'FØLGETS NAVN',
+        'form-allergi': 'ALLERGI / KOSTHOLD',
+        'allergy-none': 'Ingen allergi',
+        'allergy-dairy': 'Melk / laktose',
+        'allergy-egg': 'Egg',
+        'allergy-nuts': 'Nøtter',
+        'allergy-gluten': 'Gluten',
+        'allergy-fish': 'Fisk',
+        'allergy-shellfish': 'Skalldyr',
+        'allergy-vegetarian': 'Vegetar',
+        'form-message': 'MELDING TIL BRUDEPARET',
+        'form-message-no': 'MELDING TIL BRUDEPARET',
+        'form-submit': 'Send svar'
+      },
+      en: {
+        'wrong-password': 'Wrong password',
+        'nav-home': 'Home',
+        'nav-venue': 'Our venue',
+        'nav-destination': 'The area',
+        'nav-activities': 'Experiences',
+        'nav-map': 'Map',
+        'nav-rsvp': 'RSVP',
+        'hero-intro': 'we are returning home to the Black Sea',
+        'hero-meta-date': 'Late summer 2027',
+        'hero-meta-place': 'Bulgaria',
+        'destination-eyebrow': 'The area',
+        'destination-title': "Bulgaria's Black Sea Coast",
+        'destination-text': 'We want to gather family and friends along the beautiful Black Sea coast in Bulgaria, surrounded by the sea, warm summer evenings, and relaxed beach life.',
+        'balchik-palace-title': "Queen Marie's Palace",
+        'balchik-palace-desc': "Romantic castle with one of South-Eastern Europe's most beautiful botanical gardens.",
+        'balchik-pier-title': 'The White Coast',
+        'balchik-pier-desc': 'Whitewashed houses along the limestone cliffs, with a charming seafront promenade.',
+        'balchik-beach-title': 'The Beach and Sea',
+        'balchik-beach-desc': 'Sandy beaches, crystal-clear water, and spectacular sunsets.',
+        'venue-eyebrow': 'The ceremony and celebration',
+        'venue-title': 'Our venue',
+        'venue-tagline': 'Where we say I do',
+        'venue-subtitle': 'Golf & Villas Resort',
+        'venue-intro': "Black Sea Rama lies 7 km from Balchik, 200 metres above sea level. An exclusive resort with spectacular views and Bulgaria's first championship golf course.",
+        'venue-location-label': 'Location',
+        'venue-location-title': '200 m above the Black Sea',
+        'venue-location-desc': 'Luxury villas, four restaurants, and endless views toward Cape Kaliakra.',
+        'venue-ceremony-label': 'The Ceremony',
+        'venue-ceremony-title': 'Open-air amphitheatre',
+        'venue-ceremony-desc': 'We will say "I do" at the resort\'s beautiful amphitheatre – framed by sea and sky.',
+        'venue-reception-label': 'The Celebration',
+        'venue-reception-title': 'The EVENTUM Hall',
+        'venue-reception-desc': 'A spacious, bright reception hall overlooking the sea and the golf course.',
+        'venue-link-text': 'Visit Black Sea Rama →',
+        'activities-eyebrow': 'Curated experiences',
+        'activities-title': 'The best of the area',
+        'activities-intro': 'A handful of selected highlights with focus on tradition, culture, and fine experiences.',
+        'exp-wine-label': 'Varna · Wine tasting',
+        'exp-wine-title': 'Private Bulgarian wine tasting',
+        'exp-wine-desc': "Taste Bulgaria's finest wines with a personal sommelier in Varna.",
+        'exp-cruise-label': 'Balchik · The sea',
+        'exp-cruise-title': 'Black Sea cruise',
+        'exp-cruise-desc': '4-hour sailing trip from Balchik with lunch and drinks on board.',
+        'exp-palace-label': 'Balchik · Culture',
+        'exp-palace-title': 'Palace & Kaliakra',
+        'exp-palace-desc': "Queen Marie's Palace, botanical garden, and the dramatic Cape Kaliakra.",
+        'exp-monastery-label': 'Varna · History',
+        'exp-monastery-title': 'Aladzha Monastery',
+        'exp-monastery-desc': 'Medieval monastery carved into the cliff face, with a guided tour.',
+        'exp-stones-label': 'Varna · Nature',
+        'exp-stones-title': 'Stone Forest at sunset',
+        'exp-stones-desc': 'Mysterious stone formations in magical evening light – an unforgettable experience.',
+        'exp-folk-label': 'Tradition · Evening',
+        'exp-folk-title': 'Bulgarian folk evening',
+        'exp-folk-desc': 'Traditional folk music, dance, and local food in an authentic atmosphere.',
+        'getyourguide-link': 'Explore more on GetYourGuide →',
+        'map-eyebrow': 'The area',
+        'map-title': 'On the map',
+        'map-intro': 'Click the markers to see what is where.',
+        'legend-venue': 'Our venue',
+        'legend-town': 'Towns & resorts',
+        'legend-sight': 'Sights',
+        'legend-restaurant': 'Restaurants',
+        'rest-eyebrow': 'Where to eat',
+        'rest-title': 'Recommended restaurants',
+        'rest-intro': 'A few favourites for fresh fish, local food and spectacular sea views.',
+        'rest-1-type': 'Mussel farm & restaurant',
+        'rest-1-loc': 'Kaliakra Bay',
+        'rest-1-desc': 'Famous mussel farm with a restaurant right by the bay. Fresh mussels and seafood with spectacular views – a must-do in the area.',
+        'rest-2-type': 'Fish restaurant',
+        'rest-2-loc': 'Golden Sands',
+        'rest-2-desc': 'By the pier in Golden Sands. Black Sea fish, seafood and views over boats and the marina.',
+        'rest-3-type': 'Seafront promenade',
+        'rest-3-title': 'Taverns in Balchik',
+        'rest-3-loc': 'Balchik seafront',
+        'rest-3-desc': 'Cozy local taverns along the seafront promenade. Fresh fish, Bulgarian dishes and a calm atmosphere.',
+        'tripadvisor-link': 'More tips on TripAdvisor →',
+        'rsvp-eyebrow': 'RSVP',
+        'rsvp-title': 'Please let us know',
+        'rsvp-text': 'Fill out the form below. We are grateful if you let us know as soon as you know if you can come.',
+        'form-attending': 'WILL YOU BE ATTENDING?',
+        'form-yes': 'Yes, I will attend',
+        'form-no': 'No, I unfortunately cannot attend',
+        'form-name': 'NAME',
+        'form-email': 'EMAIL',
+        'form-phone': 'PHONE',
+        'form-companion': "COMPANION'S NAME",
+        'form-allergi': 'ALLERGIES / DIETARY REQUIREMENTS',
+        'allergy-none': 'No allergies',
+        'allergy-dairy': 'Dairy / lactose',
+        'allergy-egg': 'Egg',
+        'allergy-nuts': 'Nuts',
+        'allergy-gluten': 'Gluten',
+        'allergy-fish': 'Fish',
+        'allergy-shellfish': 'Shellfish',
+        'allergy-vegetarian': 'Vegetarian',
+        'form-message': 'MESSAGE FOR THE COUPLE',
+        'form-message-no': 'MESSAGE FOR THE COUPLE',
+        'form-submit': 'Submit'
+      },
+      bg: {
+        'wrong-password': 'Грешна парола',
+        'nav-home': 'Начало',
+        'nav-venue': 'Нашето място',
+        'nav-destination': 'Района',
+        'nav-activities': 'Изживявания',
+        'nav-map': 'Карта',
+        'nav-rsvp': 'RSVP',
+        'hero-intro': 'връщаме се у дома, на Черно море',
+        'hero-meta-date': 'Късно лято 2027',
+        'hero-meta-place': 'България',
+        'destination-eyebrow': 'Района',
+        'destination-title': 'Черноморското крайбрежие на България',
+        'destination-text': 'Искаме да съберем семейство и приятели на красивото Черноморско крайбрежие в България, заобиколени от морето, топли летни вечери и спокоен плажен живот.',
+        'balchik-palace-title': 'Дворецът на кралица Мария',
+        'balchik-palace-desc': 'Романтичен дворец с една от най-красивите ботанически градини в Югоизточна Европа.',
+        'balchik-pier-title': 'Белият бряг',
+        'balchik-pier-desc': 'Варосани къщи по варовиковите скали и очарователна крайбрежна алея.',
+        'balchik-beach-title': 'Плажът и морето',
+        'balchik-beach-desc': 'Пясъчни плажове, кристално чиста вода и зрелищни залези.',
+        'venue-eyebrow': 'Церемонията и празненството',
+        'venue-title': 'Нашето място',
+        'venue-tagline': 'Тук казваме „Да"',
+        'venue-subtitle': 'Golf & Villas Resort',
+        'venue-intro': 'Black Sea Rama се намира на 7 км от Балчик, на 200 метра над морето. Ексклузивен курорт с впечатляваща гледка и първия шампионатен голф терен в България.',
+        'venue-location-label': 'Местоположение',
+        'venue-location-title': '200 м над Черно море',
+        'venue-location-desc': 'Луксозни вили, четири ресторанта и безкрайна гледка към нос Калиакра.',
+        'venue-ceremony-label': 'Церемонията',
+        'venue-ceremony-title': 'Открит амфитеатър',
+        'venue-ceremony-desc': 'Казваме „Да" в красивия амфитеатър на курорта – с морето и небето като декор.',
+        'venue-reception-label': 'Празненството',
+        'venue-reception-title': 'Зала EVENTUM',
+        'venue-reception-desc': 'Просторна и светла зала с гледка към морето и голф терена.',
+        'venue-link-text': 'Посетете Black Sea Rama →',
+        'activities-eyebrow': 'Селективни изживявания',
+        'activities-title': 'Най-доброто от района',
+        'activities-intro': 'Няколко избрани акценти с фокус върху традицията, културата и изтънчените изживявания.',
+        'exp-wine-label': 'Варна · Дегустация',
+        'exp-wine-title': 'Частна българска винена дегустация',
+        'exp-wine-desc': 'Опитайте най-добрите вина на България с личен сомелиер във Варна.',
+        'exp-cruise-label': 'Балчик · Морето',
+        'exp-cruise-title': 'Черноморски круиз',
+        'exp-cruise-desc': '4-часов плавателен излет от Балчик с обяд и напитки на борда.',
+        'exp-palace-label': 'Балчик · Култура',
+        'exp-palace-title': 'Дворецът & Калиакра',
+        'exp-palace-desc': 'Дворецът на кралица Мария, ботаническата градина и драматичният нос Калиакра.',
+        'exp-monastery-label': 'Варна · История',
+        'exp-monastery-title': 'Аладжа манастир',
+        'exp-monastery-desc': 'Средновековен манастир, издълбан в скалата, с екскурзовод.',
+        'exp-stones-label': 'Варна · Природа',
+        'exp-stones-title': 'Побитите камъни на залез',
+        'exp-stones-desc': 'Мистична скална формация в магическа вечерна светлина – незабравимо изживяване.',
+        'exp-folk-label': 'Традиция · Вечер',
+        'exp-folk-title': 'Българска фолклорна вечер',
+        'exp-folk-desc': 'Традиционна фолклорна музика, танци и местна храна в автентична атмосфера.',
+        'getyourguide-link': 'Открийте повече в GetYourGuide →',
+        'map-eyebrow': 'Района',
+        'map-title': 'На картата',
+        'map-intro': 'Кликнете върху маркерите, за да видите какво къде се намира.',
+        'legend-venue': 'Нашето място',
+        'legend-town': 'Градове и курорти',
+        'legend-sight': 'Забележителности',
+        'legend-restaurant': 'Ресторанти',
+        'rest-eyebrow': 'Места за хранене',
+        'rest-title': 'Препоръчани ресторанти',
+        'rest-intro': 'Няколко любими места за прясна риба, местна храна и зашеметяващи морски гледки.',
+        'rest-1-type': 'Ферма за миди и ресторант',
+        'rest-1-loc': 'Залив Калиакра',
+        'rest-1-desc': 'Известна ферма за миди с ресторант до залива. Пресни миди и морски дарове с впечатляваща гледка – задължително в района.',
+        'rest-2-type': 'Рибен ресторант',
+        'rest-2-loc': 'Златни пясъци',
+        'rest-2-desc': 'До пристана на Златни пясъци. Риба от Черно море, морски дарове и гледка към лодки и марината.',
+        'rest-3-type': 'Крайбрежна алея',
+        'rest-3-title': 'Кръчми в Балчик',
+        'rest-3-loc': 'Брегът на Балчик',
+        'rest-3-desc': 'Уютни местни кръчми по крайбрежната алея. Прясна риба, български ястия и спокойна атмосфера.',
+        'tripadvisor-link': 'Още съвети в TripAdvisor →',
+        'rsvp-eyebrow': 'RSVP',
+        'rsvp-title': 'Моля, уведомете ни',
+        'rsvp-text': 'Попълнете формуляра по-долу. Благодарим на вас, ако ни уведомите веднага щом знаете дали можете да дойдете.',
+        'form-attending': 'ЩЕ УЧАСТВАТЕ ЛИ?',
+        'form-yes': 'Да, ще участвам',
+        'form-no': 'Не, за съжаление не мога да дойда',
+        'form-name': 'ИМЕ',
+        'form-email': 'ИМЕЙЛ',
+        'form-phone': 'ТЕЛЕФОН',
+        'form-companion': 'ИМЕ НА СПЪТНИК',
+        'form-allergi': 'АЛЕРГИИ / ДИЕТИЧНИ ИЗИСКВАНИЯ',
+        'allergy-none': 'Без алергии',
+        'allergy-dairy': 'Млечни продукти / лактоза',
+        'allergy-egg': 'Яйца',
+        'allergy-nuts': 'Ядки',
+        'allergy-gluten': 'Глутен',
+        'allergy-fish': 'Риба',
+        'allergy-shellfish': 'Морски раци',
+        'allergy-vegetarian': 'Вегетарианец',
+        'form-message': 'СЪОБЩЕНИЕ ЗА ДВОЙКАТА',
+        'form-message-no': 'СЪОБЩЕНИЕ ЗА ДВОЙКАТА',
+        'form-submit': 'Изпращане'
+      }
+    };
 
-      if (password === 'SiljeogKjeld') {
-        window.location.href = 'home.html';
-      } else {
-        error.style.visibility = 'visible';
-        document.getElementById('pw-input').value = '';
+    let currentLang = 'no';
 
-        setTimeout(function() {
-          error.style.visibility = 'hidden';
-        }, 2000);
+    function setLanguage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-text]').forEach(element => {
+        const key = element.dataset.text;
+        if (translations[lang] && translations[lang][key]) {
+          element.textContent = translations[lang][key];
+        }
+      });
+      document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll(`[data-lang="${lang}"]`).forEach(btn => btn.classList.add('active'));
+      localStorage.setItem('preferred-language', lang);
+      if (typeof updateMapPopups === 'function' && typeof weddingMap !== 'undefined' && weddingMap) {
+        updateMapPopups();
       }
     }
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', function() { setLanguage(this.dataset.lang); });
+    });
+
+    function openWeddingSite() {
+      var password = document.getElementById('pw-input').value;
+      var error = document.getElementById('pw-error');
+      if (password !== 'SiljeandKjeld') {
+        error.classList.add('show');
+        setTimeout(function () { error.classList.remove('show'); }, 2000);
+        return;
+      }
+      sessionStorage.setItem('sk27', '1');
+      var intro = document.getElementById('pw-screen');
+      intro.classList.add('hidden');
+      setTimeout(function () {
+        intro.style.display = 'none';
+        document.body.classList.remove('locked');
+      }, 600);
+    }
+
+    window.addEventListener('load', function () {
+      if (sessionStorage.getItem('sk27') === '1') {
+        var intro = document.getElementById('pw-screen');
+        if (intro) intro.style.display = 'none';
+        document.body.classList.remove('locked');
+      }
+      const saved = localStorage.getItem('preferred-language');
+      const browserLang = navigator.language.split('-')[0];
+      const lang = saved || (browserLang === 'en' || browserLang === 'bg' ? browserLang : 'no');
+      if (['no', 'en', 'bg'].includes(lang)) setLanguage(lang);
+    });
+
+    document.getElementById('pw-input').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') openWeddingSite();
+    });
+
+    function toggleMenu() {
+      var overlay = document.getElementById('menu-overlay');
+      overlay.classList.toggle('open');
+      document.body.style.overflow = overlay.classList.contains('open') ? 'hidden' : '';
+    }
+
+    function toggleAttendance() {
+      var status = document.querySelector('input[name="deltar"]:checked');
+      var attendingFields = document.getElementById('attending-fields');
+      var notAttendingFields = document.getElementById('not-attending-fields');
+      var form = document.getElementById('rsvp-form');
+      if (!status) return;
+      if (status.value === 'ja') {
+        attendingFields.style.display = 'block';
+        notAttendingFields.style.display = 'none';
+        form.action = '/thank-you.html';
+      } else {
+        attendingFields.style.display = 'none';
+        notAttendingFields.style.display = 'block';
+        form.action = '/thank-you-decline.html';
+      }
+    }
+  </script>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    const placeData = [
+      { coords: [43.4205, 28.0966], type: 'venue', name: 'Black Sea Rama', labels: { no: 'Vårt sted', en: 'Our venue', bg: 'Нашето място' }, descs: { no: 'Her holdes vielsen og festen', en: 'Where the ceremony and reception take place', bg: 'Тук се провежда церемонията и празненството' }},
+      { coords: [43.4239, 28.1611], type: 'town', name: 'Balchik', labels: { no: 'Kystby', en: 'Coastal town', bg: 'Крайбрежен град' }, descs: { no: 'Sjarmerende by med palass og sjøpromenade', en: 'Charming town with palace and seaside promenade', bg: 'Очарователен град с дворец и крайбрежна алея' }},
+      { coords: [43.3739, 28.0814], type: 'town', name: 'Albena', labels: { no: 'Ferieresort', en: 'Holiday resort', bg: 'Курорт' }, descs: { no: 'Familievennlig område med strand', en: 'Family-friendly resort area with beach', bg: 'Семеен курорт с плаж' }},
+      { coords: [43.2141, 27.9147], type: 'town', name: 'Varna', labels: { no: 'Storby', en: 'Main city', bg: 'Голям град' }, descs: { no: 'Storby med flyplass, shopping og kultur', en: 'Main city with airport, shopping, and culture', bg: 'Голям град с летище, шопинг и култура' }},
+      { coords: [43.2885, 28.0405], type: 'town', name: 'Golden Sands', labels: { no: 'Strand & resort', en: 'Beach & resort', bg: 'Плаж и курорт' }, descs: { no: 'Berømt sandstrand med restauranter og strandliv', en: 'Famous sandy beach with restaurants and beach life', bg: 'Известен пясъчен плаж с ресторанти и плажен живот' }},
+      { coords: [43.2321, 27.8253], type: 'sight', name: 'Varna lufthavn', labels: { no: 'Flyplass', en: 'Airport', bg: 'Летище' }, descs: { no: 'Nærmeste internasjonale flyplass', en: 'Nearest international airport', bg: 'Най-близкото международно летище' }},
+      { coords: [43.3650, 28.4636], type: 'sight', name: 'Kaliakra', labels: { no: 'Severdighet', en: 'Sight', bg: 'Забележителност' }, descs: { no: 'Dramatisk klippe ut i Svartehavet', en: 'Dramatic cliff jutting into the Black Sea', bg: 'Драматична скала към Черно море' }},
+      { coords: [43.2858, 28.0469], type: 'sight', name: 'Aladzha-klosteret', labels: { no: 'Severdighet', en: 'Sight', bg: 'Забележителност' }, descs: { no: 'Middelalder-kloster hugget inn i fjell', en: 'Medieval monastery carved into the cliff', bg: 'Средновековен манастир в скалата' }},
+      { coords: [43.2253, 27.7042], type: 'sight', name: 'Steinskogen', labels: { no: 'Naturfenomen', en: 'Natural wonder', bg: 'Природно чудо' }, descs: { no: 'Mystiske steinformasjoner – magisk ved solnedgang', en: 'Mysterious stone formations – magical at sunset', bg: 'Мистични скални формации – магически на залез' }},
+      { coords: [43.3958, 28.4486], type: 'restaurant', name: 'Dalboka', labels: { no: 'Skjellrestaurant', en: 'Mussel restaurant', bg: 'Ресторант с миди' }, descs: { no: 'Berømt skjellfarm ved Kaliakra-bukten – ferskt fra havet', en: 'Famous mussel farm by Kaliakra Bay – fresh from the sea', bg: 'Известна ферма за миди в Калиакра – прясно от морето' }},
+      { coords: [43.2906, 28.0405], type: 'restaurant', name: 'Captain Cook', labels: { no: 'Fiskerestaurant', en: 'Fish restaurant', bg: 'Рибен ресторант' }, descs: { no: 'Fersk fisk og sjømat ved bryggen i Golden Sands', en: 'Fresh fish and seafood by the pier in Golden Sands', bg: 'Прясна риба и морски дарове на пристана в Златни пясъци' }}
+    ];
+
+    let weddingMap;
+    const markerRefs = [];
+
+    function initMap() {
+      if (typeof L === 'undefined' || weddingMap) return;
+      weddingMap = L.map('map', { center: [43.33, 28.15], zoom: 10, scrollWheelZoom: false });
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap', maxZoom: 18
+      }).addTo(weddingMap);
+
+      const iconConfig = {
+        venue:      { size: [36, 44], anchor: [18, 44], symbol: '♡' },
+        town:       { size: [26, 32], anchor: [13, 32], symbol: '' },
+        sight:      { size: [22, 28], anchor: [11, 28], symbol: '' },
+        restaurant: { size: [22, 28], anchor: [11, 28], symbol: '' }
+      };
+
+      placeData.forEach(p => {
+        const cfg = iconConfig[p.type];
+        const icon = L.divIcon({
+          className: 'sk-marker sk-marker-' + p.type,
+          html: `<div class="pin"><span class="pin-inner">${cfg.symbol}</span></div>`,
+          iconSize: cfg.size,
+          iconAnchor: cfg.anchor,
+          popupAnchor: [0, -cfg.anchor[1] + 4]
+        });
+        const marker = L.marker(p.coords, { icon }).addTo(weddingMap);
+        markerRefs.push({ marker, data: p });
+      });
+
+      updateMapPopups();
+      const group = new L.featureGroup(markerRefs.map(m => m.marker));
+      weddingMap.fitBounds(group.getBounds(), { padding: [30, 30] });
+    }
+
+    function updateMapPopups() {
+      const lang = currentLang || 'no';
+      markerRefs.forEach(({ marker, data }) => {
+        const label = data.labels[lang] || data.labels.no;
+        const desc = data.descs[lang] || data.descs.no;
+        marker.bindPopup(`
+          <span class="popup-name">${data.name}</span>
+          <span class="popup-label">${label}</span>
+          <span class="popup-desc">${desc}</span>
+        `);
+      });
+    }
+
+    window.addEventListener('load', function() { setTimeout(initMap, 100); });
   </script>
 
 </body>
