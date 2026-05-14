@@ -328,6 +328,99 @@
 
     .menu-toggle:hover span { background: var(--brass); }
 
+    /* RIGHT SIDE OF NAV (lang dropdown + hamburger) */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    /* LANGUAGE DROPDOWN */
+    .lang-dropdown {
+      position: relative;
+    }
+
+    .lang-dropdown-trigger {
+      background: transparent;
+      border: 1px solid var(--brass);
+      color: var(--brass);
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: 0.7rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      padding: 0.5rem 0.7rem 0.5rem 0.85rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all 0.2s;
+      line-height: 1;
+    }
+
+    .lang-dropdown-trigger:hover {
+      background: var(--brass);
+      color: var(--paper);
+    }
+
+    .lang-chevron {
+      font-size: 0.6rem;
+      transition: transform 0.3s ease;
+      transform: translateY(-1px);
+    }
+
+    .lang-dropdown.open .lang-chevron {
+      transform: rotate(180deg) translateY(0);
+    }
+
+    .lang-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      background: var(--paper);
+      border: 1px solid var(--brass);
+      min-width: 100%;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+      box-shadow: 0 8px 20px rgba(155, 124, 66, 0.12);
+    }
+
+    .lang-dropdown.open .lang-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .lang-option {
+      display: block;
+      width: 100%;
+      background: transparent;
+      border: none;
+      padding: 0.6rem 1.1rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: 0.7rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--brass-dark);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      line-height: 1;
+    }
+
+    .lang-option:hover {
+      background: var(--cream);
+      color: var(--brass);
+    }
+
+    .lang-option.active {
+      color: var(--brass);
+      background: var(--cream-warm);
+    }
+
     /* ============================================
        FULLSCREEN MENU OVERLAY
        ============================================ */
@@ -471,15 +564,35 @@
       color: var(--brass);
       font-size: 0.6rem;
       letter-spacing: 0.5em;
-      margin-bottom: 5rem;
+      margin-bottom: 3.5rem;
       opacity: 0.5;
+    }
+
+    /* Invitation line — italic, warm, the welcoming message */
+    .hero-invite {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+      color: var(--brass-dark);
+      margin-bottom: 3.5rem;
+      letter-spacing: 0.02em;
+      line-height: 1.4;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      width: 100%;
+      animation: hero-rise 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s both;
     }
 
     /* The names — the hero of the hero */
     .hero-names {
       font-family: 'Cormorant Garamond', serif;
       font-weight: 300;
-      font-size: clamp(3.8rem, 12vw, 7.5rem);
+      font-size: clamp(3.5rem, 11vw, 7rem);
       line-height: 1;
       color: var(--ink);
       letter-spacing: 0.005em;
@@ -492,16 +605,24 @@
 
     .hero-name { display: inline-block; }
 
-    /* The script ampersand — the signature moment */
-    .hero-amp {
-      font-family: 'Italianno', cursive;
-      font-weight: 400;
-      font-size: 1.4em;
+    /* The heart symbol — antique brass, the signature moment */
+    .hero-heart {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 0.55em;
+      height: 0.55em;
       color: var(--brass);
-      font-style: normal;
-      line-height: 0.7;
-      transform: translateY(-0.05em);
-      letter-spacing: 0;
+    }
+
+    .hero-heart svg {
+      width: 100%;
+      height: 100%;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     /* Thin gold line — quiet separator */
@@ -533,9 +654,10 @@
 
     @media (max-width: 768px) {
       #hjem { padding: 7rem 1.5rem 5rem; }
-      .hero-ornament { margin-bottom: 4rem; }
-      .hero-names { gap: 0.25em; }
-      .hero-amp { font-size: 1.3em; }
+      .hero-ornament { margin-bottom: 2.5rem; }
+      .hero-invite { font-size: 1rem; margin-bottom: 2.5rem; }
+      .hero-names { gap: 0.25em; font-size: clamp(2.8rem, 12vw, 5rem); }
+      .hero-heart { width: 0.5em; height: 0.5em; }
       .hero-line { margin: 3rem auto 1.75rem; }
       .hero-meta { font-size: 0.7rem; letter-spacing: 0.35em; }
     }
@@ -566,15 +688,33 @@
       opacity: 0.5;
     }
 
+    .letter-salutation {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: var(--dust);
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.02em;
+    }
+
     .letter-body {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
       font-weight: 300;
       font-size: clamp(1.2rem, 2.4vw, 1.5rem);
       color: var(--ink-soft);
-      line-height: 1.8;
+      line-height: 1.75;
       margin-bottom: 1.8rem;
       letter-spacing: 0.01em;
+    }
+
+    /* Practical line — slightly more reserved, like a postscript */
+    .letter-body--practical {
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: var(--dust);
+      font-weight: 400;
+      margin-top: 2.5rem;
     }
 
     .letter-body:last-of-type {
@@ -595,6 +735,117 @@
       .letter-ornament { margin-bottom: 3rem; }
       .letter-body { font-size: 1.15rem; line-height: 1.7; }
       .letter-body:last-of-type { margin-bottom: 3rem; }
+    }
+
+    /* ============================================
+       ✦  PLANEN  ✦  — Step 3 redesign
+       ============================================ */
+    #planen {
+      background: var(--cream);
+      padding: 9rem 2rem;
+      text-align: center;
+    }
+
+    .planen-content {
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .planen-ornament {
+      color: var(--brass);
+      font-size: 0.55rem;
+      letter-spacing: 0.5em;
+      margin-bottom: 2rem;
+      opacity: 0.5;
+    }
+
+    .planen-eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 1.05rem;
+      color: var(--dust);
+      margin-bottom: 0.5rem;
+    }
+
+    .planen-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 7vw, 3.6rem);
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 3rem;
+    }
+
+    .planen-intro {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--dust);
+      margin-bottom: 4rem;
+    }
+
+    .planen-items {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+      margin-bottom: 4.5rem;
+    }
+
+    .planen-item {
+      text-align: center;
+    }
+
+    .planen-item-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: 0.72rem;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--brass-dark);
+      margin-bottom: 0.8rem;
+    }
+
+    .planen-item-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+      color: var(--ink-soft);
+      line-height: 1.6;
+      max-width: 460px;
+      margin: 0 auto;
+    }
+
+    .planen-separator {
+      color: var(--brass);
+      letter-spacing: 0.8em;
+      font-size: 0.5rem;
+      opacity: 0.5;
+      text-align: center;
+    }
+
+    .planen-note {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(1.05rem, 2vw, 1.2rem);
+      color: var(--ink-soft);
+      line-height: 1.75;
+      max-width: 520px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .planen-note--small {
+      font-size: 0.95rem;
+      color: var(--dust);
+    }
+
+    @media (max-width: 768px) {
+      #planen { padding: 6rem 1.5rem; }
+      .planen-title { margin-bottom: 2rem; }
+      .planen-intro { margin-bottom: 3rem; }
+      .planen-items { gap: 2.5rem; margin-bottom: 3rem; }
+      .planen-item-text { font-size: 1.15rem; }
     }
 
     /* ============================================
@@ -1116,11 +1367,26 @@
       </a>
 
 ```
-  <button class="menu-toggle" aria-label="Meny" onclick="toggleMenu()">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
+  <div class="nav-right">
+    <!-- Language dropdown -->
+    <div class="lang-dropdown" id="lang-dropdown">
+      <button class="lang-dropdown-trigger" onclick="toggleLangDropdown(event)" aria-label="Velg språk">
+        <span class="lang-current">NO</span>
+        <span class="lang-chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="lang-dropdown-menu">
+        <button class="lang-btn lang-option active" data-lang="no">NO</button>
+        <button class="lang-btn lang-option" data-lang="en">EN</button>
+        <button class="lang-btn lang-option" data-lang="bg">BG</button>
+      </div>
+    </div>
+
+    <button class="menu-toggle" aria-label="Meny" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
 </div>
 ```
 
@@ -1142,18 +1408,12 @@
 
 <ul class="menu-links-list">
   <li><a href="#hjem" data-text="nav-home" onclick="toggleMenu()">Hjem</a></li>
+  <li><a href="#planen" data-text="nav-plan" onclick="toggleMenu()">Planen</a></li>
   <li><a href="#omradet" data-text="nav-destination" onclick="toggleMenu()">Området</a></li>
-  <li><a href="#venue" data-text="nav-venue" onclick="toggleMenu()">Vårt sted</a></li>
   <li><a href="#aktiviteter" data-text="nav-activities" onclick="toggleMenu()">Opplevelser</a></li>
   <li><a href="#kart" data-text="nav-map" onclick="toggleMenu()">Kart</a></li>
   <li><a href="#paamelding" data-text="nav-rsvp" onclick="toggleMenu()">Påmelding</a></li>
 </ul>
-
-<div class="menu-langs">
-  <button class="lang-btn active" data-lang="no">NO</button>
-  <button class="lang-btn" data-lang="en">EN</button>
-  <button class="lang-btn" data-lang="bg">BG</button>
-</div>
 ```
 
   </div>
@@ -1170,9 +1430,17 @@
 ```
   <div class="hero-ornament">✦</div>
 
+  <p class="hero-invite" data-text="hero-invite">
+    Du er invitert til vårt bryllup
+  </p>
+
   <h1 class="hero-names" aria-label="Silje og Kjeld">
     <span class="hero-name">Silje</span>
-    <span class="hero-amp" aria-hidden="true">&amp;</span>
+    <span class="hero-heart" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+    </span>
     <span class="hero-name">Kjeld</span>
   </h1>
 
@@ -1181,7 +1449,7 @@
   <p class="hero-meta">
     <span data-text="hero-meta-date">Sensommer 2027</span>
     <span class="hero-meta-dot">·</span>
-    <span data-text="hero-meta-place">Bulgaria</span>
+    <span data-text="hero-meta-place">Dato kommer</span>
   </p>
 
 </div>
@@ -1201,20 +1469,77 @@
 ```
   <div class="letter-ornament">✦</div>
 
+  <p class="letter-salutation" data-text="letter-salutation">
+    Til familie og venner,
+  </p>
+
   <p class="letter-body" data-text="letter-1">
-    Silje sin mor er fra Bulgaria,
-    og derfor har dette landet alltid betydd noe for oss.
+    Vi gifter oss i Bulgaria, ved Svartehavet — i området rundt Balchik og Albena.
+    Silje har familie i Bulgaria, og det er et sted som betyr mye for oss.
+    Derfor ønsker vi å samle familie og venner akkurat her.
   </p>
 
   <p class="letter-body" data-text="letter-2">
-    Det er en ro her — en ro som er blitt en del av livet vårt.
+    Vi håper dere har lyst til å komme og feire sammen med oss.
+    Datoen er ikke helt satt ennå, men bryllupet blir i sensommeren 2027.
   </p>
 
-  <p class="letter-body" data-text="letter-3">
-    Vi vil dele det med vennene og de nærmeste vi er glade i.
+  <p class="letter-body letter-body--practical" data-text="letter-3">
+    Nærmeste flyplass er Varna. Mer praktisk informasjon kommer etter hvert.
   </p>
 
   <div class="letter-signature">Silje &amp; Kjeld</div>
+
+</div>
+```
+
+  </section>
+
+  <!-- ╔══════════════════════════════════════════╗ -->
+
+  <!-- ║          ✦  PLANEN  ✦                    ║ -->
+
+  <!-- ╚══════════════════════════════════════════╝ -->
+
+  <section id="planen">
+    <div class="planen-content">
+
+```
+  <div class="planen-ornament">✦</div>
+
+  <p class="planen-eyebrow" data-text="planen-eyebrow">Foreløpig</p>
+  <h2 class="planen-title" data-text="planen-title">Planen</h2>
+
+  <p class="planen-intro" data-text="planen-intro">
+    Slik tenker vi det nå:
+  </p>
+
+  <div class="planen-items">
+    <div class="planen-item">
+      <p class="planen-item-label" data-text="planen-1-label">En kveld før</p>
+      <p class="planen-item-text" data-text="planen-1-text">
+        Strandfest og get-together. Kanskje en båttur, om vi får tid.
+      </p>
+    </div>
+
+    <div class="planen-separator">· · ·</div>
+
+    <div class="planen-item">
+      <p class="planen-item-label" data-text="planen-2-label">Bryllupsdagen</p>
+      <p class="planen-item-text" data-text="planen-2-text">
+        Vielse og fest på Black Sea Rama, like utenfor Balchik.
+      </p>
+    </div>
+  </div>
+
+  <p class="planen-note" data-text="planen-note-1">
+    Vi vet det er et stykke å reise. Vi prøver å legge det opp slik at
+    det går både å gjøre det til en ferieuke — eller komme bare til helgen.
+  </p>
+
+  <p class="planen-note planen-note--small" data-text="planen-note-2">
+    Mer praktisk informasjon kommer.
+  </p>
 
 </div>
 ```
@@ -1226,7 +1551,7 @@
   <section id="omradet">
     <div class="section-wrap">
       <p class="section-eyebrow" data-text="destination-eyebrow">Området</p>
-      <h2 class="section-title" data-text="destination-title">Svartehavskysten i Bulgaria</h2>
+      <h2 class="section-title" data-text="destination-title">Svartehavet, om sommeren</h2>
       <div class="divider"><span class="divider-icon">✦</span></div>
 
 ```
@@ -1235,8 +1560,8 @@
   </div>
 
   <p class="section-sub" data-text="destination-text">
-    Vi ønsker å samle familie og venner ved vakre Svartehavskysten i Bulgaria,
-    omgitt av sjø, varme sommerkvelder og avslappet strandliv.
+    Mellom Balchik og Kaliakra ligger en bit av kysten vi har blitt glad i.
+    Hvite klipper, varme kvelder, hav.
   </p>
 
   <div class="balchik-gallery">
@@ -1245,7 +1570,7 @@
       <div class="balchik-card-content">
         <h3 data-text="balchik-palace-title">Dronning Marias palass</h3>
         <p data-text="balchik-palace-desc">
-          Romantisk slott med en av Sør-Øst-Europas vakreste botaniske hager.
+          Bygget av en dronning som elsket hagene sine. Lett å bruke en formiddag her.
         </p>
       </div>
     </div>
@@ -1255,7 +1580,7 @@
       <div class="balchik-card-content">
         <h3 data-text="balchik-pier-title">Den hvite kysten</h3>
         <p data-text="balchik-pier-desc">
-          Hvitkalkede hus i kalkstein-klippene, med koselig sjøpromenade.
+          Hvite hus klatrer opp kalksteinklippene. Promenaden går langs vannet.
         </p>
       </div>
     </div>
@@ -1263,60 +1588,13 @@
     <div class="balchik-card">
       <img class="balchik-card-image" src="images/balchik-beach.png" alt="Strand med strå-parasoller" loading="lazy" />
       <div class="balchik-card-content">
-        <h3 data-text="balchik-beach-title">Stranden og sjøen</h3>
+        <h3 data-text="balchik-beach-title">Stranden</h3>
         <p data-text="balchik-beach-desc">
-          Sandstrender, krystallklart vann og spektakulære solnedganger.
+          Stille bukter, mykt vann. Solnedgangene er av den slag man husker.
         </p>
       </div>
     </div>
   </div>
-</div>
-```
-
-  </section>
-
-  <!-- VENUE -->
-
-  <section id="venue">
-    <div class="section-wrap" style="text-align:center;">
-      <p class="section-eyebrow" data-text="venue-eyebrow">Vielsen og festen</p>
-      <h2 class="section-title" data-text="venue-title">Vårt sted</h2>
-      <div class="divider"><span class="divider-icon">✦</span></div>
-
-```
-  <p class="venue-tagline" data-text="venue-tagline">Hvor vi sier ja</p>
-  <h3 class="venue-name">Black Sea Rama</h3>
-  <p class="venue-tagline" data-text="venue-subtitle" style="margin-top:0;">Golf & Villas Resort</p>
-
-  <p class="venue-intro" data-text="venue-intro">
-    Black Sea Rama ligger 7 km fra Balchik, 200 meter over havet.
-    Et eksklusivt resort med spektakulær utsikt og Bulgarias første mesterskapsgolfbane.
-  </p>
-
-  <div class="venue-features">
-    <div class="venue-feature">
-      <div class="venue-feature-icon">✦</div>
-      <p class="venue-feature-label" data-text="venue-location-label">Beliggenhet</p>
-      <h3 data-text="venue-location-title">200 m over Svartehavet</h3>
-      <p data-text="venue-location-desc">Luksusvillaer, fire restauranter og endeløs utsikt mot Kaliakra-kappen.</p>
-    </div>
-
-    <div class="venue-feature">
-      <div class="venue-feature-icon">♡</div>
-      <p class="venue-feature-label" data-text="venue-ceremony-label">Vielsen</p>
-      <h3 data-text="venue-ceremony-title">Utendørs amfiteater</h3>
-      <p data-text="venue-ceremony-desc">Vi sier "ja" i resortens vakre amfiteater – med havet og himmelen som ramme.</p>
-    </div>
-
-    <div class="venue-feature">
-      <div class="venue-feature-icon">✧</div>
-      <p class="venue-feature-label" data-text="venue-reception-label">Festen</p>
-      <h3 data-text="venue-reception-title">EVENTUM-salen</h3>
-      <p data-text="venue-reception-desc">Et stort, lyst festlokale med utsikt over hav og golfbane.</p>
-    </div>
-  </div>
-
-  <a class="venue-link" href="https://www.blacksearama.com" target="_blank" rel="noopener" data-text="venue-link-text">Besøk Black Sea Rama →</a>
 </div>
 ```
 
@@ -1326,50 +1604,50 @@
 
   <section id="aktiviteter">
     <div class="section-wrap">
-      <p class="section-eyebrow" data-text="activities-eyebrow">Eksklusive opplevelser</p>
-      <h2 class="section-title" data-text="activities-title">Det beste av området</h2>
+      <p class="section-eyebrow" data-text="activities-eyebrow">Hvis dere blir lenger</p>
+      <h2 class="section-title" data-text="activities-title">Anbefalinger</h2>
       <div class="divider"><span class="divider-icon">✦</span></div>
 
 ```
   <p class="section-sub" data-text="activities-intro">
-    Noen håndplukkede høydepunkter med fokus på tradisjon, kultur og fine opplevelser.
+    Steder og opplevelser vi er glade i. Plukk det dere har lyst på.
   </p>
 
   <div class="activities-grid">
     <div class="activity-card">
-      <p class="activity-label" data-text="exp-wine-label">Varna · Vinsmaking</p>
-      <h3 data-text="exp-wine-title">Privat bulgarsk vinsmaking</h3>
-      <p data-text="exp-wine-desc">Smak Bulgarias beste viner med en personlig sommelier i Varna.</p>
+      <p class="activity-label" data-text="exp-beach-label">Albena · Strand</p>
+      <h3 data-text="exp-beach-title">Strandliv</h3>
+      <p data-text="exp-beach-desc">Lange strender, varmt vann, late dager. Albena er gjort for sommer.</p>
     </div>
 
     <div class="activity-card">
-      <p class="activity-label" data-text="exp-cruise-label">Balchik · Sjøen</p>
-      <h3 data-text="exp-cruise-title">Svartehavscruise</h3>
-      <p data-text="exp-cruise-desc">4-timers seiltur fra Balchik med lunsj og drikke om bord.</p>
+      <p class="activity-label" data-text="exp-golf-label">Black Sea Rama · Sport</p>
+      <h3 data-text="exp-golf-title">Mesterskapsgolf</h3>
+      <p data-text="exp-golf-desc">Banen på Black Sea Rama er Bulgarias første mesterskapsbane. Verdt en runde.</p>
     </div>
 
     <div class="activity-card">
-      <p class="activity-label" data-text="exp-palace-label">Balchik · Kultur</p>
-      <h3 data-text="exp-palace-title">Palasset & Kaliakra</h3>
-      <p data-text="exp-palace-desc">Dronning Marias palass, botanisk hage og den dramatiske kappen Kaliakra.</p>
+      <p class="activity-label" data-text="exp-city-label">Varna · Byliv</p>
+      <h3 data-text="exp-city-title">Varna</h3>
+      <p data-text="exp-city-desc">Storby med havn, kafeer og park. Bra for en dag eller kveld.</p>
     </div>
 
     <div class="activity-card">
-      <p class="activity-label" data-text="exp-monastery-label">Varna · Historie</p>
-      <h3 data-text="exp-monastery-title">Aladzha-klosteret</h3>
-      <p data-text="exp-monastery-desc">Middelalder-kloster hugget inn i fjellveggen, med guidet omvisning.</p>
+      <p class="activity-label" data-text="exp-food-label">Kysten · Mat</p>
+      <h3 data-text="exp-food-title">Sjømat og salater</h3>
+      <p data-text="exp-food-desc">Skjell, fersk fisk, lette salater. Kystmat på sitt beste.</p>
     </div>
 
     <div class="activity-card">
       <p class="activity-label" data-text="exp-stones-label">Varna · Natur</p>
-      <h3 data-text="exp-stones-title">Steinskogen ved solnedgang</h3>
-      <p data-text="exp-stones-desc">Mystisk steinformasjon i magisk kveldslys – en uforglemmelig opplevelse.</p>
+      <h3 data-text="exp-stones-title">Steinskogen</h3>
+      <p data-text="exp-stones-desc">Underlige steinformasjoner ute på sletten. Best ved solnedgang.</p>
     </div>
 
     <div class="activity-card">
-      <p class="activity-label" data-text="exp-folk-label">Tradisjon · Kveld</p>
-      <h3 data-text="exp-folk-title">Bulgarsk folkeaften</h3>
-      <p data-text="exp-folk-desc">Tradisjonell folkemusikk, dans og lokal mat i autentisk atmosfære.</p>
+      <p class="activity-label" data-text="exp-promenade-label">Balchik · Kveld</p>
+      <h3 data-text="exp-promenade-title">Promenaden</h3>
+      <p data-text="exp-promenade-desc">Sjøpromenaden i Balchik. Restauranter, barer og kveldsmusikk.</p>
     </div>
   </div>
 
@@ -1385,12 +1663,12 @@
 
   <section id="kart">
     <div class="section-wrap">
-      <p class="section-eyebrow" data-text="map-eyebrow">Området</p>
+      <p class="section-eyebrow" data-text="map-eyebrow">Geografi</p>
       <h2 class="section-title" data-text="map-title">På kartet</h2>
       <div class="divider"><span class="divider-icon">✦</span></div>
 
 ```
-  <p class="section-sub" data-text="map-intro">Klikk på markørene for å se hva som er hvor.</p>
+  <p class="section-sub" data-text="map-intro">Trykk på markørene for detaljer.</p>
 
   <div id="map" class="map-container"></div>
 
@@ -1398,7 +1676,6 @@
     <div class="legend-item"><span class="legend-marker legend-venue"></span><span data-text="legend-venue">Vårt sted</span></div>
     <div class="legend-item"><span class="legend-marker legend-town"></span><span data-text="legend-town">Byer & resorter</span></div>
     <div class="legend-item"><span class="legend-marker legend-sight"></span><span data-text="legend-sight">Severdigheter</span></div>
-    <div class="legend-item"><span class="legend-marker legend-restaurant"></span><span data-text="legend-restaurant">Restauranter</span></div>
   </div>
 </div>
 ```
@@ -1409,33 +1686,33 @@
 
   <section id="restauranter">
     <div class="section-wrap" style="text-align:center;">
-      <p class="section-eyebrow" data-text="rest-eyebrow">Spisesteder</p>
-      <h2 class="section-title" data-text="rest-title">Anbefalte restauranter</h2>
+      <p class="section-eyebrow" data-text="rest-eyebrow">Mat</p>
+      <h2 class="section-title" data-text="rest-title">Stedene vi går tilbake til</h2>
       <div class="divider"><span class="divider-icon">✦</span></div>
 
 ```
-  <p class="section-sub" data-text="rest-intro">Noen favoritter for fersk fisk, lokal mat og spektakulær sjøutsikt.</p>
+  <p class="section-sub" data-text="rest-intro">Tre favoritter. Resten finner dere selv.</p>
 
   <div class="restaurants-grid" style="text-align:left;">
     <div class="restaurant-card">
-      <p class="restaurant-type" data-text="rest-1-type">Skjellfarm & restaurant</p>
+      <p class="restaurant-type" data-text="rest-1-type">Skjellfarm</p>
       <h3>Dalboka</h3>
       <p class="restaurant-location" data-text="rest-1-loc">Kaliakra-bukten</p>
-      <p data-text="rest-1-desc">Berømt skjellfarm med restaurant rett ved bukten. Ferske skjell og sjømat med spektakulær utsikt – en må-oppleve i området.</p>
+      <p data-text="rest-1-desc">Skjell rett fra havet. Spis ved bukten, gjerne en kveld.</p>
     </div>
 
     <div class="restaurant-card">
-      <p class="restaurant-type" data-text="rest-2-type">Fiskerestaurant</p>
+      <p class="restaurant-type" data-text="rest-2-type">Fisk</p>
       <h3>Captain Cook</h3>
       <p class="restaurant-location" data-text="rest-2-loc">Golden Sands</p>
-      <p data-text="rest-2-desc">Ved bryggen i Golden Sands. Black Sea-fisk, sjømat og utsikt mot småbåter og marina.</p>
+      <p data-text="rest-2-desc">Bryggen, båtene, fisk fra Svartehavet.</p>
     </div>
 
     <div class="restaurant-card">
-      <p class="restaurant-type" data-text="rest-3-type">Sjøpromenade</p>
-      <h3 data-text="rest-3-title">Tavernaer i Balchik</h3>
-      <p class="restaurant-location" data-text="rest-3-loc">Balchik sjøfront</p>
-      <p data-text="rest-3-desc">Koselige lokale tavernaer langs sjøpromenaden. Fersk fisk, bulgarske retter og rolig stemning.</p>
+      <p class="restaurant-type" data-text="rest-3-type">Lokal mat</p>
+      <h3 data-text="rest-3-title">Tavernaene i Balchik</h3>
+      <p class="restaurant-location" data-text="rest-3-loc">Sjøpromenaden</p>
+      <p data-text="rest-3-desc">Mange små steder langs promenaden. Velg en med utsikt.</p>
     </div>
   </div>
 
@@ -1450,12 +1727,12 @@
   <section id="paamelding">
     <div class="section-wrap">
       <p class="section-eyebrow" data-text="rsvp-eyebrow">Påmelding</p>
-      <h2 class="section-title" data-text="rsvp-title">Meld deg på</h2>
+      <h2 class="section-title" data-text="rsvp-title">Si fra om dere kommer</h2>
       <div class="divider"><span class="divider-icon">✦</span></div>
 
 ```
   <p class="section-sub" data-text="rsvp-text">
-    Fyll inn skjemaet nedenfor. Vi er takknemlige om du melder fra så snart du vet om du kan komme.
+    Helst så snart dere vet — det hjelper oss å planlegge.
   </p>
 
   <form name="paamelding" method="POST" data-netlify="true" action="/thank-you.html" id="rsvp-form" class="rsvp-step">
@@ -1464,7 +1741,7 @@
 
     <div class="form-grid">
       <div class="form-group">
-        <p class="form-person-label" data-text="form-attending">KOMMER DU?</p>
+        <p class="form-person-label" data-text="form-attending">KAN DU KOMME?</p>
         <div class="form-radio-group">
           <label class="form-radio">
             <input type="radio" name="deltar" value="ja" onchange="toggleAttendance()" required />
@@ -1472,7 +1749,7 @@
           </label>
           <label class="form-radio">
             <input type="radio" name="deltar" value="nei" onchange="toggleAttendance()" required />
-            <span data-text="form-no">Nei, jeg kan dessverre ikke komme</span>
+            <span data-text="form-no">Nei, dessverre ikke denne gangen</span>
           </label>
         </div>
       </div>
@@ -1547,7 +1824,8 @@
       K
     </div>
     <span class="ornament">✦ &nbsp; ✦ &nbsp; ✦</span>
-    <p style="margin-top:1rem;font-size:0.95rem;">Bulgaria · 2027</p>
+    <p style="margin-top:1rem;font-style:italic;font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--brass-light);" data-text="footer-line">Vi gleder oss til å se dere.</p>
+    <p style="margin-top:0.5rem;font-size:0.95rem;">Bulgaria · 2027</p>
   </footer>
 
   <script>
@@ -1555,89 +1833,100 @@
       no: {
         'wrong-password': 'Feil passord',
         'nav-home': 'Hjem',
-        'nav-venue': 'Vårt sted',
+        'nav-plan': 'Planen',
         'nav-destination': 'Området',
         'nav-activities': 'Opplevelser',
         'nav-map': 'Kart',
         'nav-rsvp': 'Påmelding',
+        'hero-invite': 'Du er invitert til vårt bryllup',
         'hero-meta-date': 'Sensommer 2027',
-        'hero-meta-place': 'Bulgaria',
-        'letter-1': 'Silje sin mor er fra Bulgaria, og derfor har dette landet alltid betydd noe for oss.',
-        'letter-2': 'Det er en ro her — en ro som er blitt en del av livet vårt.',
-        'letter-3': 'Vi vil dele det med vennene og de nærmeste vi er glade i.',
+        'hero-meta-place': 'Dato kommer',
+        'letter-salutation': 'Til familie og venner,',
+        'letter-1': 'Vi gifter oss i Bulgaria, ved Svartehavet — i området rundt Balchik og Albena. Silje har familie i Bulgaria, og det er et sted som betyr mye for oss. Derfor ønsker vi å samle familie og venner akkurat her.',
+        'letter-2': 'Vi håper dere har lyst til å komme og feire sammen med oss. Datoen er ikke helt satt ennå, men bryllupet blir i sensommeren 2027.',
+        'letter-3': 'Nærmeste flyplass er Varna. Mer praktisk informasjon kommer etter hvert.',
+        'planen-eyebrow': 'Foreløpig',
+        'planen-title': 'Planen',
+        'planen-intro': 'Slik tenker vi det nå:',
+        'planen-1-label': 'En kveld før',
+        'planen-1-text': 'Strandfest og get-together. Kanskje en båttur, om vi får tid.',
+        'planen-2-label': 'Bryllupsdagen',
+        'planen-2-text': 'Vielse og fest på Black Sea Rama, like utenfor Balchik.',
+        'planen-note-1': 'Vi vet det er et stykke å reise. Vi prøver å legge det opp slik at det går både å gjøre det til en ferieuke — eller komme bare til helgen.',
+        'planen-note-2': 'Mer praktisk informasjon kommer.',
         'destination-eyebrow': 'Området',
-        'destination-title': 'Svartehavskysten i Bulgaria',
-        'destination-text': 'Vi ønsker å samle familie og venner ved vakre Svartehavskysten i Bulgaria, omgitt av sjø, varme sommerkvelder og avslappet strandliv.',
+        'destination-title': 'Svartehavet, om sommeren',
+        'destination-text': 'Mellom Balchik og Kaliakra ligger en bit av kysten vi har blitt glad i. Hvite klipper, varme kvelder, hav.',
         'balchik-palace-title': 'Dronning Marias palass',
-        'balchik-palace-desc': 'Romantisk slott med en av Sør-Øst-Europas vakreste botaniske hager.',
+        'balchik-palace-desc': 'Bygget av en dronning som elsket hagene sine. Lett å bruke en formiddag her.',
         'balchik-pier-title': 'Den hvite kysten',
-        'balchik-pier-desc': 'Hvitkalkede hus i kalkstein-klippene, med koselig sjøpromenade.',
-        'balchik-beach-title': 'Stranden og sjøen',
-        'balchik-beach-desc': 'Sandstrender, krystallklart vann og spektakulære solnedganger.',
-        'venue-eyebrow': 'Vielsen og festen',
+        'balchik-pier-desc': 'Hvite hus klatrer opp kalksteinklippene. Promenaden går langs vannet.',
+        'balchik-beach-title': 'Stranden',
+        'balchik-beach-desc': 'Stille bukter, mykt vann. Solnedgangene er av den slag man husker.',
+        'venue-eyebrow': 'Bryllupet',
         'venue-title': 'Vårt sted',
         'venue-tagline': 'Hvor vi sier ja',
         'venue-subtitle': 'Golf & Villas Resort',
-        'venue-intro': 'Black Sea Rama ligger 7 km fra Balchik, 200 meter over havet. Et eksklusivt resort med spektakulær utsikt og Bulgarias første mesterskapsgolfbane.',
+        'venue-intro': 'Bryllupet er her — på en kant 200 meter over havet, like utenfor Balchik.',
         'venue-location-label': 'Beliggenhet',
-        'venue-location-title': '200 m over Svartehavet',
-        'venue-location-desc': 'Luksusvillaer, fire restauranter og endeløs utsikt mot Kaliakra-kappen.',
+        'venue-location-title': 'På klippen',
+        'venue-location-desc': 'Villaer langs ryggen, fire restauranter, og utsikt helt til Kaliakra.',
         'venue-ceremony-label': 'Vielsen',
-        'venue-ceremony-title': 'Utendørs amfiteater',
-        'venue-ceremony-desc': 'Vi sier "ja" i resortens vakre amfiteater – med havet og himmelen som ramme.',
+        'venue-ceremony-title': 'Amfiteateret',
+        'venue-ceremony-desc': 'Vi sier ja under åpen himmel, med havet bak oss.',
         'venue-reception-label': 'Festen',
-        'venue-reception-title': 'EVENTUM-salen',
-        'venue-reception-desc': 'Et stort, lyst festlokale med utsikt over hav og golfbane.',
-        'venue-link-text': 'Besøk Black Sea Rama →',
-        'activities-eyebrow': 'Eksklusive opplevelser',
-        'activities-title': 'Det beste av området',
-        'activities-intro': 'Noen håndplukkede høydepunkter med fokus på tradisjon, kultur og fine opplevelser.',
-        'exp-wine-label': 'Varna · Vinsmaking',
-        'exp-wine-title': 'Privat bulgarsk vinsmaking',
-        'exp-wine-desc': 'Smak Bulgarias beste viner med en personlig sommelier i Varna.',
-        'exp-cruise-label': 'Balchik · Sjøen',
-        'exp-cruise-title': 'Svartehavscruise',
-        'exp-cruise-desc': '4-timers seiltur fra Balchik med lunsj og drikke om bord.',
-        'exp-palace-label': 'Balchik · Kultur',
-        'exp-palace-title': 'Palasset & Kaliakra',
-        'exp-palace-desc': 'Dronning Marias palass, botanisk hage og den dramatiske kappen Kaliakra.',
-        'exp-monastery-label': 'Varna · Historie',
-        'exp-monastery-title': 'Aladzha-klosteret',
-        'exp-monastery-desc': 'Middelalder-kloster hugget inn i fjellveggen, med guidet omvisning.',
+        'venue-reception-title': 'EVENTUM',
+        'venue-reception-desc': 'Stor, lys, åpen mot havet. Her blir det heidundrende.',
+        'venue-link-text': 'Se Black Sea Rama →',
+        'activities-eyebrow': 'Hvis dere blir lenger',
+        'activities-title': 'Anbefalinger',
+        'activities-intro': 'Steder og opplevelser vi er glade i. Plukk det dere har lyst på.',
+        'exp-beach-label': 'Albena · Strand',
+        'exp-beach-title': 'Strandliv',
+        'exp-beach-desc': 'Lange strender, varmt vann, late dager. Albena er gjort for sommer.',
+        'exp-golf-label': 'Black Sea Rama · Sport',
+        'exp-golf-title': 'Mesterskapsgolf',
+        'exp-golf-desc': 'Banen på Black Sea Rama er Bulgarias første mesterskapsbane. Verdt en runde.',
+        'exp-city-label': 'Varna · Byliv',
+        'exp-city-title': 'Varna',
+        'exp-city-desc': 'Storby med havn, kafeer og park. Bra for en dag eller kveld.',
+        'exp-food-label': 'Kysten · Mat',
+        'exp-food-title': 'Sjømat og salater',
+        'exp-food-desc': 'Skjell, fersk fisk, lette salater. Kystmat på sitt beste.',
         'exp-stones-label': 'Varna · Natur',
-        'exp-stones-title': 'Steinskogen ved solnedgang',
-        'exp-stones-desc': 'Mystisk steinformasjon i magisk kveldslys – en uforglemmelig opplevelse.',
-        'exp-folk-label': 'Tradisjon · Kveld',
-        'exp-folk-title': 'Bulgarsk folkeaften',
-        'exp-folk-desc': 'Tradisjonell folkemusikk, dans og lokal mat i autentisk atmosfære.',
-        'getyourguide-link': 'Utforsk flere på GetYourGuide →',
-        'map-eyebrow': 'Området',
+        'exp-stones-title': 'Steinskogen',
+        'exp-stones-desc': 'Underlige steinformasjoner ute på sletten. Best ved solnedgang.',
+        'exp-promenade-label': 'Balchik · Kveld',
+        'exp-promenade-title': 'Promenaden',
+        'exp-promenade-desc': 'Sjøpromenaden i Balchik. Restauranter, barer og kveldsmusikk.',
+        'getyourguide-link': 'Flere på GetYourGuide →',
+        'map-eyebrow': 'Geografi',
         'map-title': 'På kartet',
-        'map-intro': 'Klikk på markørene for å se hva som er hvor.',
+        'map-intro': 'Trykk på markørene for detaljer.',
         'legend-venue': 'Vårt sted',
         'legend-town': 'Byer & resorter',
         'legend-sight': 'Severdigheter',
         'legend-restaurant': 'Restauranter',
-        'rest-eyebrow': 'Spisesteder',
-        'rest-title': 'Anbefalte restauranter',
-        'rest-intro': 'Noen favoritter for fersk fisk, lokal mat og spektakulær sjøutsikt.',
-        'rest-1-type': 'Skjellfarm & restaurant',
+        'rest-eyebrow': 'Mat',
+        'rest-title': 'Stedene vi går tilbake til',
+        'rest-intro': 'Tre favoritter. Resten finner dere selv.',
+        'rest-1-type': 'Skjellfarm',
         'rest-1-loc': 'Kaliakra-bukten',
-        'rest-1-desc': 'Berømt skjellfarm med restaurant rett ved bukten. Ferske skjell og sjømat med spektakulær utsikt – en må-oppleve i området.',
-        'rest-2-type': 'Fiskerestaurant',
+        'rest-1-desc': 'Skjell rett fra havet. Spis ved bukten, gjerne en kveld.',
+        'rest-2-type': 'Fisk',
         'rest-2-loc': 'Golden Sands',
-        'rest-2-desc': 'Ved bryggen i Golden Sands. Black Sea-fisk, sjømat og utsikt mot småbåter og marina.',
-        'rest-3-type': 'Sjøpromenade',
-        'rest-3-title': 'Tavernaer i Balchik',
-        'rest-3-loc': 'Balchik sjøfront',
-        'rest-3-desc': 'Koselige lokale tavernaer langs sjøpromenaden. Fersk fisk, bulgarske retter og rolig stemning.',
-        'tripadvisor-link': 'Flere tips på TripAdvisor →',
+        'rest-2-desc': 'Bryggen, båtene, fisk fra Svartehavet.',
+        'rest-3-type': 'Lokal mat',
+        'rest-3-title': 'Tavernaene i Balchik',
+        'rest-3-loc': 'Sjøpromenaden',
+        'rest-3-desc': 'Mange små steder langs promenaden. Velg en med utsikt.',
+        'tripadvisor-link': 'Flere på TripAdvisor →',
         'rsvp-eyebrow': 'Påmelding',
-        'rsvp-title': 'Meld deg på',
-        'rsvp-text': 'Fyll inn skjemaet nedenfor. Vi er takknemlige om du melder fra så snart du vet om du kan komme.',
-        'form-attending': 'KOMMER DU?',
+        'rsvp-title': 'Si fra om dere kommer',
+        'rsvp-text': 'Helst så snart dere vet — det hjelper oss å planlegge.',
+        'form-attending': 'KAN DU KOMME?',
         'form-yes': 'Ja, jeg kommer',
-        'form-no': 'Nei, jeg kan dessverre ikke komme',
+        'form-no': 'Nei, dessverre ikke denne gangen',
         'form-name': 'NAVN',
         'form-email': 'MAIL',
         'form-phone': 'TELEFON',
@@ -1653,94 +1942,106 @@
         'allergy-vegetarian': 'Vegetar',
         'form-message': 'MELDING TIL BRUDEPARET',
         'form-message-no': 'MELDING TIL BRUDEPARET',
-        'form-submit': 'Send svar'
+        'form-submit': 'Send svar',
+        'footer-line': 'Vi gleder oss til å se dere.'
       },
       en: {
         'wrong-password': 'Wrong password',
         'nav-home': 'Home',
-        'nav-venue': 'Our venue',
+        'nav-plan': 'The plan',
         'nav-destination': 'The area',
         'nav-activities': 'Experiences',
         'nav-map': 'Map',
         'nav-rsvp': 'RSVP',
+        'hero-invite': 'You are invited to our wedding',
         'hero-meta-date': 'Late summer 2027',
-        'hero-meta-place': 'Bulgaria',
-        'letter-1': "Silje's mother is from Bulgaria, and so this country has always meant something to us.",
-        'letter-2': 'There is a stillness here — a stillness that has become part of our lives.',
-        'letter-3': 'We want to share it with the friends and loved ones closest to us.',
+        'hero-meta-place': 'Date to come',
+        'letter-salutation': 'Dear family and friends,',
+        'letter-1': "We are getting married in Bulgaria, by the Black Sea — in the area around Balchik and Albena. Silje has family in Bulgaria, and it is a place that means a lot to us. That is why we want to gather family and friends right here.",
+        'letter-2': 'We hope you would like to come and celebrate with us. The date is not quite set yet, but the wedding will be in late summer 2027.',
+        'letter-3': 'The nearest airport is Varna. More practical information will follow.',
+        'planen-eyebrow': 'Preliminary',
+        'planen-title': 'The plan',
+        'planen-intro': 'Here is how we are thinking about it:',
+        'planen-1-label': 'The evening before',
+        'planen-1-text': 'Beach party and get-together. Perhaps a boat trip, if there is time.',
+        'planen-2-label': 'The wedding day',
+        'planen-2-text': 'Ceremony and celebration at Black Sea Rama, just outside Balchik.',
+        'planen-note-1': 'We know it is a long journey. We are trying to plan it so you can make it a holiday week — or just come for the weekend.',
+        'planen-note-2': 'More practical information will follow.',
         'destination-eyebrow': 'The area',
-        'destination-title': "Bulgaria's Black Sea Coast",
-        'destination-text': 'We want to gather family and friends along the beautiful Black Sea coast in Bulgaria, surrounded by the sea, warm summer evenings, and relaxed beach life.',
+        'destination-title': 'The Black Sea, in summer',
+        'destination-text': 'Between Balchik and Kaliakra lies a stretch of coast we have grown fond of. White cliffs, warm evenings, the sea.',
         'balchik-palace-title': "Queen Marie's Palace",
-        'balchik-palace-desc': "Romantic castle with one of South-Eastern Europe's most beautiful botanical gardens.",
+        'balchik-palace-desc': 'Built by a queen who loved her gardens. Easy to spend a morning here.',
         'balchik-pier-title': 'The White Coast',
-        'balchik-pier-desc': 'Whitewashed houses along the limestone cliffs, with a charming seafront promenade.',
-        'balchik-beach-title': 'The Beach and Sea',
-        'balchik-beach-desc': 'Sandy beaches, crystal-clear water, and spectacular sunsets.',
-        'venue-eyebrow': 'The ceremony and celebration',
+        'balchik-pier-desc': 'White houses climb the limestone cliffs. The promenade runs along the water.',
+        'balchik-beach-title': 'The Beach',
+        'balchik-beach-desc': 'Quiet bays, soft water. The sunsets are the kind you remember.',
+        'venue-eyebrow': 'The wedding',
         'venue-title': 'Our venue',
         'venue-tagline': 'Where we say I do',
         'venue-subtitle': 'Golf & Villas Resort',
-        'venue-intro': "Black Sea Rama lies 7 km from Balchik, 200 metres above sea level. An exclusive resort with spectacular views and Bulgaria's first championship golf course.",
+        'venue-intro': 'The wedding is here — on a ridge 200 metres above the sea, just outside Balchik.',
         'venue-location-label': 'Location',
-        'venue-location-title': '200 m above the Black Sea',
-        'venue-location-desc': 'Luxury villas, four restaurants, and endless views toward Cape Kaliakra.',
+        'venue-location-title': 'On the cliff',
+        'venue-location-desc': 'Villas along the ridge, four restaurants, and views all the way to Kaliakra.',
         'venue-ceremony-label': 'The Ceremony',
-        'venue-ceremony-title': 'Open-air amphitheatre',
-        'venue-ceremony-desc': 'We will say "I do" at the resort\'s beautiful amphitheatre – framed by sea and sky.',
+        'venue-ceremony-title': 'The amphitheatre',
+        'venue-ceremony-desc': 'We say yes under open sky, with the sea behind us.',
         'venue-reception-label': 'The Celebration',
-        'venue-reception-title': 'The EVENTUM Hall',
-        'venue-reception-desc': 'A spacious, bright reception hall overlooking the sea and the golf course.',
-        'venue-link-text': 'Visit Black Sea Rama →',
-        'activities-eyebrow': 'Curated experiences',
-        'activities-title': 'The best of the area',
-        'activities-intro': 'A handful of selected highlights with focus on tradition, culture, and fine experiences.',
-        'exp-wine-label': 'Varna · Wine tasting',
-        'exp-wine-title': 'Private Bulgarian wine tasting',
-        'exp-wine-desc': "Taste Bulgaria's finest wines with a personal sommelier in Varna.",
-        'exp-cruise-label': 'Balchik · The sea',
-        'exp-cruise-title': 'Black Sea cruise',
-        'exp-cruise-desc': '4-hour sailing trip from Balchik with lunch and drinks on board.',
-        'exp-palace-label': 'Balchik · Culture',
-        'exp-palace-title': 'Palace & Kaliakra',
-        'exp-palace-desc': "Queen Marie's Palace, botanical garden, and the dramatic Cape Kaliakra.",
-        'exp-monastery-label': 'Varna · History',
-        'exp-monastery-title': 'Aladzha Monastery',
-        'exp-monastery-desc': 'Medieval monastery carved into the cliff face, with a guided tour.',
+        'venue-reception-title': 'EVENTUM',
+        'venue-reception-desc': 'Large, bright, open to the sea. This is where the celebration happens.',
+        'venue-link-text': 'See Black Sea Rama →',
+        'activities-eyebrow': 'If you stay longer',
+        'activities-title': 'Recommendations',
+        'activities-intro': "Places and experiences we love. Pick what you fancy.",
+        'exp-beach-label': 'Albena · Beach',
+        'exp-beach-title': 'Beach life',
+        'exp-beach-desc': 'Long beaches, warm water, lazy days. Albena was made for summer.',
+        'exp-golf-label': 'Black Sea Rama · Sport',
+        'exp-golf-title': 'Championship golf',
+        'exp-golf-desc': "The course at Black Sea Rama is Bulgaria's first championship course. Worth a round.",
+        'exp-city-label': 'Varna · City',
+        'exp-city-title': 'Varna',
+        'exp-city-desc': 'Lively city with harbour, cafés and a park. Good for a day or evening.',
+        'exp-food-label': 'The coast · Food',
+        'exp-food-title': 'Seafood and salads',
+        'exp-food-desc': 'Mussels, fresh fish, light salads. Coastal food at its best.',
         'exp-stones-label': 'Varna · Nature',
-        'exp-stones-title': 'Stone Forest at sunset',
-        'exp-stones-desc': 'Mysterious stone formations in magical evening light – an unforgettable experience.',
-        'exp-folk-label': 'Tradition · Evening',
-        'exp-folk-title': 'Bulgarian folk evening',
-        'exp-folk-desc': 'Traditional folk music, dance, and local food in an authentic atmosphere.',
-        'getyourguide-link': 'Explore more on GetYourGuide →',
-        'map-eyebrow': 'The area',
+        'exp-stones-title': 'The Stone Forest',
+        'exp-stones-desc': 'Strange stone formations out on the plain. Best at sunset.',
+        'exp-promenade-label': 'Balchik · Evening',
+        'exp-promenade-title': 'The promenade',
+        'exp-promenade-desc': 'The seafront promenade in Balchik. Restaurants, bars, evening music.',
+        'getyourguide-link': 'More on GetYourGuide →',
+        'map-eyebrow': 'Geography',
         'map-title': 'On the map',
-        'map-intro': 'Click the markers to see what is where.',
+        'map-intro': 'Tap the markers for details.',
         'legend-venue': 'Our venue',
         'legend-town': 'Towns & resorts',
         'legend-sight': 'Sights',
         'legend-restaurant': 'Restaurants',
-        'rest-eyebrow': 'Where to eat',
-        'rest-title': 'Recommended restaurants',
-        'rest-intro': 'A few favourites for fresh fish, local food and spectacular sea views.',
-        'rest-1-type': 'Mussel farm & restaurant',
+        'rest-eyebrow': 'Food',
+        'rest-title': 'The places we keep going back to',
+        'rest-intro': 'Three favourites. The rest you can find yourselves.',
+        'rest-1-type': 'Mussel farm',
         'rest-1-loc': 'Kaliakra Bay',
-        'rest-1-desc': 'Famous mussel farm with a restaurant right by the bay. Fresh mussels and seafood with spectacular views – a must-do in the area.',
-        'rest-2-type': 'Fish restaurant',
+        'rest-1-desc': 'Mussels straight from the sea. Eat by the bay, preferably in the evening.',
+        'rest-2-type': 'Fish',
         'rest-2-loc': 'Golden Sands',
-        'rest-2-desc': 'By the pier in Golden Sands. Black Sea fish, seafood and views over boats and the marina.',
-        'rest-3-type': 'Seafront promenade',
-        'rest-3-title': 'Taverns in Balchik',
-        'rest-3-loc': 'Balchik seafront',
-        'rest-3-desc': 'Cozy local taverns along the seafront promenade. Fresh fish, Bulgarian dishes and a calm atmosphere.',
-        'tripadvisor-link': 'More tips on TripAdvisor →',
+        'rest-2-desc': 'The pier, the boats, fish from the Black Sea.',
+        'rest-3-type': 'Local food',
+        'rest-3-title': 'The taverns in Balchik',
+        'rest-3-loc': 'The seafront promenade',
+        'rest-3-desc': 'Many small spots along the promenade. Pick one with a view.',
+        'tripadvisor-link': 'More on TripAdvisor →',
         'rsvp-eyebrow': 'RSVP',
-        'rsvp-title': 'Please let us know',
-        'rsvp-text': 'Fill out the form below. We are grateful if you let us know as soon as you know if you can come.',
-        'form-attending': 'WILL YOU BE ATTENDING?',
-        'form-yes': 'Yes, I will attend',
-        'form-no': 'No, I unfortunately cannot attend',
+        'rsvp-title': 'Let us know if you can come',
+        'rsvp-text': 'As soon as you know — it helps us plan.',
+        'form-attending': 'CAN YOU COME?',
+        'form-yes': 'Yes, I will be there',
+        'form-no': "No, unfortunately not this time",
         'form-name': 'NAME',
         'form-email': 'EMAIL',
         'form-phone': 'PHONE',
@@ -1756,94 +2057,106 @@
         'allergy-vegetarian': 'Vegetarian',
         'form-message': 'MESSAGE FOR THE COUPLE',
         'form-message-no': 'MESSAGE FOR THE COUPLE',
-        'form-submit': 'Submit'
+        'form-submit': 'Submit',
+        'footer-line': 'We look forward to seeing you.'
       },
       bg: {
         'wrong-password': 'Грешна парола',
         'nav-home': 'Начало',
-        'nav-venue': 'Нашето място',
+        'nav-plan': 'Планът',
         'nav-destination': 'Района',
         'nav-activities': 'Изживявания',
         'nav-map': 'Карта',
         'nav-rsvp': 'RSVP',
+        'hero-invite': 'Поканени сте на нашата сватба',
         'hero-meta-date': 'Късно лято 2027',
-        'hero-meta-place': 'България',
-        'letter-1': 'Майката на Силе е от България — затова тази страна винаги е била скъпа за нас.',
-        'letter-2': 'Има едно спокойствие тук — спокойствие, което е станало част от живота ни.',
-        'letter-3': 'Искаме да го споделим с приятелите и най-близките ни хора.',
+        'hero-meta-place': 'Дата предстои',
+        'letter-salutation': 'Скъпи семейство и приятели,',
+        'letter-1': 'Ще се венчаем в България, на Черно море — в района около Балчик и Албена. Силе има семейство в България, и това е място, което значи много за нас. Затова искаме да съберем семейство и приятели точно тук.',
+        'letter-2': 'Надяваме се, че ще искате да дойдете и да празнувате с нас. Датата не е напълно определена, но сватбата ще бъде през късното лято на 2027.',
+        'letter-3': 'Най-близкото летище е Варна. Повече практическа информация ще последва.',
+        'planen-eyebrow': 'Предварителен',
+        'planen-title': 'Планът',
+        'planen-intro': 'Ето как си го представяме:',
+        'planen-1-label': 'Вечерта преди',
+        'planen-1-text': 'Плажно парти и среща. Може би разходка с лодка, ако имаме време.',
+        'planen-2-label': 'Сватбеният ден',
+        'planen-2-text': 'Церемония и празненство в Black Sea Rama, точно извън Балчик.',
+        'planen-note-1': 'Знаем, че пътят е дълъг. Опитваме се да го планираме така, че да може да го направите ваканционна седмица — или да дойдете само за уикенда.',
+        'planen-note-2': 'Повече практическа информация предстои.',
         'destination-eyebrow': 'Района',
-        'destination-title': 'Черноморското крайбрежие на България',
-        'destination-text': 'Искаме да съберем семейство и приятели на красивото Черноморско крайбрежие в България, заобиколени от морето, топли летни вечери и спокоен плажен живот.',
+        'destination-title': 'Черно море, през лятото',
+        'destination-text': 'Между Балчик и Калиакра има едно парче бряг, което сме обикнали. Бели скали, топли вечери, морето.',
         'balchik-palace-title': 'Дворецът на кралица Мария',
-        'balchik-palace-desc': 'Романтичен дворец с една от най-красивите ботанически градини в Югоизточна Европа.',
+        'balchik-palace-desc': 'Построен от кралица, която обичаше градините си. Лесно се прекарва една сутрин тук.',
         'balchik-pier-title': 'Белият бряг',
-        'balchik-pier-desc': 'Варосани къщи по варовиковите скали и очарователна крайбрежна алея.',
-        'balchik-beach-title': 'Плажът и морето',
-        'balchik-beach-desc': 'Пясъчни плажове, кристално чиста вода и зрелищни залези.',
-        'venue-eyebrow': 'Церемонията и празненството',
+        'balchik-pier-desc': 'Бели къщи се изкачват по варовиковите скали. Алеята минава покрай водата.',
+        'balchik-beach-title': 'Плажът',
+        'balchik-beach-desc': 'Тихи заливи, меко море. Залезите тук са от онези, които се помнят.',
+        'venue-eyebrow': 'Сватбата',
         'venue-title': 'Нашето място',
         'venue-tagline': 'Тук казваме „Да"',
         'venue-subtitle': 'Golf & Villas Resort',
-        'venue-intro': 'Black Sea Rama се намира на 7 км от Балчик, на 200 метра над морето. Ексклузивен курорт с впечатляваща гледка и първия шампионатен голф терен в България.',
+        'venue-intro': 'Сватбата е тук — на ръба, 200 метра над морето, малко извън Балчик.',
         'venue-location-label': 'Местоположение',
-        'venue-location-title': '200 м над Черно море',
-        'venue-location-desc': 'Луксозни вили, четири ресторанта и безкрайна гледка към нос Калиакра.',
+        'venue-location-title': 'На скалата',
+        'venue-location-desc': 'Вили по билото, четири ресторанта, и гледка чак до Калиакра.',
         'venue-ceremony-label': 'Церемонията',
-        'venue-ceremony-title': 'Открит амфитеатър',
-        'venue-ceremony-desc': 'Казваме „Да" в красивия амфитеатър на курорта – с морето и небето като декор.',
+        'venue-ceremony-title': 'Амфитеатърът',
+        'venue-ceremony-desc': 'Казваме „Да" под открито небе, с морето зад нас.',
         'venue-reception-label': 'Празненството',
-        'venue-reception-title': 'Зала EVENTUM',
-        'venue-reception-desc': 'Просторна и светла зала с гледка към морето и голф терена.',
-        'venue-link-text': 'Посетете Black Sea Rama →',
-        'activities-eyebrow': 'Селективни изживявания',
-        'activities-title': 'Най-доброто от района',
-        'activities-intro': 'Няколко избрани акценти с фокус върху традицията, културата и изтънчените изживявания.',
-        'exp-wine-label': 'Варна · Дегустация',
-        'exp-wine-title': 'Частна българска винена дегустация',
-        'exp-wine-desc': 'Опитайте най-добрите вина на България с личен сомелиер във Варна.',
-        'exp-cruise-label': 'Балчик · Морето',
-        'exp-cruise-title': 'Черноморски круиз',
-        'exp-cruise-desc': '4-часов плавателен излет от Балчик с обяд и напитки на борда.',
-        'exp-palace-label': 'Балчик · Култура',
-        'exp-palace-title': 'Дворецът & Калиакра',
-        'exp-palace-desc': 'Дворецът на кралица Мария, ботаническата градина и драматичният нос Калиакра.',
-        'exp-monastery-label': 'Варна · История',
-        'exp-monastery-title': 'Аладжа манастир',
-        'exp-monastery-desc': 'Средновековен манастир, издълбан в скалата, с екскурзовод.',
+        'venue-reception-title': 'EVENTUM',
+        'venue-reception-desc': 'Голяма, светла, открита към морето. Тук ще стане празник.',
+        'venue-link-text': 'Виж Black Sea Rama →',
+        'activities-eyebrow': 'Ако останете по-дълго',
+        'activities-title': 'Препоръки',
+        'activities-intro': 'Места и преживявания, които обичаме. Изберете това, което ви се иска.',
+        'exp-beach-label': 'Албена · Плаж',
+        'exp-beach-title': 'Плажен живот',
+        'exp-beach-desc': 'Дълги плажове, топла вода, бавни дни. Албена е създадена за лято.',
+        'exp-golf-label': 'Black Sea Rama · Спорт',
+        'exp-golf-title': 'Шампионски голф',
+        'exp-golf-desc': 'Игрището в Black Sea Rama е първото шампионско в България. Заслужава си една обиколка.',
+        'exp-city-label': 'Варна · Градът',
+        'exp-city-title': 'Варна',
+        'exp-city-desc': 'Оживен град с пристанище, кафенета и парк. Добре за един ден или вечер.',
+        'exp-food-label': 'Брегът · Храна',
+        'exp-food-title': 'Морски дарове и салати',
+        'exp-food-desc': 'Миди, прясна риба, леки салати. Крайбрежна храна в най-добрия си вид.',
         'exp-stones-label': 'Варна · Природа',
-        'exp-stones-title': 'Побитите камъни на залез',
-        'exp-stones-desc': 'Мистична скална формация в магическа вечерна светлина – незабравимо изживяване.',
-        'exp-folk-label': 'Традиция · Вечер',
-        'exp-folk-title': 'Българска фолклорна вечер',
-        'exp-folk-desc': 'Традиционна фолклорна музика, танци и местна храна в автентична атмосфера.',
-        'getyourguide-link': 'Открийте повече в GetYourGuide →',
-        'map-eyebrow': 'Района',
+        'exp-stones-title': 'Побитите камъни',
+        'exp-stones-desc': 'Странни скални формации на полето. Най-добре на залез.',
+        'exp-promenade-label': 'Балчик · Вечер',
+        'exp-promenade-title': 'Алеята',
+        'exp-promenade-desc': 'Крайбрежната алея в Балчик. Ресторанти, барове, вечерна музика.',
+        'getyourguide-link': 'Още в GetYourGuide →',
+        'map-eyebrow': 'География',
         'map-title': 'На картата',
-        'map-intro': 'Кликнете върху маркерите, за да видите какво къде се намира.',
+        'map-intro': 'Натиснете маркерите за подробности.',
         'legend-venue': 'Нашето място',
         'legend-town': 'Градове и курорти',
         'legend-sight': 'Забележителности',
         'legend-restaurant': 'Ресторанти',
-        'rest-eyebrow': 'Места за хранене',
-        'rest-title': 'Препоръчани ресторанти',
-        'rest-intro': 'Няколко любими места за прясна риба, местна храна и зашеметяващи морски гледки.',
-        'rest-1-type': 'Ферма за миди и ресторант',
+        'rest-eyebrow': 'Храна',
+        'rest-title': 'Местата, в които се връщаме',
+        'rest-intro': 'Три любими. Останалото ще намерите сами.',
+        'rest-1-type': 'Ферма за миди',
         'rest-1-loc': 'Залив Калиакра',
-        'rest-1-desc': 'Известна ферма за миди с ресторант до залива. Пресни миди и морски дарове с впечатляваща гледка – задължително в района.',
-        'rest-2-type': 'Рибен ресторант',
+        'rest-1-desc': 'Миди направо от морето. Хапнете до залива, най-добре вечер.',
+        'rest-2-type': 'Риба',
         'rest-2-loc': 'Златни пясъци',
-        'rest-2-desc': 'До пристана на Златни пясъци. Риба от Черно море, морски дарове и гледка към лодки и марината.',
-        'rest-3-type': 'Крайбрежна алея',
-        'rest-3-title': 'Кръчми в Балчик',
-        'rest-3-loc': 'Брегът на Балчик',
-        'rest-3-desc': 'Уютни местни кръчми по крайбрежната алея. Прясна риба, български ястия и спокойна атмосфера.',
-        'tripadvisor-link': 'Още съвети в TripAdvisor →',
+        'rest-2-desc': 'Пристанът, лодките, риба от Черно море.',
+        'rest-3-type': 'Местна храна',
+        'rest-3-title': 'Кръчмите в Балчик',
+        'rest-3-loc': 'Крайбрежната алея',
+        'rest-3-desc': 'Много малки заведения по алеята. Изберете едно с гледка.',
+        'tripadvisor-link': 'Още в TripAdvisor →',
         'rsvp-eyebrow': 'RSVP',
-        'rsvp-title': 'Моля, уведомете ни',
-        'rsvp-text': 'Попълнете формуляра по-долу. Благодарим на вас, ако ни уведомите веднага щом знаете дали можете да дойдете.',
-        'form-attending': 'ЩЕ УЧАСТВАТЕ ЛИ?',
-        'form-yes': 'Да, ще участвам',
-        'form-no': 'Не, за съжаление не мога да дойда',
+        'rsvp-title': 'Кажете ни дали идвате',
+        'rsvp-text': 'Колкото по-скоро знаете — толкова повече ни помагате да планираме.',
+        'form-attending': 'МОЖЕТЕ ЛИ ДА ДОЙДЕТЕ?',
+        'form-yes': 'Да, ще дойда',
+        'form-no': 'Не, за съжаление не този път',
         'form-name': 'ИМЕ',
         'form-email': 'ИМЕЙЛ',
         'form-phone': 'ТЕЛЕФОН',
@@ -1859,7 +2172,8 @@
         'allergy-vegetarian': 'Вегетарианец',
         'form-message': 'СЪОБЩЕНИЕ ЗА ДВОЙКАТА',
         'form-message-no': 'СЪОБЩЕНИЕ ЗА ДВОЙКАТА',
-        'form-submit': 'Изпращане'
+        'form-submit': 'Изпращане',
+        'footer-line': 'Радваме се да ви видим.'
       }
     };
 
@@ -1876,11 +2190,34 @@
       });
       document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll(`[data-lang="${lang}"]`).forEach(btn => btn.classList.add('active'));
+
+      // Update dropdown trigger label
+      const trigger = document.querySelector('.lang-current');
+      if (trigger) trigger.textContent = lang.toUpperCase();
+
+      // Close dropdown after selection
+      const dropdown = document.getElementById('lang-dropdown');
+      if (dropdown) dropdown.classList.remove('open');
+
       localStorage.setItem('preferred-language', lang);
       if (typeof updateMapPopups === 'function' && typeof weddingMap !== 'undefined' && weddingMap) {
         updateMapPopups();
       }
     }
+
+    function toggleLangDropdown(event) {
+      event.stopPropagation();
+      const dropdown = document.getElementById('lang-dropdown');
+      dropdown.classList.toggle('open');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      const dropdown = document.getElementById('lang-dropdown');
+      if (dropdown && !dropdown.contains(e.target)) {
+        dropdown.classList.remove('open');
+      }
+    });
 
     document.querySelectorAll('.lang-btn').forEach(btn => {
       btn.addEventListener('click', function() { setLanguage(this.dataset.lang); });
@@ -1947,17 +2284,15 @@
 
   <script>
     const placeData = [
-      { coords: [43.4205, 28.0966], type: 'venue', name: 'Black Sea Rama', labels: { no: 'Vårt sted', en: 'Our venue', bg: 'Нашето място' }, descs: { no: 'Her holdes vielsen og festen', en: 'Where the ceremony and reception take place', bg: 'Тук се провежда церемонията и празненството' }},
-      { coords: [43.4239, 28.1611], type: 'town', name: 'Balchik', labels: { no: 'Kystby', en: 'Coastal town', bg: 'Крайбрежен град' }, descs: { no: 'Sjarmerende by med palass og sjøpromenade', en: 'Charming town with palace and seaside promenade', bg: 'Очарователен град с дворец и крайбрежна алея' }},
-      { coords: [43.3739, 28.0814], type: 'town', name: 'Albena', labels: { no: 'Ferieresort', en: 'Holiday resort', bg: 'Курорт' }, descs: { no: 'Familievennlig område med strand', en: 'Family-friendly resort area with beach', bg: 'Семеен курорт с плаж' }},
-      { coords: [43.2141, 27.9147], type: 'town', name: 'Varna', labels: { no: 'Storby', en: 'Main city', bg: 'Голям град' }, descs: { no: 'Storby med flyplass, shopping og kultur', en: 'Main city with airport, shopping, and culture', bg: 'Голям град с летище, шопинг и култура' }},
-      { coords: [43.2885, 28.0405], type: 'town', name: 'Golden Sands', labels: { no: 'Strand & resort', en: 'Beach & resort', bg: 'Плаж и курорт' }, descs: { no: 'Berømt sandstrand med restauranter og strandliv', en: 'Famous sandy beach with restaurants and beach life', bg: 'Известен пясъчен плаж с ресторанти и плажен живот' }},
-      { coords: [43.2321, 27.8253], type: 'sight', name: 'Varna lufthavn', labels: { no: 'Flyplass', en: 'Airport', bg: 'Летище' }, descs: { no: 'Nærmeste internasjonale flyplass', en: 'Nearest international airport', bg: 'Най-близкото международно летище' }},
-      { coords: [43.3650, 28.4636], type: 'sight', name: 'Kaliakra', labels: { no: 'Severdighet', en: 'Sight', bg: 'Забележителност' }, descs: { no: 'Dramatisk klippe ut i Svartehavet', en: 'Dramatic cliff jutting into the Black Sea', bg: 'Драматична скала към Черно море' }},
-      { coords: [43.2858, 28.0469], type: 'sight', name: 'Aladzha-klosteret', labels: { no: 'Severdighet', en: 'Sight', bg: 'Забележителност' }, descs: { no: 'Middelalder-kloster hugget inn i fjell', en: 'Medieval monastery carved into the cliff', bg: 'Средновековен манастир в скалата' }},
-      { coords: [43.2253, 27.7042], type: 'sight', name: 'Steinskogen', labels: { no: 'Naturfenomen', en: 'Natural wonder', bg: 'Природно чудо' }, descs: { no: 'Mystiske steinformasjoner – magisk ved solnedgang', en: 'Mysterious stone formations – magical at sunset', bg: 'Мистични скални формации – магически на залез' }},
-      { coords: [43.3958, 28.4486], type: 'restaurant', name: 'Dalboka', labels: { no: 'Skjellrestaurant', en: 'Mussel restaurant', bg: 'Ресторант с миди' }, descs: { no: 'Berømt skjellfarm ved Kaliakra-bukten – ferskt fra havet', en: 'Famous mussel farm by Kaliakra Bay – fresh from the sea', bg: 'Известна ферма за миди в Калиакра – прясно от морето' }},
-      { coords: [43.2906, 28.0405], type: 'restaurant', name: 'Captain Cook', labels: { no: 'Fiskerestaurant', en: 'Fish restaurant', bg: 'Рибен ресторант' }, descs: { no: 'Fersk fisk og sjømat ved bryggen i Golden Sands', en: 'Fresh fish and seafood by the pier in Golden Sands', bg: 'Прясна риба и морски дарове на пристана в Златни пясъци' }}
+      { coords: [43.4205, 28.0966], type: 'venue', name: 'Black Sea Rama', labels: { no: 'Vårt sted', en: 'Our venue', bg: 'Нашето място' }, descs: { no: 'Bryllupet er her', en: 'The wedding is here', bg: 'Сватбата е тук' }},
+      { coords: [43.4239, 28.1611], type: 'town', name: 'Balchik', labels: { no: 'Kystby', en: 'Coastal town', bg: 'Крайбрежен град' }, descs: { no: 'By med palass og promenade', en: 'Town with palace and promenade', bg: 'Град с дворец и алея' }},
+      { coords: [43.3739, 28.0814], type: 'town', name: 'Albena', labels: { no: 'Ferieresort', en: 'Holiday resort', bg: 'Курорт' }, descs: { no: 'Ferieresort med lang strand', en: 'Resort with long beaches', bg: 'Курорт с дълги плажове' }},
+      { coords: [43.2141, 27.9147], type: 'town', name: 'Varna', labels: { no: 'Storby', en: 'Main city', bg: 'Голям град' }, descs: { no: 'Storby. Flyplass, shopping, kultur.', en: 'Main city. Airport, shopping, culture.', bg: 'Голям град. Летище, шопинг, култура.' }},
+      { coords: [43.2885, 28.0405], type: 'town', name: 'Golden Sands', labels: { no: 'Strand & resort', en: 'Beach & resort', bg: 'Плаж и курорт' }, descs: { no: 'Sandstrand og resort', en: 'Sandy beach and resort', bg: 'Пясъчен плаж и курорт' }},
+      { coords: [43.2321, 27.8253], type: 'sight', name: 'Varna lufthavn', labels: { no: 'Flyplass', en: 'Airport', bg: 'Летище' }, descs: { no: 'Nærmeste flyplass', en: 'Nearest airport', bg: 'Най-близкото летище' }},
+      { coords: [43.3650, 28.4636], type: 'sight', name: 'Kaliakra', labels: { no: 'Severdighet', en: 'Sight', bg: 'Забележителност' }, descs: { no: 'Klippe ut i Svartehavet', en: 'Cliff into the Black Sea', bg: 'Скала към Черно море' }},
+      { coords: [43.2858, 28.0469], type: 'sight', name: 'Aladzha-klosteret', labels: { no: 'Severdighet', en: 'Sight', bg: 'Забележителност' }, descs: { no: 'Kloster i fjellveggen', en: 'Monastery in the cliff face', bg: 'Манастир в скалата' }},
+      { coords: [43.2253, 27.7042], type: 'sight', name: 'Steinskogen', labels: { no: 'Naturfenomen', en: 'Natural wonder', bg: 'Природно чудо' }, descs: { no: 'Steinformasjoner, magisk på kvelden', en: 'Stone formations, magical at sunset', bg: 'Скални формации, магически на залез' }}
     ];
 
     let weddingMap;
