@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
@@ -14,19 +13,16 @@
 
   <style>
     :root {
-      /* REFINED LUX PALETTE */
-      --cream: #F4EDE2;          /* deeper, richer cream */
-      --cream-warm: #EBE3D5;     /* secondary surface */
-      --paper: #FAF6EE;          /* lightest for cards */
-      --ink: #2A2520;            /* primary text */
-      --ink-soft: #3D3530;       /* body text */
-      --dust: #6C625B;           /* subtle/secondary text */
-      --brass: #9B7C42;          /* antique brass — replaces "gold" */
-      --brass-light: #C4A874;    /* lighter brass for accents */
-      --brass-dark: #6E5728;     /* deep brass for hover/contrast */
+      --cream: #F4EDE2;
+      --cream-warm: #EBE3D5;
+      --paper: #FAF6EE;
+      --ink: #2A2520;
+      --ink-soft: #3D3530;
+      --dust: #6C625B;
+      --brass: #9B7C42;
+      --brass-light: #C4A874;
+      --brass-dark: #6E5728;
       --line: rgba(155, 124, 66, 0.25);
-
-      /* Legacy aliases for non-redesigned sections */
       --gold: var(--brass);
       --gold-light: var(--brass-light);
       --gold-dark: var(--brass-dark);
@@ -39,18 +35,8 @@
       --terracotta: #B07854;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      overflow-wrap: break-word;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      overflow-x: hidden;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; overflow-wrap: break-word; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
     body {
       font-family: 'EB Garamond', serif;
       background: var(--cream);
@@ -60,62 +46,33 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
-
     body.locked { overflow: hidden; }
 
-    /* ============================================
-       PASSWORD SCREEN — kept as-is, beautiful
-       ============================================ */
+    /* PASSWORD SCREEN */
     #pw-screen {
-      position: fixed;
-      inset: 0;
-      z-index: 99999;
+      position: fixed; inset: 0; z-index: 99999;
       background: #0F0B08;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1.5rem;
-      padding: 2rem;
-      transition: opacity 0.6s ease;
-      overflow: hidden;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 1.5rem; padding: 2rem;
+      transition: opacity 0.6s ease; overflow: hidden;
     }
-
-    #pw-screen.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
+    #pw-screen.hidden { opacity: 0; pointer-events: none; }
     #pw-screen::before {
-      content: '';
-      position: absolute;
-      inset: 0;
+      content: ''; position: absolute; inset: 0;
       background: radial-gradient(ellipse at center, rgba(155,124,66,0.10) 0%, transparent 60%);
-      pointer-events: none;
-      opacity: 0;
+      pointer-events: none; opacity: 0;
       animation: glow-in 2s ease 0.3s forwards;
     }
-
     @keyframes glow-in { to { opacity: 1; } }
 
-    .pw-particles {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
+    .pw-particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
     .pw-particles span {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: var(--brass);
-      border-radius: 50%;
-      opacity: 0;
-      box-shadow: 0 0 6px var(--brass);
+      position: absolute; width: 2px; height: 2px;
+      background: var(--brass); border-radius: 50%;
+      opacity: 0; box-shadow: 0 0 6px var(--brass);
       animation: float-particle 12s infinite ease-in-out;
     }
-
     .pw-particles span:nth-child(1)  { top: 15%; left: 12%; animation-delay: 1.0s; animation-duration: 10s; }
     .pw-particles span:nth-child(2)  { top: 28%; left: 82%; animation-delay: 2.5s; animation-duration: 14s; }
     .pw-particles span:nth-child(3)  { top: 70%; left: 18%; animation-delay: 4.0s; animation-duration: 11s; }
@@ -137,521 +94,225 @@
     }
 
     .pw-logo {
-      position: relative;
-      z-index: 2;
+      position: relative; z-index: 2;
       font-family: 'Cormorant Garamond', serif;
-      font-size: 4.2rem;
-      font-weight: 300;
-      font-style: italic;
-      color: var(--brass);
-      letter-spacing: 0.04em;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.25em;
+      font-size: 4.2rem; font-weight: 300; font-style: italic;
+      color: var(--brass); letter-spacing: 0.04em;
+      display: inline-flex; align-items: center; gap: 0.25em;
     }
-
     .pw-letter { display: inline-block; opacity: 0; }
     .pw-letter-s { transform: translateX(-25px); animation: slide-in-left 1.4s cubic-bezier(0.25,0.1,0.25,1) 1.6s forwards; }
     .pw-letter-k { transform: translateX(25px); animation: slide-in-right 1.4s cubic-bezier(0.25,0.1,0.25,1) 1.6s forwards; }
-
     @keyframes slide-in-left  { to { opacity: 1; transform: translateX(0); } }
     @keyframes slide-in-right { to { opacity: 1; transform: translateX(0); } }
 
     .pw-heart-wrap {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      display: inline-flex; align-items: center; justify-content: center;
       animation: heart-pulse 3s ease-in-out 3.5s infinite;
     }
-
-    @keyframes heart-pulse {
-      0%, 100% { transform: scale(1); }
-      50%      { transform: scale(1.08); }
-    }
-
-    .pw-heart {
-      width: 0.65em;
-      height: 0.65em;
-      stroke-width: 1.1;
-    }
-
-    .pw-heart path {
-      stroke-dasharray: 80;
-      stroke-dashoffset: 80;
-      animation: draw-heart 1.8s ease-out 1.0s forwards;
-    }
-
+    @keyframes heart-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+    .pw-heart { width: 0.65em; height: 0.65em; stroke-width: 1.1; }
+    .pw-heart path { stroke-dasharray: 80; stroke-dashoffset: 80; animation: draw-heart 1.8s ease-out 1.0s forwards; }
     @keyframes draw-heart { to { stroke-dashoffset: 0; } }
 
     .pw-input {
-      width: 240px;
-      padding: 1rem;
-      border: 1px solid var(--brass);
-      background: transparent;
-      color: var(--brass-light);
-      font-family: 'EB Garamond', serif;
-      font-size: 1rem;
-      text-align: center;
-      outline: none;
-      transition: border-color 0.2s;
-      position: relative;
-      z-index: 2;
+      width: 240px; padding: 1rem;
+      border: 1px solid var(--brass); background: transparent;
+      color: var(--brass-light); font-family: 'EB Garamond', serif;
+      font-size: 1rem; text-align: center; outline: none;
+      transition: border-color 0.2s; position: relative; z-index: 2;
     }
-
     .pw-input::placeholder { color: rgba(196, 168, 116, 0.5); }
     .pw-input:focus { border-color: var(--brass-light); }
-
-    .pw-fade-in {
-      opacity: 0;
-      transform: translateY(15px);
-      animation: fade-up 1s ease 3.2s forwards;
-    }
+    .pw-fade-in { opacity: 0; transform: translateY(15px); animation: fade-up 1s ease 3.2s forwards; }
     .pw-fade-in-late { animation-delay: 3.5s; }
-
     @keyframes fade-up { to { opacity: 1; transform: translateY(0); } }
 
     #pw-enter {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.6rem;
-      font-weight: 300;
-      color: var(--brass);
-      background: transparent;
-      border: 1px solid var(--brass);
-      width: 3.5rem;
-      height: 3.5rem;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.25s;
-      line-height: 1;
-      position: relative;
-      z-index: 2;
+      font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 300;
+      color: var(--brass); background: transparent; border: 1px solid var(--brass);
+      width: 3.5rem; height: 3.5rem;
+      display: inline-flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.25s; line-height: 1;
+      position: relative; z-index: 2;
     }
-
     #pw-enter:hover { background: var(--brass); color: #0F0B08; }
-
-    .pw-error {
-      color: #C97B7B;
-      font-size: 0.9rem;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
+    .pw-error { color: #C97B7B; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s; }
     .pw-error.show { opacity: 1; }
 
-    /* ============================================
-       NAVIGATION
-       ============================================ */
+    /* NAV */
     .lang-switcher { display: none; }
-
     nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 200;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
       background: rgba(244, 237, 226, 0.85);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--line);
     }
-
     .nav-inner {
-      max-width: 1200px;
-      margin: 0 auto;
+      max-width: 1200px; margin: 0 auto;
       padding: 1.1rem 1.75rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
     }
-
     .nav-logo {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      line-height: 1;
-      color: var(--brass-dark);
-      text-decoration: none;
+      display: flex; flex-direction: column; align-items: center;
+      line-height: 1; color: var(--brass-dark); text-decoration: none;
     }
-
     .nav-logo-main {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35em;
+      display: inline-flex; align-items: center; gap: 0.35em;
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem;
-      font-style: italic;
-      letter-spacing: 0.05em;
-      font-weight: 400;
+      font-size: 1.5rem; font-style: italic;
+      letter-spacing: 0.05em; font-weight: 400;
     }
-
     .nav-logo-year {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 0.55rem;
-      letter-spacing: 0.5em;
-      margin-top: 0.4rem;
-      color: var(--brass);
+      font-size: 0.55rem; letter-spacing: 0.5em;
+      margin-top: 0.4rem; color: var(--brass);
       text-transform: uppercase;
     }
-
     .heart-icon {
-      display: inline-block;
-      width: 0.85em;
-      height: 0.85em;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 1.4;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      vertical-align: middle;
-      margin-bottom: 0.05em;
+      display: inline-block; width: 0.85em; height: 0.85em;
+      stroke: currentColor; fill: none; stroke-width: 1.4;
+      stroke-linecap: round; stroke-linejoin: round;
+      vertical-align: middle; margin-bottom: 0.05em;
     }
-
     .menu-toggle {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      padding: 0.4rem;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      width: 32px;
+      background: transparent; border: none; cursor: pointer;
+      padding: 0.4rem; display: flex; flex-direction: column;
+      gap: 5px; width: 32px;
     }
-
-    .menu-toggle span {
-      display: block;
-      width: 24px;
-      height: 1.5px;
-      background: var(--brass-dark);
-      transition: all 0.3s;
-    }
-
+    .menu-toggle span { display: block; width: 24px; height: 1.5px; background: var(--brass-dark); transition: all 0.3s; }
     .menu-toggle:hover span { background: var(--brass); }
 
-    /* RIGHT SIDE OF NAV (lang dropdown + hamburger) */
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-    }
-
-    /* LANGUAGE DROPDOWN */
-    .lang-dropdown {
-      position: relative;
-    }
-
+    .nav-right { display: flex; align-items: center; gap: 0.8rem; }
+    .lang-dropdown { position: relative; }
     .lang-dropdown-trigger {
-      background: transparent;
-      border: 1px solid var(--brass);
-      color: var(--brass);
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
-      font-size: 0.7rem;
-      letter-spacing: 0.32em;
-      text-transform: uppercase;
+      background: transparent; border: 1px solid var(--brass);
+      color: var(--brass); font-family: 'Cormorant Garamond', serif;
+      font-weight: 500; font-size: 0.7rem;
+      letter-spacing: 0.32em; text-transform: uppercase;
       padding: 0.5rem 0.7rem 0.5rem 0.85rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      transition: all 0.2s;
-      line-height: 1;
+      cursor: pointer; display: inline-flex; align-items: center;
+      gap: 0.45rem; transition: all 0.2s; line-height: 1;
     }
-
-    .lang-dropdown-trigger:hover {
-      background: var(--brass);
-      color: var(--paper);
-    }
-
-    .lang-chevron {
-      font-size: 0.6rem;
-      transition: transform 0.3s ease;
-      transform: translateY(-1px);
-    }
-
-    .lang-dropdown.open .lang-chevron {
-      transform: rotate(180deg) translateY(0);
-    }
-
+    .lang-dropdown-trigger:hover { background: var(--brass); color: var(--paper); }
+    .lang-chevron { font-size: 0.6rem; transition: transform 0.3s ease; transform: translateY(-1px); }
+    .lang-dropdown.open .lang-chevron { transform: rotate(180deg) translateY(0); }
     .lang-dropdown-menu {
-      position: absolute;
-      top: calc(100% + 6px);
-      right: 0;
-      background: var(--paper);
-      border: 1px solid var(--brass);
-      min-width: 100%;
-      opacity: 0;
-      visibility: hidden;
+      position: absolute; top: calc(100% + 6px); right: 0;
+      background: var(--paper); border: 1px solid var(--brass);
+      min-width: 100%; opacity: 0; visibility: hidden;
       transform: translateY(-6px);
       transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
       box-shadow: 0 8px 20px rgba(155, 124, 66, 0.12);
     }
-
-    .lang-dropdown.open .lang-dropdown-menu {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-
+    .lang-dropdown.open .lang-dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
     .lang-option {
-      display: block;
-      width: 100%;
-      background: transparent;
-      border: none;
-      padding: 0.6rem 1.1rem;
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
-      font-size: 0.7rem;
-      letter-spacing: 0.32em;
-      text-transform: uppercase;
-      color: var(--brass-dark);
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s;
-      line-height: 1;
+      display: block; width: 100%; background: transparent; border: none;
+      padding: 0.6rem 1.1rem; font-family: 'Cormorant Garamond', serif;
+      font-weight: 500; font-size: 0.7rem;
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--brass-dark); cursor: pointer; text-align: center;
+      transition: all 0.2s; line-height: 1;
     }
+    .lang-option:hover { background: var(--cream); color: var(--brass); }
+    .lang-option.active { color: var(--brass); background: var(--cream-warm); }
 
-    .lang-option:hover {
-      background: var(--cream);
-      color: var(--brass);
-    }
-
-    .lang-option.active {
-      color: var(--brass);
-      background: var(--cream-warm);
-    }
-
-    /* ============================================
-       FULLSCREEN MENU OVERLAY
-       ============================================ */
+    /* MENU OVERLAY */
     .menu-overlay {
-      position: fixed;
-      inset: 0;
-      background: #0F0B08;
+      position: fixed; inset: 0; background: #0F0B08;
       z-index: 500;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 2.5rem;
-      opacity: 0;
-      visibility: hidden;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 2.5rem; opacity: 0; visibility: hidden;
       transition: opacity 0.4s ease, visibility 0.4s ease;
     }
-
     .menu-overlay.open { opacity: 1; visibility: visible; }
-
     .menu-close {
-      position: absolute;
-      top: 1.5rem;
-      right: 1.5rem;
-      width: 2.5rem;
-      height: 2.5rem;
-      background: transparent;
-      border: 1px solid var(--brass);
-      color: var(--brass);
-      font-size: 1.4rem;
-      font-family: 'Cormorant Garamond', serif;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      width: 2.5rem; height: 2.5rem;
+      background: transparent; border: 1px solid var(--brass);
+      color: var(--brass); font-size: 1.4rem;
+      font-family: 'Cormorant Garamond', serif; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
       transition: all 0.3s;
     }
-
     .menu-close:hover { background: var(--brass); color: #0F0B08; }
-
     .menu-logo {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 2.5rem;
-      font-style: italic;
-      color: var(--brass);
-      letter-spacing: 0.05em;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35em;
+      font-size: 2.5rem; font-style: italic;
+      color: var(--brass); letter-spacing: 0.05em;
+      display: inline-flex; align-items: center; gap: 0.35em;
     }
-
-    .menu-logo .heart-icon {
-      width: 0.7em;
-      height: 0.7em;
-      stroke-width: 1.3;
-    }
-
-    .menu-links-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 1.4rem;
-      text-align: center;
-    }
-
+    .menu-logo .heart-icon { width: 0.7em; height: 0.7em; stroke-width: 1.3; }
+    .menu-links-list { list-style: none; display: flex; flex-direction: column; gap: 1.4rem; text-align: center; }
     .menu-links-list a {
       font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 1.7rem;
-      color: var(--brass-light);
-      text-decoration: none;
-      letter-spacing: 0.03em;
-      transition: color 0.3s;
+      font-style: italic; font-size: 1.7rem;
+      color: var(--brass-light); text-decoration: none;
+      letter-spacing: 0.03em; transition: color 0.3s;
     }
-
     .menu-links-list a:hover { color: var(--brass); }
-
-    .menu-langs {
-      display: flex;
-      gap: 0.6rem;
-      margin-top: 1rem;
-    }
-
+    .menu-langs { display: flex; gap: 0.6rem; margin-top: 1rem; }
     .menu-langs .lang-btn {
-      padding: 0.55rem 1rem;
-      border: 1px solid var(--brass);
-      background: transparent;
-      color: var(--brass);
+      padding: 0.55rem 1rem; border: 1px solid var(--brass);
+      background: transparent; color: var(--brass);
       font-family: 'Cormorant Garamond', serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      cursor: pointer;
+      font-size: 0.7rem; letter-spacing: 0.3em;
+      text-transform: uppercase; cursor: pointer;
       transition: all 0.3s;
     }
-
     .menu-langs .lang-btn:hover,
     .menu-langs .lang-btn.active { background: var(--brass); color: #0F0B08; }
 
-    /* ============================================
-       ✦  LUX HERO  ✦  — Step 1 redesign
-       ============================================ */
+    /* HERO */
     #hjem {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 8rem 2rem 6rem;
-      position: relative;
-      background: var(--cream);
-      overflow: hidden;
+      min-height: 100vh; display: flex;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 8rem 2rem 6rem;
+      position: relative; background: var(--cream); overflow: hidden;
     }
-
-    /* Subtle radial warmth — no frames, no borders */
     #hjem::before {
-      content: '';
-      position: absolute;
-      inset: 0;
+      content: ''; position: absolute; inset: 0;
       background:
         radial-gradient(ellipse 50% 40% at 50% 35%, rgba(155, 124, 66, 0.07), transparent 70%),
         radial-gradient(ellipse 70% 50% at 50% 100%, rgba(155, 124, 66, 0.04), transparent 60%);
       pointer-events: none;
     }
-
     .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 760px;
-      width: 100%;
+      position: relative; z-index: 1;
+      max-width: 760px; width: 100%;
       animation: hero-rise 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s both;
     }
-
-    @keyframes hero-rise {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Tiny top ornament — restrained */
-    .hero-ornament {
-      color: var(--brass);
-      font-size: 0.6rem;
-      letter-spacing: 0.5em;
-      margin-bottom: 3.5rem;
-      opacity: 0.5;
-    }
-
-    /* Invitation line — italic, warm, the welcoming message */
+    @keyframes hero-rise { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .hero-ornament { color: var(--brass); font-size: 0.6rem; letter-spacing: 0.5em; margin-bottom: 3.5rem; opacity: 0.5; }
     .hero-invite {
       font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-weight: 400;
+      font-style: italic; font-weight: 400;
       font-size: clamp(1.1rem, 2.5vw, 1.45rem);
-      color: var(--brass-dark);
-      margin-bottom: 3.5rem;
-      letter-spacing: 0.02em;
-      line-height: 1.4;
+      color: var(--brass-dark); margin-bottom: 3.5rem;
+      letter-spacing: 0.02em; line-height: 1.4;
     }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 760px;
-      width: 100%;
-      animation: hero-rise 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s both;
-    }
-
-    /* The names — the hero of the hero */
     .hero-names {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 300;
-      font-size: clamp(3.5rem, 11vw, 7rem);
-      line-height: 1;
-      color: var(--ink);
-      letter-spacing: 0.005em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.35em;
-      margin: 0;
+      font-family: 'Cormorant Garamond', serif; font-weight: 300;
+      font-size: clamp(3.5rem, 11vw, 7rem); line-height: 1;
+      color: var(--ink); letter-spacing: 0.005em;
+      display: flex; align-items: center; justify-content: center;
+      gap: 0.35em; margin: 0;
     }
-
     .hero-name { display: inline-block; }
-
-    /* The heart symbol — antique brass, the signature moment */
     .hero-heart {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 0.55em;
-      height: 0.55em;
-      color: var(--brass);
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 0.55em; height: 0.55em; color: var(--brass);
     }
-
-    .hero-heart svg {
-      width: 100%;
-      height: 100%;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 1.2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    /* Thin gold line — quiet separator */
-    .hero-line {
-      width: 60px;
-      height: 1px;
-      background: var(--brass);
-      margin: 3.5rem auto 2rem;
-      opacity: 0.65;
-    }
-
-    /* Date + place — Garamond caps, wide tracking (not Cinzel) */
+    .hero-heart svg { width: 100%; height: 100%; stroke: currentColor; fill: none; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+    .hero-line { width: 60px; height: 1px; background: var(--brass); margin: 3.5rem auto 2rem; opacity: 0.65; }
     .hero-meta {
       font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
-      font-size: 0.78rem;
-      letter-spacing: 0.42em;
-      text-transform: uppercase;
-      color: var(--brass-dark);
-      line-height: 2;
+      font-weight: 500; font-size: 0.78rem;
+      letter-spacing: 0.42em; text-transform: uppercase;
+      color: var(--brass-dark); line-height: 2;
     }
-
-    .hero-meta-dot {
-      display: inline-block;
-      margin: 0 0.5em;
-      color: var(--brass);
-      transform: translateY(-0.1em);
-    }
-
+    .hero-meta-dot { display: inline-block; margin: 0 0.5em; color: var(--brass); transform: translateY(-0.1em); }
     @media (max-width: 768px) {
       #hjem { padding: 7rem 1.5rem 5rem; }
       .hero-ornament { margin-bottom: 2.5rem; }
@@ -662,74 +323,40 @@
       .hero-meta { font-size: 0.7rem; letter-spacing: 0.35em; }
     }
 
-    /* ============================================
-       ✦  THE LETTER — Step 2 redesign
-       ============================================ */
+    /* LETTER */
     #brevet {
       background: var(--paper);
       padding: 10rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative;
     }
-
-    .letter-content {
-      max-width: 520px;
-      width: 100%;
-    }
-
-    .letter-ornament {
-      color: var(--brass);
-      font-size: 0.55rem;
-      letter-spacing: 0.5em;
-      margin-bottom: 4rem;
-      opacity: 0.5;
-    }
-
+    .letter-content { max-width: 520px; width: 100%; }
+    .letter-ornament { color: var(--brass); font-size: 0.55rem; letter-spacing: 0.5em; margin-bottom: 4rem; opacity: 0.5; }
     .letter-salutation {
       font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-weight: 400;
+      font-style: italic; font-weight: 400;
       font-size: clamp(1rem, 2vw, 1.15rem);
-      color: var(--dust);
-      margin-bottom: 2.5rem;
-      letter-spacing: 0.02em;
+      color: var(--dust); margin-bottom: 2.5rem; letter-spacing: 0.02em;
     }
-
     .letter-body {
       font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-weight: 300;
+      font-style: italic; font-weight: 300;
       font-size: clamp(1.2rem, 2.4vw, 1.5rem);
-      color: var(--ink-soft);
-      line-height: 1.75;
-      margin-bottom: 1.8rem;
-      letter-spacing: 0.01em;
+      color: var(--ink-soft); line-height: 1.75;
+      margin-bottom: 1.8rem; letter-spacing: 0.01em;
     }
-
-    /* Practical line — slightly more reserved, like a postscript */
     .letter-body--practical {
       font-size: clamp(1rem, 2vw, 1.15rem);
-      color: var(--dust);
-      font-weight: 400;
+      color: var(--dust); font-weight: 400;
       margin-top: 2.5rem;
     }
-
-    .letter-body:last-of-type {
-      margin-bottom: 4rem;
-    }
-
+    .letter-body:last-of-type { margin-bottom: 4rem; }
     .letter-signature {
       font-family: 'Italianno', cursive;
       font-size: clamp(2.5rem, 6vw, 3.5rem);
-      color: var(--brass);
-      font-weight: 400;
-      line-height: 1;
-      letter-spacing: 0.02em;
+      color: var(--brass); font-weight: 400;
+      line-height: 1; letter-spacing: 0.02em;
     }
-
     @media (max-width: 768px) {
       #brevet { padding: 6rem 1.5rem; }
       .letter-ornament { margin-bottom: 3rem; }
@@ -737,109 +364,49 @@
       .letter-body:last-of-type { margin-bottom: 3rem; }
     }
 
-    /* ============================================
-       ✦  PLANEN  ✦  — Step 3 redesign
-       ============================================ */
-    #planen {
-      background: var(--cream);
-      padding: 9rem 2rem;
-      text-align: center;
-    }
-
-    .planen-content {
-      max-width: 620px;
-      margin: 0 auto;
-    }
-
-    .planen-ornament {
-      color: var(--brass);
-      font-size: 0.55rem;
-      letter-spacing: 0.5em;
-      margin-bottom: 2rem;
-      opacity: 0.5;
-    }
-
+    /* PLANEN */
+    #planen { background: var(--cream); padding: 9rem 2rem; text-align: center; }
+    .planen-content { max-width: 620px; margin: 0 auto; }
+    .planen-ornament { color: var(--brass); font-size: 0.55rem; letter-spacing: 0.5em; margin-bottom: 2rem; opacity: 0.5; }
     .planen-eyebrow {
       font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-weight: 400;
-      font-size: 1.05rem;
-      color: var(--dust);
-      margin-bottom: 0.5rem;
+      font-style: italic; font-weight: 400;
+      font-size: 1.05rem; color: var(--dust); margin-bottom: 0.5rem;
     }
-
     .planen-title {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(2.4rem, 7vw, 3.6rem);
-      font-weight: 400;
-      color: var(--ink);
-      margin-bottom: 3rem;
+      font-weight: 400; color: var(--ink); margin-bottom: 3rem;
     }
-
     .planen-intro {
       font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 1.1rem;
-      color: var(--dust);
-      margin-bottom: 4rem;
+      font-style: italic; font-size: 1.1rem;
+      color: var(--dust); margin-bottom: 4rem;
     }
-
-    .planen-items {
-      display: flex;
-      flex-direction: column;
-      gap: 3rem;
-      margin-bottom: 4.5rem;
-    }
-
-    .planen-item {
-      text-align: center;
-    }
-
+    .planen-items { display: flex; flex-direction: column; gap: 3rem; margin-bottom: 4.5rem; }
+    .planen-item { text-align: center; }
     .planen-item-label {
       font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
-      font-size: 0.72rem;
-      letter-spacing: 0.42em;
-      text-transform: uppercase;
-      color: var(--brass-dark);
-      margin-bottom: 0.8rem;
+      font-weight: 500; font-size: 0.72rem;
+      letter-spacing: 0.42em; text-transform: uppercase;
+      color: var(--brass-dark); margin-bottom: 0.8rem;
     }
-
     .planen-item-text {
       font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-weight: 300;
+      font-style: italic; font-weight: 300;
       font-size: clamp(1.2rem, 2.4vw, 1.5rem);
-      color: var(--ink-soft);
-      line-height: 1.6;
-      max-width: 460px;
-      margin: 0 auto;
+      color: var(--ink-soft); line-height: 1.6;
+      max-width: 460px; margin: 0 auto;
     }
-
-    .planen-separator {
-      color: var(--brass);
-      letter-spacing: 0.8em;
-      font-size: 0.5rem;
-      opacity: 0.5;
-      text-align: center;
-    }
-
+    .planen-separator { color: var(--brass); letter-spacing: 0.8em; font-size: 0.5rem; opacity: 0.5; text-align: center; }
     .planen-note {
       font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-weight: 300;
+      font-style: italic; font-weight: 300;
       font-size: clamp(1.05rem, 2vw, 1.2rem);
-      color: var(--ink-soft);
-      line-height: 1.75;
-      max-width: 520px;
-      margin: 0 auto 1.5rem;
+      color: var(--ink-soft); line-height: 1.75;
+      max-width: 520px; margin: 0 auto 1.5rem;
     }
-
-    .planen-note--small {
-      font-size: 0.95rem;
-      color: var(--dust);
-    }
-
+    .planen-note--small { font-size: 0.95rem; color: var(--dust); }
     @media (max-width: 768px) {
       #planen { padding: 6rem 1.5rem; }
       .planen-title { margin-bottom: 2rem; }
@@ -848,305 +415,238 @@
       .planen-item-text { font-size: 1.15rem; }
     }
 
-    /* ============================================
-       SECTIONS — kept as legacy for now
-       (Will be redesigned section by section)
-       ============================================ */
+    /* SECTIONS */
     section { padding: 6rem 1.5rem; }
     section:nth-child(even) { background: var(--cream-warm); }
     .section-wrap { max-width: 920px; margin: 0 auto; }
-
     .section-eyebrow {
-      font-family: 'Cinzel', serif;
-      font-size: 0.62rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--brass);
-      margin-bottom: 0.5rem;
+      font-family: 'Cinzel', serif; font-size: 0.62rem;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--brass); margin-bottom: 0.5rem;
     }
-
     .section-title {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(2.2rem, 8vw, 3.8rem);
-      font-weight: 400;
-      color: var(--ink);
-      margin-bottom: 1.5rem;
+      font-weight: 400; color: var(--ink); margin-bottom: 1.5rem;
     }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 2rem 0;
-    }
-
+    .divider { display: flex; align-items: center; justify-content: center; margin: 2rem 0; }
     .divider-icon { color: var(--brass); font-size: 1.2rem; }
-
-    .section-sub {
-      font-size: 1.1rem;
-      line-height: 1.8;
-      color: var(--dust);
-      max-width: 680px;
-      margin: 2rem auto;
-      text-align: center;
-    }
-
+    .section-sub { font-size: 1.1rem; line-height: 1.8; color: var(--dust); max-width: 680px; margin: 2rem auto; text-align: center; }
     .ornament { color: var(--brass); letter-spacing: 0.3em; }
 
-    /* BALCHIK / AREA section */
     .balchik-hero {
-      width: 100%;
-      max-width: 920px;
-      margin: 3rem auto;
-      overflow: hidden;
-      border: 1px solid var(--line);
+      width: 100%; max-width: 920px; margin: 3rem auto;
+      overflow: hidden; border: 1px solid var(--line);
       box-shadow: 0 8px 30px rgba(155,124,66,0.10);
     }
     .balchik-hero img { width: 100%; height: auto; display: block; }
-
     .balchik-gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-      margin-top: 3rem;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem; margin-top: 3rem;
     }
-
     .balchik-card {
-      background: var(--paper);
-      border: 1px solid var(--line);
-      overflow: hidden;
-      transition: transform 0.3s, box-shadow 0.3s;
+      background: var(--paper); border: 1px solid var(--line);
+      overflow: hidden; transition: transform 0.3s, box-shadow 0.3s;
     }
-
-    .balchik-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 30px rgba(155,124,66,0.15);
-    }
-
+    .balchik-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(155,124,66,0.15); }
     .balchik-card-image { width: 100%; height: 220px; object-fit: cover; display: block; }
     .balchik-card-content { padding: 1.5rem; }
-    .balchik-card-content h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.4rem;
-      color: var(--ink);
-      margin-bottom: 0.6rem;
-    }
-    .balchik-card-content p {
-      font-size: 0.95rem;
-      line-height: 1.7;
-      color: var(--dust);
-    }
+    .balchik-card-content h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--ink); margin-bottom: 0.6rem; }
+    .balchik-card-content p { font-size: 0.95rem; line-height: 1.7; color: var(--dust); }
 
-    /* VENUE section */
-    #venue { background: var(--cream-warm); position: relative; }
+    /* PRAKTISK SECTION */
+    #praktisk { background: var(--paper); padding: 7rem 1.5rem; }
+    #praktisk .section-wrap { max-width: 920px; margin: 0 auto; text-align: center; }
 
-    .venue-intro {
-      max-width: 720px;
-      margin: 2rem auto;
-      text-align: center;
-      font-size: 1.15rem;
-      line-height: 1.8;
-      color: var(--ink-soft);
+    .practical-facts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2.5rem;
+      margin: 3.5rem auto 0;
+      max-width: 820px;
     }
-
-    .venue-name {
+    .practical-fact { text-align: center; padding: 0 0.5rem; }
+    .practical-fact-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--brass);
+      margin-bottom: 0.9rem;
+    }
+    .practical-fact-text {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
-      font-size: clamp(2.5rem, 7vw, 4rem);
-      color: var(--brass-dark);
-      text-align: center;
-      margin: 1rem 0 0.5rem;
-      font-weight: 400;
+      font-weight: 300;
+      font-size: 1.1rem;
+      line-height: 1.65;
+      color: var(--ink-soft);
+      max-width: 260px;
+      margin: 0 auto;
     }
 
-    .venue-tagline {
+    .practical-separator {
+      color: var(--brass);
+      letter-spacing: 0.8em;
+      font-size: 0.5rem;
+      opacity: 0.45;
+      text-align: center;
+      margin: 4.5rem 0 3rem;
+    }
+
+    .practical-subtitle {
       font-family: 'Cinzel', serif;
       font-size: 0.7rem;
       letter-spacing: 0.4em;
       text-transform: uppercase;
-      color: var(--brass);
+      color: var(--brass-dark);
       text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .venue-features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-top: 3.5rem;
-    }
-
-    .venue-feature {
-      background: var(--paper);
-      padding: 2.5rem 2rem;
-      border: 1px solid var(--line);
-      text-align: center;
-      transition: all 0.3s;
-    }
-
-    .venue-feature:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(155,124,66,0.15);
-    }
-
-    .venue-feature-icon {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 2.2rem;
-      color: var(--brass);
       margin-bottom: 0.5rem;
     }
 
-    .venue-feature-label {
+    .practical-hotels {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+      text-align: left;
+    }
+    .practical-hotel-card {
+      background: var(--cream);
+      border: 1px solid var(--line);
+      padding: 2rem 1.6rem;
+      transition: all 0.3s;
+      text-align: center;
+    }
+    .practical-hotel-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(155,124,66,0.15);
+    }
+    .practical-hotel-distance {
       font-family: 'Cinzel', serif;
-      font-size: 0.62rem;
+      font-size: 0.55rem;
       letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--brass);
+      margin-bottom: 0.7rem;
+    }
+    .practical-hotel-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.7rem;
+      color: var(--ink);
+      margin-bottom: 0.8rem;
+      font-weight: 400;
+    }
+    .practical-hotel-card p {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: var(--dust);
+    }
+
+    .practical-note {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--dust);
+      text-align: center;
+      max-width: 560px;
+      margin: 2.5rem auto 0;
+      line-height: 1.7;
+    }
+
+    .practical-pair {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 3rem;
+      margin-top: 1.5rem;
+    }
+    .practical-pair-item { text-align: center; }
+    .practical-pair-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.4em;
       text-transform: uppercase;
       color: var(--brass-dark);
       margin-bottom: 1rem;
     }
-
-    .venue-feature h3 {
+    .practical-pair-text {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem;
-      color: var(--ink);
-      margin-bottom: 1rem;
-    }
-
-    .venue-feature p {
-      font-size: 0.95rem;
+      font-style: italic;
+      font-weight: 300;
+      font-size: 1.15rem;
       line-height: 1.7;
-      color: var(--dust);
+      color: var(--ink-soft);
+      max-width: 380px;
+      margin: 0 auto;
     }
 
-    .venue-link, .tripadvisor-link {
-      display: inline-block;
-      margin-top: 3rem;
-      padding: 1rem 2.4rem;
-      border: 1px solid var(--brass);
-      color: var(--brass);
-      font-family: 'Cinzel', serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: all 0.3s;
+    @media (max-width: 768px) {
+      #praktisk { padding: 5rem 1.25rem; }
+      .practical-facts { gap: 2.5rem; margin-top: 2.5rem; }
+      .practical-separator { margin: 3.5rem 0 2.5rem; }
+      .practical-hotels { gap: 1.25rem; margin-top: 2rem; }
+      .practical-pair { gap: 2.5rem; }
     }
-
-    .venue-link:hover, .tripadvisor-link:hover { background: var(--brass); color: #fff; }
 
     /* ACTIVITIES */
     #aktiviteter { background: var(--paper); }
-
     .activities-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 3rem;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem; margin-top: 3rem;
     }
-
     .activity-card {
-      padding: 2.2rem 1.8rem;
-      background: var(--cream-warm);
-      border: 1px solid var(--line);
-      border-top: 2px solid var(--brass);
+      padding: 2.2rem 1.8rem; background: var(--cream-warm);
+      border: 1px solid var(--line); border-top: 2px solid var(--brass);
       transition: all 0.3s;
     }
-
-    .activity-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(155,124,66,0.15);
-    }
-
+    .activity-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(155,124,66,0.15); }
     .activity-label {
-      font-family: 'Cinzel', serif;
-      font-size: 0.6rem;
-      letter-spacing: 0.32em;
-      text-transform: uppercase;
-      color: var(--brass);
-      margin-bottom: 0.8rem;
+      font-family: 'Cinzel', serif; font-size: 0.6rem;
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--brass); margin-bottom: 0.8rem;
     }
+    .activity-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--ink); margin-bottom: 1rem; line-height: 1.3; }
+    .activity-card p { font-size: 0.95rem; line-height: 1.7; color: var(--dust); }
 
-    .activity-card h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.4rem;
-      color: var(--ink);
-      margin-bottom: 1rem;
-      line-height: 1.3;
+    .tripadvisor-link {
+      display: inline-block; margin-top: 3rem;
+      padding: 1rem 2.4rem;
+      border: 1px solid var(--brass); color: var(--brass);
+      font-family: 'Cinzel', serif; font-size: 0.65rem;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      text-decoration: none; transition: all 0.3s;
     }
-
-    .activity-card p {
-      font-size: 0.95rem;
-      line-height: 1.7;
-      color: var(--dust);
-    }
+    .tripadvisor-link:hover { background: var(--brass); color: #fff; }
 
     /* MAP */
     #kart { background: var(--cream-warm); }
-
     .map-container {
-      width: 100%;
-      height: 520px;
-      margin: 3rem 0 2rem;
+      width: 100%; height: 520px; margin: 3rem 0 2rem;
       border: 1px solid var(--line);
       box-shadow: 0 8px 30px rgba(155,124,66,0.10);
-      position: relative;
-      z-index: 1;
+      position: relative; z-index: 1;
     }
-
     @media (max-width: 768px) { .map-container { height: 420px; } }
-
     .leaflet-container { font-family: 'EB Garamond', serif; background: #F4EDE2; }
     .leaflet-popup-content-wrapper {
-      border-radius: 0;
-      border: 1px solid var(--line);
-      background: var(--paper);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      border-radius: 0; border: 1px solid var(--line);
+      background: var(--paper); box-shadow: 0 6px 20px rgba(0,0,0,0.12);
     }
     .leaflet-popup-tip { background: var(--paper); border: 1px solid var(--line); }
-    .leaflet-popup-content {
-      margin: 1rem 1.2rem;
-      font-size: 0.92rem;
-      line-height: 1.5;
-      color: var(--ink-soft);
-    }
-    .leaflet-popup-content .popup-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.3rem;
-      color: var(--ink);
-      display: block;
-      margin-bottom: 0.2rem;
-    }
-    .leaflet-popup-content .popup-label {
-      font-family: 'Cinzel', serif;
-      font-size: 0.55rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--brass);
-      display: block;
-      margin-bottom: 0.6rem;
-    }
+    .leaflet-popup-content { margin: 1rem 1.2rem; font-size: 0.92rem; line-height: 1.5; color: var(--ink-soft); }
+    .leaflet-popup-content .popup-name { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--ink); display: block; margin-bottom: 0.2rem; }
+    .leaflet-popup-content .popup-label { font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--brass); display: block; margin-bottom: 0.6rem; }
     .leaflet-popup-content .popup-desc { color: var(--dust); font-size: 0.9rem; }
 
     .sk-marker { background: transparent !important; border: none !important; }
     .sk-marker .pin {
-      width: 100%;
-      height: 100%;
-      border-radius: 50% 50% 50% 0;
-      transform: rotate(-45deg);
-      border: 2px solid #fff;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 100%; height: 100%;
+      border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+      border: 2px solid #fff; box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+      display: flex; align-items: center; justify-content: center;
     }
-    .sk-marker .pin-inner {
-      transform: rotate(45deg);
-      color: #fff;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 14px;
-      line-height: 1;
-    }
+    .sk-marker .pin-inner { transform: rotate(45deg); color: #fff; font-family: 'Cormorant Garamond', serif; font-size: 14px; line-height: 1; }
     .sk-marker-venue .pin { background: var(--brass-dark); }
     .sk-marker-venue .pin-inner { font-size: 16px; }
     .sk-marker-town .pin { background: var(--brass); }
@@ -1154,27 +654,13 @@
     .sk-marker-restaurant .pin { background: var(--terracotta); }
 
     .map-legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.8rem;
-      justify-content: center;
+      display: flex; flex-wrap: wrap; gap: 1.8rem; justify-content: center;
       margin-top: 1.5rem;
-      font-family: 'Cinzel', serif;
-      font-size: 0.62rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--ink-soft);
+      font-family: 'Cinzel', serif; font-size: 0.62rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-soft);
     }
     .legend-item { display: flex; align-items: center; gap: 0.6rem; }
-    .legend-marker {
-      width: 14px;
-      height: 18px;
-      border-radius: 50% 50% 50% 0;
-      transform: rotate(-45deg);
-      display: inline-block;
-      border: 1.5px solid #fff;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    }
+    .legend-marker { width: 14px; height: 18px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: inline-block; border: 1.5px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
     .legend-venue { background: var(--brass-dark); }
     .legend-town { background: var(--brass); }
     .legend-sight { background: var(--rose); }
@@ -1182,150 +668,221 @@
 
     /* RESTAURANTS */
     #restauranter { background: var(--paper); }
-    .restaurants-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2.5rem;
-    }
+    .restaurants-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
     .restaurant-card {
-      padding: 2rem 1.6rem;
-      background: var(--cream-warm);
-      border: 1px solid var(--line);
-      border-top: 2px solid var(--terracotta);
+      padding: 2rem 1.6rem; background: var(--cream-warm);
+      border: 1px solid var(--line); border-top: 2px solid var(--terracotta);
       transition: all 0.3s;
     }
-    .restaurant-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(176,120,84,0.18);
-    }
-    .restaurant-type {
-      font-family: 'Cinzel', serif;
-      font-size: 0.55rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--terracotta);
-      margin-bottom: 0.6rem;
-    }
-    .restaurant-card h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem;
-      color: var(--ink);
-      margin-bottom: 0.3rem;
-    }
-    .restaurant-location {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 0.95rem;
-      color: var(--dust);
-      margin-bottom: 0.8rem;
-    }
+    .restaurant-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(176,120,84,0.18); }
+    .restaurant-type { font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 0.6rem; }
+    .restaurant-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--ink); margin-bottom: 0.3rem; }
+    .restaurant-location { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.95rem; color: var(--dust); margin-bottom: 0.8rem; }
     .restaurant-card p { font-size: 0.92rem; line-height: 1.6; color: var(--ink-soft); }
 
     /* FORM */
     .rsvp-step { max-width: 600px; margin: 0 auto; }
     .form-grid { display: grid; gap: 2rem; }
     .form-group { text-align: left; }
-    .form-person-label {
-      font-family: 'Cinzel', serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--brass);
-      margin-bottom: 1rem;
-      display: block;
-    }
+    .form-person-label { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--brass); margin-bottom: 1rem; display: block; }
     .form-radio-group { display: flex; flex-direction: column; gap: 1rem; }
     .form-radio { display: flex; align-items: center; gap: 0.8rem; cursor: pointer; font-size: 1rem; }
     .form-radio input[type="radio"] { cursor: pointer; width: 18px; height: 18px; accent-color: var(--brass); }
-    .form-label {
-      display: block;
-      font-family: 'Cinzel', serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--brass);
-      margin-bottom: 0.6rem;
-    }
-    .form-input {
-      width: 100%;
-      padding: 0.9rem;
-      border: 1px solid var(--line);
-      background: var(--paper);
-      font-family: 'EB Garamond', serif;
-      font-size: 1rem;
-      color: var(--ink-soft);
-      outline: none;
-      transition: border-color 0.2s;
-    }
+    .form-label { display: block; font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--brass); margin-bottom: 0.6rem; }
+    .form-input { width: 100%; padding: 0.9rem; border: 1px solid var(--line); background: var(--paper); font-family: 'EB Garamond', serif; font-size: 1rem; color: var(--ink-soft); outline: none; transition: border-color 0.2s; }
     .form-input:focus { border-color: var(--brass); }
     .form-textarea { resize: vertical; min-height: 120px; }
-    .allergy-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1rem;
-      margin: 1rem 0;
-    }
+    .allergy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 1rem 0; }
     .allergy-item { display: flex; align-items: center; gap: 0.6rem; cursor: pointer; font-size: 0.95rem; }
     .allergy-item input[type="checkbox"] { cursor: pointer; accent-color: var(--brass); }
     .allergy-item--wide { grid-column: 1 / -1; }
-    .form-submit {
-      width: 100%;
-      padding: 1.1rem;
-      background: var(--brass);
-      color: #fff;
-      border: none;
-      font-family: 'Cinzel', serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.3s;
-      margin-top: 1rem;
-    }
+    .form-submit { width: 100%; padding: 1.1rem; background: var(--brass); color: #fff; border: none; font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: background 0.3s; margin-top: 1rem; }
     .form-submit:hover { background: var(--brass-dark); }
 
     /* FOOTER */
-    footer {
-      background: var(--ink);
-      color: var(--paper);
-      text-align: center;
-      padding: 3.5rem 1.5rem;
-    }
-    .footer-names {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4em;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2rem;
-      font-style: italic;
-      margin-bottom: 1rem;
-      letter-spacing: 0.05em;
-    }
-    .footer-names .heart-icon {
-      color: var(--brass-light);
-      width: 0.7em;
-      height: 0.7em;
-      stroke-width: 1.3;
-    }
+    footer { background: var(--ink); color: var(--paper); text-align: center; padding: 3.5rem 1.5rem; }
+    .footer-names { display: inline-flex; align-items: center; gap: 0.4em; font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-style: italic; margin-bottom: 1rem; letter-spacing: 0.05em; }
+    .footer-names .heart-icon { color: var(--brass-light); width: 0.7em; height: 0.7em; stroke-width: 1.3; }
     footer .ornament { color: var(--brass-light); }
 
     @media (max-width: 768px) {
       section { padding: 4rem 1.25rem; }
       .section-wrap { padding: 0 0.25rem; }
-      .venue-name { font-size: clamp(2rem, 8vw, 3.5rem); }
       .section-title { font-size: clamp(1.8rem, 7vw, 3rem); }
+    }
+
+    /* OPENING STATEMENT (#brevet) */
+    .opening-statement {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(1.55rem, 3.6vw, 2.2rem);
+      color: var(--ink);
+      line-height: 1.35;
+      letter-spacing: 0.005em;
+      margin-bottom: 0.4rem;
+    }
+    .opening-statement--secondary {
+      font-size: clamp(1.2rem, 2.8vw, 1.55rem);
+      color: var(--brass-dark);
+      margin-bottom: 3rem;
+    }
+    .opening-closer {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(1.1rem, 2.3vw, 1.3rem);
+      color: var(--brass-dark);
+      margin-top: 2.5rem;
+      letter-spacing: 0.01em;
+    }
+
+    /* HILSEN — personal note */
+    #hilsen {
+      background: var(--cream);
+      padding: 9rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+    }
+    .hilsen-content {
+      max-width: 560px;
+      width: 100%;
+    }
+    .hilsen-ornament {
+      color: var(--brass);
+      font-size: 0.55rem;
+      letter-spacing: 0.5em;
+      margin-bottom: 3rem;
+      opacity: 0.5;
+    }
+    .hilsen-eyebrow {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--brass);
+      margin-bottom: 3rem;
+    }
+    .hilsen-lead {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(1.35rem, 2.8vw, 1.75rem);
+      color: var(--ink);
+      line-height: 1.45;
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.005em;
+    }
+    .hilsen-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(1.1rem, 2.2vw, 1.3rem);
+      color: var(--ink-soft);
+      line-height: 1.75;
+      margin-bottom: 1.8rem;
+      letter-spacing: 0.005em;
+    }
+    .hilsen-intro-line {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: var(--dust);
+      margin-top: 1.5rem;
+      margin-bottom: 0.4rem;
+    }
+    .hilsen-quote {
+      font-family: 'Italianno', cursive;
+      font-style: normal;
+      font-weight: 400;
+      font-size: clamp(2.2rem, 5.5vw, 3.2rem);
+      color: var(--brass);
+      line-height: 1.2;
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.01em;
+    }
+    .hilsen-signature {
+      font-family: 'Italianno', cursive;
+      font-size: clamp(2.5rem, 6vw, 3.5rem);
+      color: var(--brass);
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: 0.02em;
+      margin-top: 3rem;
+    }
+    @media (max-width: 768px) {
+      #hilsen { padding: 5rem 1.5rem; }
+      .hilsen-ornament { margin-bottom: 2rem; }
+      .hilsen-eyebrow { margin-bottom: 2rem; }
+      .hilsen-lead { font-size: 1.3rem; margin-bottom: 2rem; }
+      .hilsen-body { font-size: 1.15rem; line-height: 1.7; margin-bottom: 1.4rem; }
+    }
+
+    /* PRACTICAL — prose & subsection layout */
+    .practical-prose {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(1.1rem, 2.2vw, 1.3rem);
+      color: var(--ink-soft);
+      line-height: 1.7;
+      max-width: 640px;
+      margin: 0.6rem auto;
+      text-align: center;
+    }
+    .practical-subtitle--top { margin-top: 1.5rem; }
+
+    /* DRESSCODE stanza */
+    .dress-stanza {
+      max-width: 560px;
+      margin: 1.5rem auto 0;
+    }
+    .dress-stanza .practical-prose {
+      margin-bottom: 0.3rem;
+    }
+    .dress-stanza .dress-detail {
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      color: var(--ink-soft);
+    }
+    .dress-stanza .dress-closer {
+      margin-top: 1.2rem;
+      color: var(--brass-dark);
+    }
+
+    /* STRANDMAT panel (inside #omradet) */
+    .strandmat-panel {
+      margin-top: 4.5rem;
+      padding-top: 3.5rem;
+      border-top: 1px solid var(--line);
+      text-align: center;
+    }
+    .strandmat-prose {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(1.15rem, 2.4vw, 1.4rem);
+      color: var(--ink-soft);
+      line-height: 1.75;
+      max-width: 640px;
+      margin: 1.5rem auto 0;
+      letter-spacing: 0.005em;
+    }
+    @media (max-width: 768px) {
+      .strandmat-panel { margin-top: 3rem; padding-top: 2.5rem; }
+      .strandmat-prose { font-size: 1.15rem; line-height: 1.7; }
     }
 
     .hidden { display: none !important; }
   </style>
-
 </head>
 
 <body class="locked">
 
   <!-- PASSWORD SCREEN -->
-
   <div id="pw-screen">
     <div class="pw-particles" aria-hidden="true">
       <span></span><span></span><span></span><span></span>
@@ -1333,26 +890,22 @@
       <span></span><span></span><span></span><span></span>
     </div>
 
-```
-<div class="pw-logo">
-  <span class="pw-letter pw-letter-s">S</span>
-  <span class="pw-heart-wrap">
-    <svg class="heart-icon pw-heart" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-    </svg>
-  </span>
-  <span class="pw-letter pw-letter-k">K</span>
-</div>
+    <div class="pw-logo">
+      <span class="pw-letter pw-letter-s">S</span>
+      <span class="pw-heart-wrap">
+        <svg class="heart-icon pw-heart" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </span>
+      <span class="pw-letter pw-letter-k">K</span>
+    </div>
 
-<input type="password" id="pw-input" class="pw-input pw-fade-in" placeholder="Password" />
-<button id="pw-enter" class="pw-fade-in pw-fade-in-late" aria-label="Open" onclick="openWeddingSite()">→</button>
-<p id="pw-error" class="pw-error" data-text="wrong-password">Feil passord</p>
-```
-
+    <input type="password" id="pw-input" class="pw-input pw-fade-in" placeholder="Password" />
+    <button id="pw-enter" class="pw-fade-in pw-fade-in-late" aria-label="Open" onclick="openWeddingSite()">→</button>
+    <p id="pw-error" class="pw-error" data-text="wrong-password">Feil passord</p>
   </div>
 
   <!-- NAV -->
-
   <nav>
     <div class="nav-inner">
       <a href="#hjem" class="nav-logo">
@@ -1366,453 +919,534 @@
         <span class="nav-logo-year">2 0 2 7</span>
       </a>
 
-```
-  <div class="nav-right">
-    <!-- Language dropdown -->
-    <div class="lang-dropdown" id="lang-dropdown">
-      <button class="lang-dropdown-trigger" onclick="toggleLangDropdown(event)" aria-label="Velg språk">
-        <span class="lang-current">NO</span>
-        <span class="lang-chevron" aria-hidden="true">▾</span>
-      </button>
-      <div class="lang-dropdown-menu">
-        <button class="lang-btn lang-option active" data-lang="no">NO</button>
-        <button class="lang-btn lang-option" data-lang="en">EN</button>
-        <button class="lang-btn lang-option" data-lang="bg">BG</button>
+      <div class="nav-right">
+        <div class="lang-dropdown" id="lang-dropdown">
+          <button class="lang-dropdown-trigger" onclick="toggleLangDropdown(event)" aria-label="Velg språk">
+            <span class="lang-current">NO</span>
+            <span class="lang-chevron" aria-hidden="true">▾</span>
+          </button>
+          <div class="lang-dropdown-menu">
+            <button class="lang-btn lang-option active" data-lang="no">NO</button>
+            <button class="lang-btn lang-option" data-lang="en">EN</button>
+            <button class="lang-btn lang-option" data-lang="bg">BG</button>
+          </div>
+        </div>
+
+        <button class="menu-toggle" aria-label="Meny" onclick="toggleMenu()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
     </div>
-
-    <button class="menu-toggle" aria-label="Meny" onclick="toggleMenu()">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </div>
-</div>
-```
-
   </nav>
 
-  <!-- FULLSCREEN MENU OVERLAY -->
-
+  <!-- MENU OVERLAY -->
   <div class="menu-overlay" id="menu-overlay">
     <button class="menu-close" onclick="toggleMenu()" aria-label="Lukk">×</button>
 
-```
-<div class="menu-logo">
-  S
-  <svg class="heart-icon" viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-  </svg>
-  K
-</div>
-
-<ul class="menu-links-list">
-  <li><a href="#hjem" data-text="nav-home" onclick="toggleMenu()">Hjem</a></li>
-  <li><a href="#planen" data-text="nav-plan" onclick="toggleMenu()">Planen</a></li>
-  <li><a href="#omradet" data-text="nav-destination" onclick="toggleMenu()">Området</a></li>
-  <li><a href="#aktiviteter" data-text="nav-activities" onclick="toggleMenu()">Opplevelser</a></li>
-  <li><a href="#kart" data-text="nav-map" onclick="toggleMenu()">Kart</a></li>
-  <li><a href="#paamelding" data-text="nav-rsvp" onclick="toggleMenu()">Påmelding</a></li>
-</ul>
-```
-
-  </div>
-
-  <!-- ╔══════════════════════════════════════════╗ -->
-
-  <!-- ║          ✦  LUX HERO  ✦                  ║ -->
-
-  <!-- ╚══════════════════════════════════════════╝ -->
-
-  <section id="hjem">
-    <div class="hero-content">
-
-```
-  <div class="hero-ornament">✦</div>
-
-  <p class="hero-invite" data-text="hero-invite">
-    Du er invitert til vårt bryllup
-  </p>
-
-  <h1 class="hero-names" aria-label="Silje og Kjeld">
-    <span class="hero-name">Silje</span>
-    <span class="hero-heart" aria-hidden="true">
-      <svg viewBox="0 0 24 24">
+    <div class="menu-logo">
+      S
+      <svg class="heart-icon" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
       </svg>
-    </span>
-    <span class="hero-name">Kjeld</span>
-  </h1>
-
-  <div class="hero-line" aria-hidden="true"></div>
-
-  <p class="hero-meta">
-    <span data-text="hero-meta-date">Sensommer 2027</span>
-    <span class="hero-meta-dot">·</span>
-    <span data-text="hero-meta-place">Dato kommer</span>
-  </p>
-
-</div>
-```
-
-  </section>
-
-  <!-- ╔══════════════════════════════════════════╗ -->
-
-  <!-- ║          ✦  BREVET  ✦                    ║ -->
-
-  <!-- ╚══════════════════════════════════════════╝ -->
-
-  <section id="brevet">
-    <div class="letter-content">
-
-```
-  <div class="letter-ornament">✦</div>
-
-  <p class="letter-salutation" data-text="letter-salutation">
-    Til familie og venner,
-  </p>
-
-  <p class="letter-body" data-text="letter-1">
-    Vi gifter oss i Bulgaria, ved Svartehavet — i området rundt Balchik og Albena.
-    Silje har familie i Bulgaria, og det er et sted som betyr mye for oss.
-    Derfor ønsker vi å samle familie og venner akkurat her.
-  </p>
-
-  <p class="letter-body" data-text="letter-2">
-    Vi håper dere har lyst til å komme og feire sammen med oss.
-    Datoen er ikke helt satt ennå, men bryllupet blir i sensommeren 2027.
-  </p>
-
-  <p class="letter-body letter-body--practical" data-text="letter-3">
-    Nærmeste flyplass er Varna. Mer praktisk informasjon kommer etter hvert.
-  </p>
-
-  <div class="letter-signature">Silje &amp; Kjeld</div>
-
-</div>
-```
-
-  </section>
-
-  <!-- ╔══════════════════════════════════════════╗ -->
-
-  <!-- ║          ✦  PLANEN  ✦                    ║ -->
-
-  <!-- ╚══════════════════════════════════════════╝ -->
-
-  <section id="planen">
-    <div class="planen-content">
-
-```
-  <div class="planen-ornament">✦</div>
-
-  <p class="planen-eyebrow" data-text="planen-eyebrow">Foreløpig</p>
-  <h2 class="planen-title" data-text="planen-title">Planen</h2>
-
-  <p class="planen-intro" data-text="planen-intro">
-    Slik tenker vi det nå:
-  </p>
-
-  <div class="planen-items">
-    <div class="planen-item">
-      <p class="planen-item-label" data-text="planen-1-label">En kveld før</p>
-      <p class="planen-item-text" data-text="planen-1-text">
-        Strandfest og get-together. Kanskje en båttur, om vi får tid.
-      </p>
+      K
     </div>
 
-    <div class="planen-separator">· · ·</div>
-
-    <div class="planen-item">
-      <p class="planen-item-label" data-text="planen-2-label">Bryllupsdagen</p>
-      <p class="planen-item-text" data-text="planen-2-text">
-        Vielse og fest på Black Sea Rama, like utenfor Balchik.
-      </p>
-    </div>
+    <ul class="menu-links-list">
+      <li><a href="#hjem" data-text="nav-home" onclick="toggleMenu()">Hjem</a></li>
+      <li><a href="#planen" data-text="nav-plan" onclick="toggleMenu()">Planen</a></li>
+      <li><a href="#omradet" data-text="nav-destination" onclick="toggleMenu()">Området</a></li>
+      <li><a href="#praktisk" data-text="nav-practical" onclick="toggleMenu()">Praktisk</a></li>
+      <li><a href="#aktiviteter" data-text="nav-activities" onclick="toggleMenu()">Opplevelser</a></li>
+      <li><a href="#kart" data-text="nav-map" onclick="toggleMenu()">Kart</a></li>
+      <li><a href="#paamelding" data-text="nav-rsvp" onclick="toggleMenu()">Påmelding</a></li>
+    </ul>
   </div>
 
-  <p class="planen-note" data-text="planen-note-1">
-    Vi vet det er et stykke å reise. Vi prøver å legge det opp slik at
-    det går både å gjøre det til en ferieuke — eller komme bare til helgen.
-  </p>
-
-  <p class="planen-note planen-note--small" data-text="planen-note-2">
-    Mer praktisk informasjon kommer.
-  </p>
-
-</div>
-```
-
+  <!-- HERO -->
+  <section id="hjem">
+    <div class="hero-content">
+      <div class="hero-ornament">✦</div>
+      <p class="hero-invite" data-text="hero-invite">
+        Du er invitert til vårt bryllup
+      </p>
+      <h1 class="hero-names" aria-label="Silje og Kjeld">
+        <span class="hero-name">Silje</span>
+        <span class="hero-heart" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </span>
+        <span class="hero-name">Kjeld</span>
+      </h1>
+      <div class="hero-line" aria-hidden="true"></div>
+      <p class="hero-meta">
+        <span data-text="hero-meta-date">Sensommer 2027</span>
+        <span class="hero-meta-dot">·</span>
+        <span data-text="hero-meta-place">Dato kommer</span>
+      </p>
+    </div>
   </section>
 
-  <!-- OMRÅDET (kept from previous version) -->
+  <!-- BREVET — opening invitation -->
+  <section id="brevet">
+    <div class="letter-content">
+      <div class="letter-ornament">✦</div>
 
+      <p class="opening-statement" data-text="opening-statement-1">
+        Bulgaria. Sommer. Svartehavet.
+      </p>
+      <p class="opening-statement opening-statement--secondary" data-text="opening-statement-2">
+        Og et bryllup midt i det hele.
+      </p>
+
+      <p class="letter-body" data-text="opening-invite">
+        Vi håper dere vil bli med til Bulgaria — ikke bare for bryllupet, men for hele opplevelsen. Lange sommerdager ved Svartehavet, gode middager, varme kvelder og tid sammen.
+      </p>
+
+      <p class="opening-closer" data-text="opening-closer">
+        Gjør bryllupet vårt til en del av sommerferien.
+      </p>
+    </div>
+  </section>
+
+  <!-- HILSEN — personal note -->
+  <section id="hilsen">
+    <div class="hilsen-content">
+      <div class="hilsen-ornament">✦</div>
+
+      <p class="hilsen-eyebrow" data-text="hilsen-eyebrow">Personlig hilsen</p>
+
+      <p class="hilsen-lead" data-text="hilsen-1">
+        Bulgaria har en spesiell plass i hjertene våre.
+      </p>
+
+      <p class="hilsen-body" data-text="hilsen-2">
+        Silje har stor familie her, og gjennom mange reiser hit har stedet blitt en viktig del av livet vårt. Vi trives her, senker skuldrene og finner roen.
+      </p>
+
+      <p class="hilsen-body" data-text="hilsen-3">
+        Tanken på et lyst og varmt sommerbryllup ved Svartehavet føltes derfor helt riktig for oss.
+      </p>
+
+      <p class="hilsen-body" data-text="hilsen-4">
+        BlackSeaRama oppdaget vi på en av reisene våre. Vi spiste lunsj der, gikk langs golfbanen og ble sittende og se utover havet og klippene.
+      </p>
+
+      <p class="hilsen-intro-line" data-text="hilsen-5-intro">
+        Det tok ikke lang tid før vi begge tenkte:
+      </p>
+
+      <p class="hilsen-quote" data-text="hilsen-quote">
+        "Det er her vi vil si ja."
+      </p>
+
+      <p class="hilsen-body" data-text="hilsen-6">
+        Nå gleder vi oss til å dele dette stedet med dere.
+      </p>
+
+      <div class="hilsen-signature">Silje &amp; Kjeld</div>
+    </div>
+  </section>
+
+  <!-- PLANEN -->
+  <section id="planen">
+    <div class="planen-content">
+      <div class="planen-ornament">✦</div>
+      <p class="planen-eyebrow" data-text="planen-eyebrow">Foreløpig</p>
+      <h2 class="planen-title" data-text="planen-title">Planen</h2>
+      <p class="planen-intro" data-text="planen-intro">Slik tenker vi det nå:</p>
+      <div class="planen-items">
+        <div class="planen-item">
+          <p class="planen-item-label" data-text="planen-1-label">En kveld før</p>
+          <p class="planen-item-text" data-text="planen-1-text">
+            Strandfest og get-together. Kanskje en båttur, om vi får tid.
+          </p>
+        </div>
+        <div class="planen-separator">· · ·</div>
+        <div class="planen-item">
+          <p class="planen-item-label" data-text="planen-2-label">Bryllupsdagen</p>
+          <p class="planen-item-text" data-text="planen-2-text">
+            Vielse og fest på Black Sea Rama, like utenfor Balchik.
+          </p>
+        </div>
+      </div>
+      <p class="planen-note" data-text="planen-note-1">
+        Vi vet det er et stykke å reise. Vi prøver å legge det opp slik at det går både å gjøre det til en ferieuke — eller komme bare til helgen.
+      </p>
+      <p class="planen-note planen-note--small" data-text="planen-note-2">
+        Mer praktisk informasjon kommer.
+      </p>
+    </div>
+  </section>
+
+  <!-- OMRÅDET -->
   <section id="omradet">
     <div class="section-wrap">
       <p class="section-eyebrow" data-text="destination-eyebrow">Området</p>
       <h2 class="section-title" data-text="destination-title">Svartehavet, om sommeren</h2>
       <div class="divider"><span class="divider-icon">✦</span></div>
 
-```
-  <div class="balchik-hero">
-    <img src="images/balchik-panorama.webp" alt="Balchik panorama ved solnedgang" loading="lazy" />
-  </div>
+      <div class="balchik-hero">
+        <img src="images/balchik-panorama.webp" alt="Balchik panorama ved solnedgang" loading="lazy" />
+      </div>
 
-  <p class="section-sub" data-text="destination-text">
-    Mellom Balchik og Kaliakra ligger en bit av kysten vi har blitt glad i.
-    Hvite klipper, varme kvelder, hav.
-  </p>
+      <p class="section-sub" data-text="destination-text">
+        Mellom Balchik og Kaliakra ligger en bit av kysten vi har blitt glad i. Hvite klipper, varme kvelder, hav.
+      </p>
 
-  <div class="balchik-gallery">
-    <div class="balchik-card">
-      <img class="balchik-card-image" src="images/balchik-palace.jpg" alt="Dronning Marias palass" loading="lazy" />
-      <div class="balchik-card-content">
-        <h3 data-text="balchik-palace-title">Dronning Marias palass</h3>
-        <p data-text="balchik-palace-desc">
-          Bygget av en dronning som elsket hagene sine. Lett å bruke en formiddag her.
-        </p>
+      <div class="balchik-gallery">
+        <div class="balchik-card">
+          <img class="balchik-card-image" src="images/balchik-palace.jpg" alt="Dronning Marias palass" loading="lazy" />
+          <div class="balchik-card-content">
+            <h3 data-text="balchik-palace-title">Dronning Marias palass</h3>
+            <p data-text="balchik-palace-desc">
+              Bygget av en dronning som elsket hagene sine. Lett å bruke en formiddag her.
+            </p>
+          </div>
+        </div>
+        <div class="balchik-card">
+          <img class="balchik-card-image" src="images/balchik-pier.jpg" alt="Brygge med hvite klipper" loading="lazy" />
+          <div class="balchik-card-content">
+            <h3 data-text="balchik-pier-title">Den hvite kysten</h3>
+            <p data-text="balchik-pier-desc">
+              Hvite hus klatrer opp kalksteinklippene. Promenaden går langs vannet.
+            </p>
+          </div>
+        </div>
+        <div class="balchik-card">
+          <img class="balchik-card-image" src="images/balchik-beach.png" alt="Strand med strå-parasoller" loading="lazy" />
+          <div class="balchik-card-content">
+            <h3 data-text="balchik-beach-title">Stranden</h3>
+            <p data-text="balchik-beach-desc">
+              Stille bukter, mykt vann. Solnedgangene er av den slag man husker.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
+  </section>
 
-    <div class="balchik-card">
-      <img class="balchik-card-image" src="images/balchik-pier.jpg" alt="Brygge med hvite klipper" loading="lazy" />
-      <div class="balchik-card-content">
-        <h3 data-text="balchik-pier-title">Den hvite kysten</h3>
-        <p data-text="balchik-pier-desc">
-          Hvite hus klatrer opp kalksteinklippene. Promenaden går langs vannet.
+  <!-- PRAKTISK -->
+  <section id="praktisk">
+    <div class="section-wrap">
+      <p class="section-eyebrow" data-text="practical-eyebrow">Praktisk</p>
+      <h2 class="section-title" data-text="practical-title">Greit å vite</h2>
+      <div class="divider"><span class="divider-icon">✦</span></div>
+
+      <!-- REISE -->
+      <p class="practical-subtitle" data-text="reise-section-label">Reise</p>
+      <p class="practical-prose" data-text="reise-text">
+        Nærmeste flyplass er Varna (VAR). I sommersesongen går det direktefly fra Oslo med både charter og rutefly, blant annet gjennom Ving, TUI og Norwegian. Mange velger også å kombinere bryllupet med en ferieuke ved Svartehavet.
+      </p>
+
+      <div class="practical-separator">· · ·</div>
+
+      <!-- PRAKTISK INFORMASJON -->
+      <p class="practical-subtitle" data-text="info-section-label">Praktisk informasjon</p>
+      <div class="practical-facts">
+        <div class="practical-fact">
+          <p class="practical-fact-label" data-text="travel-schengen-label">Schengen</p>
+          <p class="practical-fact-text" data-text="travel-schengen-text">
+            Bulgaria er medlem av Schengen, så norske gjester trenger kun gyldig pass eller nasjonalt ID-kort.
+          </p>
+        </div>
+        <div class="practical-fact">
+          <p class="practical-fact-label" data-text="travel-currency-label">Valuta</p>
+          <p class="practical-fact-text" data-text="travel-currency-text">
+            Valutaen er euro (€), og vanlige norske bankkort fungerer de fleste steder.
+          </p>
+        </div>
+        <div class="practical-fact">
+          <p class="practical-fact-label" data-text="travel-power-label">Strøm</p>
+          <p class="practical-fact-text" data-text="travel-power-text">
+            Strømuttak er de samme som i Norge, så adapter er ikke nødvendig.
+          </p>
+        </div>
+      </div>
+
+      <div class="practical-separator">· · ·</div>
+
+      <!-- OVERNATTING -->
+      <p class="practical-subtitle" data-text="hotel-section-label">Overnatting</p>
+      <p class="practical-prose" data-text="hotel-intro">
+        Vi anbefaler tre alternativer, avhengig av hva slags opphold dere ønsker.
+      </p>
+
+      <div class="practical-hotels">
+        <div class="practical-hotel-card">
+          <p class="practical-hotel-distance" data-text="hotel-balchik-label">Sjarmerende kystby</p>
+          <h3 data-text="hotel-balchik-title">Balchik</h3>
+          <p data-text="hotel-balchik-desc">
+            Balchik er en rolig og sjarmerende kystby, omtrent 10 minutter fra vielsen. Her finner dere små restauranter, promenade langs sjøen og en mer avslappet atmosfære. Passer perfekt for dere som ønsker å bo nær bryllupet og samtidig oppleve litt av det lokale livet.
+          </p>
+        </div>
+        <div class="practical-hotel-card">
+          <p class="practical-hotel-distance" data-text="hotel-albena-label">Familievennlig resort</p>
+          <h3 data-text="hotel-albena-title">Albena</h3>
+          <p data-text="hotel-albena-desc">
+            Albena passer godt for familier og dere som ønsker klassisk sommerferie med strand, resort og hotellområder samlet på ett sted. Her finnes hoteller i flere prisklasser, lange sandstrender og mange aktiviteter.
+          </p>
+        </div>
+        <div class="practical-hotel-card">
+          <p class="practical-hotel-distance" data-text="hotel-chinka-label">Kun for voksne</p>
+          <h3 data-text="hotel-chinka-title">Villa Chinka</h3>
+          <p data-text="hotel-chinka-desc">
+            For dere som ønsker å gjøre turen til en liten ferie i seg selv, er Villa Chinka et fantastisk alternativ. Rolig atmosfære og fantastisk utsikt over Svartehavet. Hotellet er kun for voksne.
+          </p>
+        </div>
+      </div>
+
+      <p class="practical-note" data-text="hotel-us-note">
+        Vi selv skal bo i Obrochishte, like ved Albena — så vi er aldri langt unna.
+      </p>
+
+      <div class="practical-separator">· · ·</div>
+
+      <!-- DRESSCODE -->
+      <p class="practical-subtitle" data-text="dress-section-label">Dresscode</p>
+      <div class="dress-stanza">
+        <p class="practical-prose" data-text="dress-line-1">
+          Sommerbryllup ved sjøen.
+        </p>
+        <p class="practical-prose dress-detail" data-text="dress-line-2">
+          For damer: cocktailkjole eller elegant sommerkjole.
+        </p>
+        <p class="practical-prose dress-detail" data-text="dress-line-3">
+          For herrer: dressbukse og skjorte — gjerne uten slips.
+        </p>
+        <p class="practical-prose dress-closer" data-text="dress-line-4">
+          Tenk elegant, lett og sommerlig.
         </p>
       </div>
-    </div>
 
-    <div class="balchik-card">
-      <img class="balchik-card-image" src="images/balchik-beach.png" alt="Strand med strå-parasoller" loading="lazy" />
-      <div class="balchik-card-content">
-        <h3 data-text="balchik-beach-title">Stranden</h3>
-        <p data-text="balchik-beach-desc">
-          Stille bukter, mykt vann. Solnedgangene er av den slag man husker.
-        </p>
+      <div class="practical-separator">· · ·</div>
+
+      <!-- MATEN -->
+      <p class="practical-subtitle" data-text="mat-section-label">Maten</p>
+      <p class="practical-prose" data-text="mat-intro">
+        Bulgarsk sommermat er enkel, fersk og god. Tre kategorier vi vender tilbake til:
+      </p>
+      <div class="practical-facts">
+        <div class="practical-fact">
+          <p class="practical-fact-label" data-text="mat-beach-label">På stranden</p>
+          <p class="practical-fact-text" data-text="mat-beach-text">
+            Parlenka med feta og hvitløksbrød.
+          </p>
+        </div>
+        <div class="practical-fact">
+          <p class="practical-fact-label" data-text="mat-starter-label">Forretter & salater</p>
+          <p class="practical-fact-text" data-text="mat-starter-text">
+            Shopskasalat og Snezhanka.
+          </p>
+        </div>
+        <div class="practical-fact">
+          <p class="practical-fact-label" data-text="mat-main-label">Middag</p>
+          <p class="practical-fact-text" data-text="mat-main-text">
+            Pizza, blåskjell, grillmat.
+          </p>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-```
-
   </section>
 
   <!-- AKTIVITETER -->
-
   <section id="aktiviteter">
     <div class="section-wrap">
       <p class="section-eyebrow" data-text="activities-eyebrow">Hvis dere blir lenger</p>
       <h2 class="section-title" data-text="activities-title">Anbefalinger</h2>
       <div class="divider"><span class="divider-icon">✦</span></div>
 
-```
-  <p class="section-sub" data-text="activities-intro">
-    Steder og opplevelser vi er glade i. Plukk det dere har lyst på.
-  </p>
+      <p class="section-sub" data-text="activities-intro">
+        Steder og opplevelser vi er glade i. Plukk det dere har lyst på.
+      </p>
 
-  <div class="activities-grid">
-    <div class="activity-card">
-      <p class="activity-label" data-text="exp-beach-label">Albena · Strand</p>
-      <h3 data-text="exp-beach-title">Strandliv</h3>
-      <p data-text="exp-beach-desc">Lange strender, varmt vann, late dager. Albena er gjort for sommer.</p>
+      <div class="activities-grid">
+        <div class="activity-card">
+          <p class="activity-label" data-text="exp-beach-label">Albena · Strand</p>
+          <h3 data-text="exp-beach-title">Strandliv</h3>
+          <p data-text="exp-beach-desc">Lange strender, varmt vann, late dager. Albena er gjort for sommer.</p>
+        </div>
+        <div class="activity-card">
+          <p class="activity-label" data-text="exp-golf-label">Black Sea Rama · Sport</p>
+          <h3 data-text="exp-golf-title">Mesterskapsgolf</h3>
+          <p data-text="exp-golf-desc">Banen på Black Sea Rama er Bulgarias første mesterskapsbane. Verdt en runde.</p>
+        </div>
+        <div class="activity-card">
+          <p class="activity-label" data-text="exp-city-label">Varna · Byliv</p>
+          <h3 data-text="exp-city-title">Varna</h3>
+          <p data-text="exp-city-desc">Storby med havn, kafeer og park. Bra for en dag eller kveld.</p>
+        </div>
+        <div class="activity-card">
+          <p class="activity-label" data-text="exp-food-label">Kysten · Mat</p>
+          <h3 data-text="exp-food-title">Sjømat og salater</h3>
+          <p data-text="exp-food-desc">Skjell, fersk fisk, lette salater. Kystmat på sitt beste.</p>
+        </div>
+        <div class="activity-card">
+          <p class="activity-label" data-text="exp-stones-label">Varna · Natur</p>
+          <h3 data-text="exp-stones-title">Steinskogen</h3>
+          <p data-text="exp-stones-desc">Underlige steinformasjoner ute på sletten. Best ved solnedgang.</p>
+        </div>
+        <div class="activity-card">
+          <p class="activity-label" data-text="exp-promenade-label">Balchik · Kveld</p>
+          <h3 data-text="exp-promenade-title">Promenaden</h3>
+          <p data-text="exp-promenade-desc">Sjøpromenaden i Balchik. Restauranter, barer og kveldsmusikk.</p>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <a class="tripadvisor-link" href="https://www.getyourguide.com/varna-l1116/" target="_blank" rel="noopener" data-text="getyourguide-link">Utforsk flere på GetYourGuide →</a>
+      </div>
     </div>
-
-    <div class="activity-card">
-      <p class="activity-label" data-text="exp-golf-label">Black Sea Rama · Sport</p>
-      <h3 data-text="exp-golf-title">Mesterskapsgolf</h3>
-      <p data-text="exp-golf-desc">Banen på Black Sea Rama er Bulgarias første mesterskapsbane. Verdt en runde.</p>
-    </div>
-
-    <div class="activity-card">
-      <p class="activity-label" data-text="exp-city-label">Varna · Byliv</p>
-      <h3 data-text="exp-city-title">Varna</h3>
-      <p data-text="exp-city-desc">Storby med havn, kafeer og park. Bra for en dag eller kveld.</p>
-    </div>
-
-    <div class="activity-card">
-      <p class="activity-label" data-text="exp-food-label">Kysten · Mat</p>
-      <h3 data-text="exp-food-title">Sjømat og salater</h3>
-      <p data-text="exp-food-desc">Skjell, fersk fisk, lette salater. Kystmat på sitt beste.</p>
-    </div>
-
-    <div class="activity-card">
-      <p class="activity-label" data-text="exp-stones-label">Varna · Natur</p>
-      <h3 data-text="exp-stones-title">Steinskogen</h3>
-      <p data-text="exp-stones-desc">Underlige steinformasjoner ute på sletten. Best ved solnedgang.</p>
-    </div>
-
-    <div class="activity-card">
-      <p class="activity-label" data-text="exp-promenade-label">Balchik · Kveld</p>
-      <h3 data-text="exp-promenade-title">Promenaden</h3>
-      <p data-text="exp-promenade-desc">Sjøpromenaden i Balchik. Restauranter, barer og kveldsmusikk.</p>
-    </div>
-  </div>
-
-  <div style="text-align:center;">
-    <a class="tripadvisor-link" href="https://www.getyourguide.com/varna-l1116/" target="_blank" rel="noopener" data-text="getyourguide-link">Utforsk flere på GetYourGuide →</a>
-  </div>
-</div>
-```
-
   </section>
 
   <!-- KART -->
-
   <section id="kart">
     <div class="section-wrap">
       <p class="section-eyebrow" data-text="map-eyebrow">Geografi</p>
       <h2 class="section-title" data-text="map-title">På kartet</h2>
       <div class="divider"><span class="divider-icon">✦</span></div>
 
-```
-  <p class="section-sub" data-text="map-intro">Trykk på markørene for detaljer.</p>
+      <p class="section-sub" data-text="map-intro">Trykk på markørene for detaljer.</p>
 
-  <div id="map" class="map-container"></div>
+      <div id="map" class="map-container"></div>
 
-  <div class="map-legend">
-    <div class="legend-item"><span class="legend-marker legend-venue"></span><span data-text="legend-venue">Vårt sted</span></div>
-    <div class="legend-item"><span class="legend-marker legend-town"></span><span data-text="legend-town">Byer & resorter</span></div>
-    <div class="legend-item"><span class="legend-marker legend-sight"></span><span data-text="legend-sight">Severdigheter</span></div>
-  </div>
-</div>
-```
-
+      <div class="map-legend">
+        <div class="legend-item"><span class="legend-marker legend-venue"></span><span data-text="legend-venue">Vårt sted</span></div>
+        <div class="legend-item"><span class="legend-marker legend-town"></span><span data-text="legend-town">Byer & resorter</span></div>
+        <div class="legend-item"><span class="legend-marker legend-sight"></span><span data-text="legend-sight">Severdigheter</span></div>
+      </div>
+    </div>
   </section>
 
   <!-- RESTAURANTER -->
-
   <section id="restauranter">
     <div class="section-wrap" style="text-align:center;">
       <p class="section-eyebrow" data-text="rest-eyebrow">Mat</p>
       <h2 class="section-title" data-text="rest-title">Stedene vi går tilbake til</h2>
       <div class="divider"><span class="divider-icon">✦</span></div>
 
-```
-  <p class="section-sub" data-text="rest-intro">Tre favoritter. Resten finner dere selv.</p>
+      <p class="section-sub" data-text="rest-intro">Fire favoritter. Resten finner dere selv.</p>
 
-  <div class="restaurants-grid" style="text-align:left;">
-    <div class="restaurant-card">
-      <p class="restaurant-type" data-text="rest-1-type">Skjellfarm</p>
-      <h3>Dalboka</h3>
-      <p class="restaurant-location" data-text="rest-1-loc">Kaliakra-bukten</p>
-      <p data-text="rest-1-desc">Skjell rett fra havet. Spis ved bukten, gjerne en kveld.</p>
+      <div class="restaurants-grid" style="text-align:left;">
+        <div class="restaurant-card">
+          <p class="restaurant-type" data-text="rest-1-type">Tavernaer & promenade</p>
+          <h3 data-text="rest-1-title">Balchik</h3>
+          <p class="restaurant-location" data-text="rest-1-loc">Sjøfronten</p>
+          <p data-text="rest-1-desc">Tavernaer langs vannet, småprat med lokale, og kvelder som ikke vil ta slutt. Velg en med utsikt og bestill det fra havet.</p>
+        </div>
+        <div class="restaurant-card">
+          <p class="restaurant-type" data-text="rest-2-type">Middelhav</p>
+          <h3 data-text="rest-2-title">Villa Chinka</h3>
+          <p class="restaurant-location" data-text="rest-2-loc">Sts. Konstantin og Helena</p>
+          <p data-text="rest-2-desc">Italiensk og middelhavsmat med lokale råvarer og utsikt rett mot Svartehavet. Et fint valg for en stille, vakker kveld.</p>
+        </div>
+        <div class="restaurant-card">
+          <p class="restaurant-type" data-text="rest-3-type">Fersk fisk</p>
+          <h3 data-text="rest-3-title">Tyulenovo</h3>
+          <p class="restaurant-location" data-text="rest-3-loc">Klippekysten i nord</p>
+          <p data-text="rest-3-desc">Liten fiskerlandsby ved dramatiske klipper. Restauranten ligger nesten i vannet, fisken kommer rett fra båtene. Litt kjøretur — verdt det.</p>
+        </div>
+        <div class="restaurant-card">
+          <p class="restaurant-type" data-text="rest-4-type">Yachthavn</p>
+          <h3 data-text="rest-4-title">Varna marina</h3>
+          <p class="restaurant-location" data-text="rest-4-loc">Sentrale Varna</p>
+          <p data-text="rest-4-desc">Yachthavnen i Varna med restauranter og barer langs vannet. Liv, kveldssol og et godt utgangspunkt for en lang middag.</p>
+        </div>
+      </div>
+
+      <a class="tripadvisor-link" href="https://www.tripadvisor.com/Restaurants-g616071-c33-Varna_Province.html" target="_blank" rel="noopener" data-text="tripadvisor-link">Flere tips på TripAdvisor →</a>
     </div>
-
-    <div class="restaurant-card">
-      <p class="restaurant-type" data-text="rest-2-type">Fisk</p>
-      <h3>Captain Cook</h3>
-      <p class="restaurant-location" data-text="rest-2-loc">Golden Sands</p>
-      <p data-text="rest-2-desc">Bryggen, båtene, fisk fra Svartehavet.</p>
-    </div>
-
-    <div class="restaurant-card">
-      <p class="restaurant-type" data-text="rest-3-type">Lokal mat</p>
-      <h3 data-text="rest-3-title">Tavernaene i Balchik</h3>
-      <p class="restaurant-location" data-text="rest-3-loc">Sjøpromenaden</p>
-      <p data-text="rest-3-desc">Mange små steder langs promenaden. Velg en med utsikt.</p>
-    </div>
-  </div>
-
-  <a class="tripadvisor-link" href="https://www.tripadvisor.com/Restaurants-g616071-c33-Varna_Province.html" target="_blank" rel="noopener" data-text="tripadvisor-link">Flere tips på TripAdvisor →</a>
-</div>
-```
-
   </section>
 
   <!-- RSVP -->
-
   <section id="paamelding">
     <div class="section-wrap">
       <p class="section-eyebrow" data-text="rsvp-eyebrow">Påmelding</p>
       <h2 class="section-title" data-text="rsvp-title">Si fra om dere kommer</h2>
       <div class="divider"><span class="divider-icon">✦</span></div>
 
-```
-  <p class="section-sub" data-text="rsvp-text">
-    Helst så snart dere vet — det hjelper oss å planlegge.
-  </p>
+      <p class="section-sub" data-text="rsvp-text">
+        Helst så snart dere vet — det hjelper oss å planlegge.
+      </p>
 
-  <form name="paamelding" method="POST" data-netlify="true" action="/thank-you.html" id="rsvp-form" class="rsvp-step">
-    <input type="hidden" name="form-name" value="paamelding" />
-    <input type="hidden" name="registrert_fra" value="Wedding Website" />
+      <form name="paamelding" method="POST" data-netlify="true" action="/thank-you.html" id="rsvp-form" class="rsvp-step">
+        <input type="hidden" name="form-name" value="paamelding" />
+        <input type="hidden" name="registrert_fra" value="Wedding Website" />
 
-    <div class="form-grid">
-      <div class="form-group">
-        <p class="form-person-label" data-text="form-attending">KAN DU KOMME?</p>
-        <div class="form-radio-group">
-          <label class="form-radio">
-            <input type="radio" name="deltar" value="ja" onchange="toggleAttendance()" required />
-            <span data-text="form-yes">Ja, jeg kommer</span>
-          </label>
-          <label class="form-radio">
-            <input type="radio" name="deltar" value="nei" onchange="toggleAttendance()" required />
-            <span data-text="form-no">Nei, dessverre ikke denne gangen</span>
-          </label>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label" for="navn" data-text="form-name">NAVN</label>
-        <input class="form-input" id="navn" type="text" name="navn" required placeholder="Ditt navn" />
-      </div>
-
-      <div class="form-group">
-        <label class="form-label" for="epost" data-text="form-email">MAIL</label>
-        <input class="form-input" id="epost" type="email" name="epost" required placeholder="din@mail.no" />
-      </div>
-
-      <div id="attending-fields" style="display:none;">
-        <div class="form-grid" style="margin-top:0;">
+        <div class="form-grid">
           <div class="form-group">
-            <label class="form-label" for="telefon" data-text="form-phone">TELEFON</label>
-            <input class="form-input" id="telefon" type="tel" name="telefon" placeholder="+47 000 00 000" />
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="folge_navn" data-text="form-companion">FØLGETS NAVN</label>
-            <input class="form-input" id="folge_navn" type="text" name="folge_navn" placeholder="Hvis du kommer med følge" />
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" data-text="form-allergi">ALLERGI / KOSTHOLD</label>
-            <div class="allergy-grid">
-              <label class="allergy-item"><input type="checkbox" name="allergi_ingen" value="Ingen allergi" /> <span data-text="allergy-none">Ingen allergi</span></label>
-              <label class="allergy-item"><input type="checkbox" name="allergi_melk" value="Melk/laktose" /> <span data-text="allergy-dairy">Melk / laktose</span></label>
-              <label class="allergy-item"><input type="checkbox" name="allergi_egg" value="Egg" /> <span data-text="allergy-egg">Egg</span></label>
-              <label class="allergy-item"><input type="checkbox" name="allergi_notter" value="Nøtter" /> <span data-text="allergy-nuts">Nøtter</span></label>
-              <label class="allergy-item"><input type="checkbox" name="allergi_gluten" value="Gluten" /> <span data-text="allergy-gluten">Gluten</span></label>
-              <label class="allergy-item"><input type="checkbox" name="allergi_fisk" value="Fisk" /> <span data-text="allergy-fish">Fisk</span></label>
-              <label class="allergy-item"><input type="checkbox" name="allergi_skalldyr" value="Skalldyr" /> <span data-text="allergy-shellfish">Skalldyr</span></label>
-              <label class="allergy-item allergy-item--wide"><input type="checkbox" name="allergi_vegetar" value="Vegetar" /> <span data-text="allergy-vegetarian">Vegetar</span></label>
+            <p class="form-person-label" data-text="form-attending">KAN DU KOMME?</p>
+            <div class="form-radio-group">
+              <label class="form-radio">
+                <input type="radio" name="deltar" value="ja" onchange="toggleAttendance()" required />
+                <span data-text="form-yes">Ja, jeg kommer</span>
+              </label>
+              <label class="form-radio">
+                <input type="radio" name="deltar" value="nei" onchange="toggleAttendance()" required />
+                <span data-text="form-no">Nei, dessverre ikke denne gangen</span>
+              </label>
             </div>
-            <input class="form-input" style="margin-top:0.7rem;" type="text" name="allergi_annet" placeholder="Annet / merknad til kjøkken" />
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="melding" data-text="form-message">MELDING TIL BRUDEPARET</label>
-            <textarea class="form-input form-textarea" id="melding" name="melding" placeholder="Noe du vil si til Silje og Kjeld?"></textarea>
+            <label class="form-label" for="navn" data-text="form-name">NAVN</label>
+            <input class="form-input" id="navn" type="text" name="navn" required placeholder="Ditt navn" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="epost" data-text="form-email">MAIL</label>
+            <input class="form-input" id="epost" type="email" name="epost" required placeholder="din@mail.no" />
+          </div>
+
+          <div id="attending-fields" style="display:none;">
+            <div class="form-grid" style="margin-top:0;">
+              <div class="form-group">
+                <label class="form-label" for="telefon" data-text="form-phone">TELEFON</label>
+                <input class="form-input" id="telefon" type="tel" name="telefon" placeholder="+47 000 00 000" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="folge_navn" data-text="form-companion">FØLGETS NAVN</label>
+                <input class="form-input" id="folge_navn" type="text" name="folge_navn" placeholder="Hvis du kommer med følge" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" data-text="form-allergi">ALLERGI / KOSTHOLD</label>
+                <div class="allergy-grid">
+                  <label class="allergy-item"><input type="checkbox" name="allergi_ingen" value="Ingen allergi" /> <span data-text="allergy-none">Ingen allergi</span></label>
+                  <label class="allergy-item"><input type="checkbox" name="allergi_melk" value="Melk/laktose" /> <span data-text="allergy-dairy">Melk / laktose</span></label>
+                  <label class="allergy-item"><input type="checkbox" name="allergi_egg" value="Egg" /> <span data-text="allergy-egg">Egg</span></label>
+                  <label class="allergy-item"><input type="checkbox" name="allergi_notter" value="Nøtter" /> <span data-text="allergy-nuts">Nøtter</span></label>
+                  <label class="allergy-item"><input type="checkbox" name="allergi_gluten" value="Gluten" /> <span data-text="allergy-gluten">Gluten</span></label>
+                  <label class="allergy-item"><input type="checkbox" name="allergi_fisk" value="Fisk" /> <span data-text="allergy-fish">Fisk</span></label>
+                  <label class="allergy-item"><input type="checkbox" name="allergi_skalldyr" value="Skalldyr" /> <span data-text="allergy-shellfish">Skalldyr</span></label>
+                  <label class="allergy-item allergy-item--wide"><input type="checkbox" name="allergi_vegetar" value="Vegetar" /> <span data-text="allergy-vegetarian">Vegetar</span></label>
+                </div>
+                <input class="form-input" style="margin-top:0.7rem;" type="text" name="allergi_annet" placeholder="Annet / merknad til kjøkken" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="melding" data-text="form-message">MELDING TIL BRUDEPARET</label>
+                <textarea class="form-input form-textarea" id="melding" name="melding" placeholder="Noe du vil si til Silje og Kjeld?"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div id="not-attending-fields" style="display:none;">
+            <div class="form-group">
+              <label class="form-label" for="melding_kommer_ikke" data-text="form-message-no">MELDING TIL BRUDEPARET</label>
+              <textarea class="form-input form-textarea" id="melding_kommer_ikke" name="melding_kommer_ikke" placeholder="Skriv gjerne en kort hilsen"></textarea>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="form-submit" data-text="form-submit">Send svar</button>
           </div>
         </div>
-      </div>
-
-      <div id="not-attending-fields" style="display:none;">
-        <div class="form-group">
-          <label class="form-label" for="melding_kommer_ikke" data-text="form-message-no">MELDING TIL BRUDEPARET</label>
-          <textarea class="form-input form-textarea" id="melding_kommer_ikke" name="melding_kommer_ikke" placeholder="Skriv gjerne en kort hilsen"></textarea>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <button type="submit" class="form-submit" data-text="form-submit">Send svar</button>
-      </div>
+      </form>
     </div>
-  </form>
-</div>
-```
-
   </section>
 
   <footer>
@@ -1835,16 +1469,25 @@
         'nav-home': 'Hjem',
         'nav-plan': 'Planen',
         'nav-destination': 'Området',
+        'nav-practical': 'Praktisk',
         'nav-activities': 'Opplevelser',
         'nav-map': 'Kart',
         'nav-rsvp': 'Påmelding',
         'hero-invite': 'Du er invitert til vårt bryllup',
         'hero-meta-date': 'Sensommer 2027',
         'hero-meta-place': 'Dato kommer',
-        'letter-salutation': 'Til familie og venner,',
-        'letter-1': 'Vi gifter oss i Bulgaria, ved Svartehavet — i området rundt Balchik og Albena. Silje har familie i Bulgaria, og det er et sted som betyr mye for oss. Derfor ønsker vi å samle familie og venner akkurat her.',
-        'letter-2': 'Vi håper dere har lyst til å komme og feire sammen med oss. Datoen er ikke helt satt ennå, men bryllupet blir i sensommeren 2027.',
-        'letter-3': 'Nærmeste flyplass er Varna. Mer praktisk informasjon kommer etter hvert.',
+        'opening-statement-1': 'Bulgaria. Sommer. Svartehavet.',
+        'opening-statement-2': 'Og et bryllup midt i det hele.',
+        'opening-invite': 'Vi håper dere vil bli med til Bulgaria — ikke bare for bryllupet, men for hele opplevelsen. Lange sommerdager ved Svartehavet, gode middager, varme kvelder og tid sammen.',
+        'opening-closer': 'Gjør bryllupet vårt til en del av sommerferien.',
+        'hilsen-eyebrow': 'Personlig hilsen',
+        'hilsen-1': 'Bulgaria har en spesiell plass i hjertene våre.',
+        'hilsen-2': 'Silje har stor familie her, og gjennom mange reiser hit har stedet blitt en viktig del av livet vårt. Vi trives her, senker skuldrene og finner roen.',
+        'hilsen-3': 'Tanken på et lyst og varmt sommerbryllup ved Svartehavet føltes derfor helt riktig for oss.',
+        'hilsen-4': 'BlackSeaRama oppdaget vi på en av reisene våre. Vi spiste lunsj der, gikk langs golfbanen og ble sittende og se utover havet og klippene.',
+        'hilsen-5-intro': 'Det tok ikke lang tid før vi begge tenkte:',
+        'hilsen-quote': '"Det er her vi vil si ja."',
+        'hilsen-6': 'Nå gleder vi oss til å dele dette stedet med dere.',
         'planen-eyebrow': 'Foreløpig',
         'planen-title': 'Planen',
         'planen-intro': 'Slik tenker vi det nå:',
@@ -1863,21 +1506,42 @@
         'balchik-pier-desc': 'Hvite hus klatrer opp kalksteinklippene. Promenaden går langs vannet.',
         'balchik-beach-title': 'Stranden',
         'balchik-beach-desc': 'Stille bukter, mykt vann. Solnedgangene er av den slag man husker.',
-        'venue-eyebrow': 'Bryllupet',
-        'venue-title': 'Vårt sted',
-        'venue-tagline': 'Hvor vi sier ja',
-        'venue-subtitle': 'Golf & Villas Resort',
-        'venue-intro': 'Bryllupet er her — på en kant 200 meter over havet, like utenfor Balchik.',
-        'venue-location-label': 'Beliggenhet',
-        'venue-location-title': 'På klippen',
-        'venue-location-desc': 'Villaer langs ryggen, fire restauranter, og utsikt helt til Kaliakra.',
-        'venue-ceremony-label': 'Vielsen',
-        'venue-ceremony-title': 'Amfiteateret',
-        'venue-ceremony-desc': 'Vi sier ja under åpen himmel, med havet bak oss.',
-        'venue-reception-label': 'Festen',
-        'venue-reception-title': 'EVENTUM',
-        'venue-reception-desc': 'Stor, lys, åpen mot havet. Her blir det heidundrende.',
-        'venue-link-text': 'Se Black Sea Rama →',
+        'practical-eyebrow': 'Praktisk',
+        'practical-title': 'Greit å vite',
+        'reise-section-label': 'Reise',
+        'reise-text': 'Nærmeste flyplass er Varna (VAR). I sommersesongen går det direktefly fra Oslo med både charter og rutefly, blant annet gjennom Ving, TUI og Norwegian. Mange velger også å kombinere bryllupet med en ferieuke ved Svartehavet.',
+        'info-section-label': 'Praktisk informasjon',
+        'travel-schengen-label': 'Schengen',
+        'travel-schengen-text': 'Bulgaria er medlem av Schengen, så norske gjester trenger kun gyldig pass eller nasjonalt ID-kort.',
+        'travel-currency-label': 'Valuta',
+        'travel-currency-text': 'Valutaen er euro (€), og vanlige norske bankkort fungerer de fleste steder.',
+        'travel-power-label': 'Strøm',
+        'travel-power-text': 'Strømuttak er de samme som i Norge, så adapter er ikke nødvendig.',
+        'hotel-section-label': 'Overnatting',
+        'hotel-intro': 'Vi anbefaler tre alternativer, avhengig av hva slags opphold dere ønsker.',
+        'hotel-balchik-label': 'Sjarmerende kystby',
+        'hotel-balchik-title': 'Balchik',
+        'hotel-balchik-desc': 'Balchik er en rolig og sjarmerende kystby, omtrent 10 minutter fra vielsen. Her finner dere små restauranter, promenade langs sjøen og en mer avslappet atmosfære. Passer perfekt for dere som ønsker å bo nær bryllupet og samtidig oppleve litt av det lokale livet.',
+        'hotel-albena-label': 'Familievennlig resort',
+        'hotel-albena-title': 'Albena',
+        'hotel-albena-desc': 'Albena passer godt for familier og dere som ønsker klassisk sommerferie med strand, resort og hotellområder samlet på ett sted. Her finnes hoteller i flere prisklasser, lange sandstrender og mange aktiviteter.',
+        'hotel-chinka-label': 'Kun for voksne',
+        'hotel-chinka-title': 'Villa Chinka',
+        'hotel-chinka-desc': 'For dere som ønsker å gjøre turen til en liten ferie i seg selv, er Villa Chinka et fantastisk alternativ. Rolig atmosfære og fantastisk utsikt over Svartehavet. Hotellet er kun for voksne.',
+        'hotel-us-note': 'Vi selv skal bo i Obrochishte, like ved Albena — så vi er aldri langt unna.',
+        'dress-section-label': 'Dresscode',
+        'dress-line-1': 'Sommerbryllup ved sjøen.',
+        'dress-line-2': 'For damer: cocktailkjole eller elegant sommerkjole.',
+        'dress-line-3': 'For herrer: dressbukse og skjorte — gjerne uten slips.',
+        'dress-line-4': 'Tenk elegant, lett og sommerlig.',
+        'mat-section-label': 'Maten',
+        'mat-intro': 'Bulgarsk sommermat er enkel, fersk og god. Tre kategorier vi vender tilbake til:',
+        'mat-beach-label': 'På stranden',
+        'mat-beach-text': 'Parlenka med feta og hvitløksbrød.',
+        'mat-starter-label': 'Forretter & salater',
+        'mat-starter-text': 'Shopskasalat og Snezhanka.',
+        'mat-main-label': 'Middag',
+        'mat-main-text': 'Pizza, blåskjell, grillmat.',
         'activities-eyebrow': 'Hvis dere blir lenger',
         'activities-title': 'Anbefalinger',
         'activities-intro': 'Steder og opplevelser vi er glade i. Plukk det dere har lyst på.',
@@ -1909,17 +1573,23 @@
         'legend-restaurant': 'Restauranter',
         'rest-eyebrow': 'Mat',
         'rest-title': 'Stedene vi går tilbake til',
-        'rest-intro': 'Tre favoritter. Resten finner dere selv.',
-        'rest-1-type': 'Skjellfarm',
-        'rest-1-loc': 'Kaliakra-bukten',
-        'rest-1-desc': 'Skjell rett fra havet. Spis ved bukten, gjerne en kveld.',
-        'rest-2-type': 'Fisk',
-        'rest-2-loc': 'Golden Sands',
-        'rest-2-desc': 'Bryggen, båtene, fisk fra Svartehavet.',
-        'rest-3-type': 'Lokal mat',
-        'rest-3-title': 'Tavernaene i Balchik',
-        'rest-3-loc': 'Sjøpromenaden',
-        'rest-3-desc': 'Mange små steder langs promenaden. Velg en med utsikt.',
+        'rest-intro': 'Fire favoritter. Resten finner dere selv.',
+        'rest-1-type': 'Tavernaer & promenade',
+        'rest-1-title': 'Balchik',
+        'rest-1-loc': 'Sjøfronten',
+        'rest-1-desc': 'Tavernaer langs vannet, småprat med lokale, og kvelder som ikke vil ta slutt. Velg en med utsikt og bestill det fra havet.',
+        'rest-2-type': 'Middelhav',
+        'rest-2-title': 'Villa Chinka',
+        'rest-2-loc': 'Sts. Konstantin og Helena',
+        'rest-2-desc': 'Italiensk og middelhavsmat med lokale råvarer og utsikt rett mot Svartehavet. Et fint valg for en stille, vakker kveld.',
+        'rest-3-type': 'Fersk fisk',
+        'rest-3-title': 'Tyulenovo',
+        'rest-3-loc': 'Klippekysten i nord',
+        'rest-3-desc': 'Liten fiskerlandsby ved dramatiske klipper. Restauranten ligger nesten i vannet, fisken kommer rett fra båtene. Litt kjøretur — verdt det.',
+        'rest-4-type': 'Yachthavn',
+        'rest-4-title': 'Varna marina',
+        'rest-4-loc': 'Sentrale Varna',
+        'rest-4-desc': 'Yachthavnen i Varna med restauranter og barer langs vannet. Liv, kveldssol og et godt utgangspunkt for en lang middag.',
         'tripadvisor-link': 'Flere på TripAdvisor →',
         'rsvp-eyebrow': 'Påmelding',
         'rsvp-title': 'Si fra om dere kommer',
@@ -1950,16 +1620,25 @@
         'nav-home': 'Home',
         'nav-plan': 'The plan',
         'nav-destination': 'The area',
+        'nav-practical': 'Practical',
         'nav-activities': 'Experiences',
         'nav-map': 'Map',
         'nav-rsvp': 'RSVP',
         'hero-invite': 'You are invited to our wedding',
         'hero-meta-date': 'Late summer 2027',
         'hero-meta-place': 'Date to come',
-        'letter-salutation': 'Dear family and friends,',
-        'letter-1': "We are getting married in Bulgaria, by the Black Sea — in the area around Balchik and Albena. Silje has family in Bulgaria, and it is a place that means a lot to us. That is why we want to gather family and friends right here.",
-        'letter-2': 'We hope you would like to come and celebrate with us. The date is not quite set yet, but the wedding will be in late summer 2027.',
-        'letter-3': 'The nearest airport is Varna. More practical information will follow.',
+        'opening-statement-1': 'Bulgaria. Summer. The Black Sea.',
+        'opening-statement-2': 'And a wedding in the middle of it all.',
+        'opening-invite': 'We hope you will join us in Bulgaria — not just for the wedding, but for the whole experience. Long summer days by the Black Sea, good dinners, warm evenings and time together.',
+        'opening-closer': 'Make our wedding part of your summer holiday.',
+        'hilsen-eyebrow': 'A personal note',
+        'hilsen-1': 'Bulgaria holds a special place in our hearts.',
+        'hilsen-2': 'Silje has a large family here, and through many trips this place has become an important part of our lives. We are happy here — we let our shoulders drop and find calm.',
+        'hilsen-3': 'The thought of a bright, warm summer wedding by the Black Sea felt entirely right to us.',
+        'hilsen-4': 'We discovered BlackSeaRama on one of our trips. We had lunch there, walked along the golf course, and sat looking out over the sea and the cliffs.',
+        'hilsen-5-intro': 'It did not take long before we both thought:',
+        'hilsen-quote': '"This is where we want to say yes."',
+        'hilsen-6': 'Now we look forward to sharing this place with you.',
         'planen-eyebrow': 'Preliminary',
         'planen-title': 'The plan',
         'planen-intro': 'Here is how we are thinking about it:',
@@ -1978,24 +1657,45 @@
         'balchik-pier-desc': 'White houses climb the limestone cliffs. The promenade runs along the water.',
         'balchik-beach-title': 'The Beach',
         'balchik-beach-desc': 'Quiet bays, soft water. The sunsets are the kind you remember.',
-        'venue-eyebrow': 'The wedding',
-        'venue-title': 'Our venue',
-        'venue-tagline': 'Where we say I do',
-        'venue-subtitle': 'Golf & Villas Resort',
-        'venue-intro': 'The wedding is here — on a ridge 200 metres above the sea, just outside Balchik.',
-        'venue-location-label': 'Location',
-        'venue-location-title': 'On the cliff',
-        'venue-location-desc': 'Villas along the ridge, four restaurants, and views all the way to Kaliakra.',
-        'venue-ceremony-label': 'The Ceremony',
-        'venue-ceremony-title': 'The amphitheatre',
-        'venue-ceremony-desc': 'We say yes under open sky, with the sea behind us.',
-        'venue-reception-label': 'The Celebration',
-        'venue-reception-title': 'EVENTUM',
-        'venue-reception-desc': 'Large, bright, open to the sea. This is where the celebration happens.',
-        'venue-link-text': 'See Black Sea Rama →',
+        'practical-eyebrow': 'Practical',
+        'practical-title': 'Good to know',
+        'reise-section-label': 'Travel',
+        'reise-text': 'The nearest airport is Varna (VAR). During summer, direct flights from Oslo are available with both charter and scheduled airlines, including Ving, TUI and Norwegian. Many guests choose to combine the wedding with a holiday week by the Black Sea.',
+        'info-section-label': 'Practical information',
+        'travel-schengen-label': 'Schengen',
+        'travel-schengen-text': 'Bulgaria is part of Schengen, so guests from Norway only need a valid passport or national ID card.',
+        'travel-currency-label': 'Currency',
+        'travel-currency-text': 'The currency is the euro (€), and standard Norwegian bank cards work in most places.',
+        'travel-power-label': 'Power',
+        'travel-power-text': 'The power sockets are the same as in Norway, so no adapter is needed.',
+        'hotel-section-label': 'Where to stay',
+        'hotel-intro': 'We recommend three options, depending on what kind of stay you want.',
+        'hotel-balchik-label': 'Charming coastal town',
+        'hotel-balchik-title': 'Balchik',
+        'hotel-balchik-desc': 'Balchik is a calm and charming coastal town, about 10 minutes from the venue. You will find small restaurants, a seafront promenade and a more relaxed atmosphere. Perfect for those who want to stay close to the wedding while experiencing some of the local life.',
+        'hotel-albena-label': 'Family-friendly resort',
+        'hotel-albena-title': 'Albena',
+        'hotel-albena-desc': 'Albena is well suited for families and for those who want a classic summer holiday with beach, resort and hotel areas all in one place. Hotels in several price ranges, long sandy beaches and many activities.',
+        'hotel-chinka-label': 'Adults only',
+        'hotel-chinka-title': 'Villa Chinka',
+        'hotel-chinka-desc': 'For those who want to make the trip a little holiday in itself, Villa Chinka is a fantastic option. Calm atmosphere and stunning views over the Black Sea. The hotel is for adults only.',
+        'hotel-us-note': 'We will be staying in Obrochishte, near Albena — so we are never far away.',
+        'dress-section-label': 'Dress code',
+        'dress-line-1': 'Summer wedding by the sea.',
+        'dress-line-2': 'For women: a cocktail dress or an elegant summer dress.',
+        'dress-line-3': 'For men: dress trousers and a shirt — preferably without a tie.',
+        'dress-line-4': 'Think elegant, light and summery.',
+        'mat-section-label': 'The food',
+        'mat-intro': 'Bulgarian summer food is simple, fresh and good. Three categories we keep coming back to:',
+        'mat-beach-label': 'On the beach',
+        'mat-beach-text': 'Parlenka with feta and garlic bread.',
+        'mat-starter-label': 'Starters & salads',
+        'mat-starter-text': 'Shopska salad and Snezhanka.',
+        'mat-main-label': 'Mains',
+        'mat-main-text': 'Pizza, mussels, grilled food.',
         'activities-eyebrow': 'If you stay longer',
         'activities-title': 'Recommendations',
-        'activities-intro': "Places and experiences we love. Pick what you fancy.",
+        'activities-intro': 'Places and experiences we love. Pick what you fancy.',
         'exp-beach-label': 'Albena · Beach',
         'exp-beach-title': 'Beach life',
         'exp-beach-desc': 'Long beaches, warm water, lazy days. Albena was made for summer.',
@@ -2024,24 +1724,30 @@
         'legend-restaurant': 'Restaurants',
         'rest-eyebrow': 'Food',
         'rest-title': 'The places we keep going back to',
-        'rest-intro': 'Three favourites. The rest you can find yourselves.',
-        'rest-1-type': 'Mussel farm',
-        'rest-1-loc': 'Kaliakra Bay',
-        'rest-1-desc': 'Mussels straight from the sea. Eat by the bay, preferably in the evening.',
-        'rest-2-type': 'Fish',
-        'rest-2-loc': 'Golden Sands',
-        'rest-2-desc': 'The pier, the boats, fish from the Black Sea.',
-        'rest-3-type': 'Local food',
-        'rest-3-title': 'The taverns in Balchik',
-        'rest-3-loc': 'The seafront promenade',
-        'rest-3-desc': 'Many small spots along the promenade. Pick one with a view.',
+        'rest-intro': 'Four favourites. The rest you can find yourselves.',
+        'rest-1-type': 'Taverns & promenade',
+        'rest-1-title': 'Balchik',
+        'rest-1-loc': 'The seafront',
+        'rest-1-desc': 'Taverns along the water, small talk with locals, and evenings that do not want to end. Pick one with a view and order from the sea.',
+        'rest-2-type': 'Mediterranean',
+        'rest-2-title': 'Villa Chinka',
+        'rest-2-loc': 'Sts. Constantine and Helena',
+        'rest-2-desc': 'Italian and Mediterranean cooking with local ingredients and views straight to the Black Sea. A lovely choice for a quiet, beautiful evening.',
+        'rest-3-type': 'Fresh fish',
+        'rest-3-title': 'Tyulenovo',
+        'rest-3-loc': 'The cliff coast in the north',
+        'rest-3-desc': 'A small fishing village by dramatic cliffs. The restaurant sits almost on the water, the fish comes straight from the boats. A drive — worth it.',
+        'rest-4-type': 'Yacht harbour',
+        'rest-4-title': 'Varna Marina',
+        'rest-4-loc': 'Central Varna',
+        'rest-4-desc': "Varna's yacht harbour with restaurants and bars along the water. Life, evening sun and a good starting point for a long dinner.",
         'tripadvisor-link': 'More on TripAdvisor →',
         'rsvp-eyebrow': 'RSVP',
         'rsvp-title': 'Let us know if you can come',
         'rsvp-text': 'As soon as you know — it helps us plan.',
         'form-attending': 'CAN YOU COME?',
         'form-yes': 'Yes, I will be there',
-        'form-no': "No, unfortunately not this time",
+        'form-no': 'No, unfortunately not this time',
         'form-name': 'NAME',
         'form-email': 'EMAIL',
         'form-phone': 'PHONE',
@@ -2065,16 +1771,25 @@
         'nav-home': 'Начало',
         'nav-plan': 'Планът',
         'nav-destination': 'Района',
+        'nav-practical': 'Практично',
         'nav-activities': 'Изживявания',
         'nav-map': 'Карта',
         'nav-rsvp': 'RSVP',
         'hero-invite': 'Поканени сте на нашата сватба',
         'hero-meta-date': 'Късно лято 2027',
         'hero-meta-place': 'Дата предстои',
-        'letter-salutation': 'Скъпи семейство и приятели,',
-        'letter-1': 'Ще се венчаем в България, на Черно море — в района около Балчик и Албена. Силе има семейство в България, и това е място, което значи много за нас. Затова искаме да съберем семейство и приятели точно тук.',
-        'letter-2': 'Надяваме се, че ще искате да дойдете и да празнувате с нас. Датата не е напълно определена, но сватбата ще бъде през късното лято на 2027.',
-        'letter-3': 'Най-близкото летище е Варна. Повече практическа информация ще последва.',
+        'opening-statement-1': 'България. Лято. Черно море.',
+        'opening-statement-2': 'И една сватба в средата на всичко.',
+        'opening-invite': 'Надяваме се, че ще се присъедините към нас в България — не само за сватбата, а за цялото изживяване. Дълги летни дни на Черно море, хубави вечери, топли вечери и време заедно.',
+        'opening-closer': 'Направете нашата сватба част от лятната си ваканция.',
+        'hilsen-eyebrow': 'Лично послание',
+        'hilsen-1': 'България има специално място в сърцата ни.',
+        'hilsen-2': 'Силе има голямо семейство тук, и чрез многото ни пътувания това място стана важна част от живота ни. Чувстваме се добре тук, отпускаме раменете и намираме спокойствие.',
+        'hilsen-3': 'Мисълта за ярка и топла лятна сватба на Черно море ни се струваше напълно правилна.',
+        'hilsen-4': 'Открихме BlackSeaRama на едно от пътуванията си. Хапнахме там, разходихме се покрай голф игрището и седяхме гледайки морето и скалите.',
+        'hilsen-5-intro': 'Не отне много време преди и двамата да си помислим:',
+        'hilsen-quote': '„Тук искаме да кажем „да".',
+        'hilsen-6': 'Сега се радваме да споделим това място с вас.',
         'planen-eyebrow': 'Предварителен',
         'planen-title': 'Планът',
         'planen-intro': 'Ето как си го представяме:',
@@ -2093,21 +1808,42 @@
         'balchik-pier-desc': 'Бели къщи се изкачват по варовиковите скали. Алеята минава покрай водата.',
         'balchik-beach-title': 'Плажът',
         'balchik-beach-desc': 'Тихи заливи, меко море. Залезите тук са от онези, които се помнят.',
-        'venue-eyebrow': 'Сватбата',
-        'venue-title': 'Нашето място',
-        'venue-tagline': 'Тук казваме „Да"',
-        'venue-subtitle': 'Golf & Villas Resort',
-        'venue-intro': 'Сватбата е тук — на ръба, 200 метра над морето, малко извън Балчик.',
-        'venue-location-label': 'Местоположение',
-        'venue-location-title': 'На скалата',
-        'venue-location-desc': 'Вили по билото, четири ресторанта, и гледка чак до Калиакра.',
-        'venue-ceremony-label': 'Церемонията',
-        'venue-ceremony-title': 'Амфитеатърът',
-        'venue-ceremony-desc': 'Казваме „Да" под открито небе, с морето зад нас.',
-        'venue-reception-label': 'Празненството',
-        'venue-reception-title': 'EVENTUM',
-        'venue-reception-desc': 'Голяма, светла, открита към морето. Тук ще стане празник.',
-        'venue-link-text': 'Виж Black Sea Rama →',
+        'practical-eyebrow': 'Практично',
+        'practical-title': 'Добре е да знаете',
+        'reise-section-label': 'Пътуване',
+        'reise-text': 'Най-близкото летище е Варна (VAR). През летния сезон има директни полети от Осло с чартър и редовни линии, включително Ving, TUI и Norwegian. Много гости решават да съчетаят сватбата с ваканционна седмица на Черно море.',
+        'info-section-label': 'Практическа информация',
+        'travel-schengen-label': 'Шенген',
+        'travel-schengen-text': 'България е част от Шенген, така че гостите от Норвегия имат нужда само от валиден паспорт или национална лична карта.',
+        'travel-currency-label': 'Валута',
+        'travel-currency-text': 'Валутата е евро (€), и обичайните норвежки банкови карти работят на повечето места.',
+        'travel-power-label': 'Ток',
+        'travel-power-text': 'Електрическите контакти са същите като в Норвегия, така че адаптер не е необходим.',
+        'hotel-section-label': 'Настаняване',
+        'hotel-intro': 'Препоръчваме три варианта, в зависимост от това какъв престой искате.',
+        'hotel-balchik-label': 'Очарователен крайбрежен град',
+        'hotel-balchik-title': 'Балчик',
+        'hotel-balchik-desc': 'Балчик е спокоен и очарователен крайбрежен град, на около 10 минути от сватбата. Тук ще намерите малки ресторанти, крайбрежна алея и по-спокойна атмосфера. Идеално за тези, които искат да отседнат близо до сватбата и същевременно да усетят местния живот.',
+        'hotel-albena-label': 'Семеен курорт',
+        'hotel-albena-title': 'Албена',
+        'hotel-albena-desc': 'Албена е подходяща за семейства и за тези, които искат класическа лятна ваканция с плаж, курорт и хотелски зони на едно място. Хотели в различни ценови нива, дълги пясъчни плажове и много активности.',
+        'hotel-chinka-label': 'Само за възрастни',
+        'hotel-chinka-title': 'Вила Чинка',
+        'hotel-chinka-desc': 'За тези, които искат да направят пътуването малка ваканция сама по себе си, Вила Чинка е фантастичен вариант. Спокойна атмосфера и фантастична гледка към Черно море. Хотелът е само за възрастни.',
+        'hotel-us-note': 'Ние ще отседнем в Оброчище, близо до Албена — така че никога не сме далеч.',
+        'dress-section-label': 'Дрескод',
+        'dress-line-1': 'Лятна сватба на морето.',
+        'dress-line-2': 'За дамите: коктейлна или елегантна лятна рокля.',
+        'dress-line-3': 'За мъжете: панталон и риза — за предпочитане без вратовръзка.',
+        'dress-line-4': 'Мислете елегантно, леко и летно.',
+        'mat-section-label': 'Храната',
+        'mat-intro': 'Българската лятна храна е проста, прясна и вкусна. Три категории, към които се връщаме:',
+        'mat-beach-label': 'На плажа',
+        'mat-beach-text': 'Пърленка със сирене и чеснов хляб.',
+        'mat-starter-label': 'Предястия и салати',
+        'mat-starter-text': 'Шопска салата и Снежанка.',
+        'mat-main-label': 'Основни ястия',
+        'mat-main-text': 'Пица, миди, скара.',
         'activities-eyebrow': 'Ако останете по-дълго',
         'activities-title': 'Препоръки',
         'activities-intro': 'Места и преживявания, които обичаме. Изберете това, което ви се иска.',
@@ -2139,17 +1875,23 @@
         'legend-restaurant': 'Ресторанти',
         'rest-eyebrow': 'Храна',
         'rest-title': 'Местата, в които се връщаме',
-        'rest-intro': 'Три любими. Останалото ще намерите сами.',
-        'rest-1-type': 'Ферма за миди',
-        'rest-1-loc': 'Залив Калиакра',
-        'rest-1-desc': 'Миди направо от морето. Хапнете до залива, най-добре вечер.',
-        'rest-2-type': 'Риба',
-        'rest-2-loc': 'Златни пясъци',
-        'rest-2-desc': 'Пристанът, лодките, риба от Черно море.',
-        'rest-3-type': 'Местна храна',
-        'rest-3-title': 'Кръчмите в Балчик',
-        'rest-3-loc': 'Крайбрежната алея',
-        'rest-3-desc': 'Много малки заведения по алеята. Изберете едно с гледка.',
+        'rest-intro': 'Четири любими. Останалото ще намерите сами.',
+        'rest-1-type': 'Кръчми и алея',
+        'rest-1-title': 'Балчик',
+        'rest-1-loc': 'Крайбрежието',
+        'rest-1-desc': 'Кръчми покрай водата, разговори с местните и вечери, които не искат да свършат. Изберете една с гледка и поръчайте от морето.',
+        'rest-2-type': 'Средиземноморска',
+        'rest-2-title': 'Вила Чинка',
+        'rest-2-loc': 'Св. Св. Константин и Елена',
+        'rest-2-desc': 'Италианска и средиземноморска кухня с местни продукти и гледка направо към Черно море. Прекрасен избор за спокойна, красива вечер.',
+        'rest-3-type': 'Прясна риба',
+        'rest-3-title': 'Тюленово',
+        'rest-3-loc': 'Скалистото крайбрежие на север',
+        'rest-3-desc': 'Малко рибарско селище сред драматични скали. Ресторантът е почти във водата, рибата идва направо от лодките. Малко път е — но си струва.',
+        'rest-4-type': 'Яхтено пристанище',
+        'rest-4-title': 'Варна марина',
+        'rest-4-loc': 'Централна Варна',
+        'rest-4-desc': 'Яхтеното пристанище на Варна с ресторанти и барове покрай водата. Живот, вечерно слънце и чудесна отправна точка за дълга вечеря.',
         'tripadvisor-link': 'Още в TripAdvisor →',
         'rsvp-eyebrow': 'RSVP',
         'rsvp-title': 'Кажете ни дали идвате',
@@ -2191,11 +1933,9 @@
       document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll(`[data-lang="${lang}"]`).forEach(btn => btn.classList.add('active'));
 
-      // Update dropdown trigger label
       const trigger = document.querySelector('.lang-current');
       if (trigger) trigger.textContent = lang.toUpperCase();
 
-      // Close dropdown after selection
       const dropdown = document.getElementById('lang-dropdown');
       if (dropdown) dropdown.classList.remove('open');
 
@@ -2211,7 +1951,6 @@
       dropdown.classList.toggle('open');
     }
 
-    // Close dropdown when clicking outside
     document.addEventListener('click', function(e) {
       const dropdown = document.getElementById('lang-dropdown');
       if (dropdown && !dropdown.contains(e.target)) {
@@ -2281,12 +2020,12 @@
   </script>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
   <script>
     const placeData = [
       { coords: [43.4205, 28.0966], type: 'venue', name: 'Black Sea Rama', labels: { no: 'Vårt sted', en: 'Our venue', bg: 'Нашето място' }, descs: { no: 'Bryllupet er her', en: 'The wedding is here', bg: 'Сватбата е тук' }},
       { coords: [43.4239, 28.1611], type: 'town', name: 'Balchik', labels: { no: 'Kystby', en: 'Coastal town', bg: 'Крайбрежен град' }, descs: { no: 'By med palass og promenade', en: 'Town with palace and promenade', bg: 'Град с дворец и алея' }},
       { coords: [43.3739, 28.0814], type: 'town', name: 'Albena', labels: { no: 'Ferieresort', en: 'Holiday resort', bg: 'Курорт' }, descs: { no: 'Ferieresort med lang strand', en: 'Resort with long beaches', bg: 'Курорт с дълги плажове' }},
+      { coords: [43.4017, 28.0739], type: 'town', name: 'Obrochishte', labels: { no: 'Vårt opphold', en: 'Where we stay', bg: 'Където отсядаме' }, descs: { no: 'Her bor brudeparet', en: 'Where the couple stays', bg: 'Тук отсяда двойката' }},
       { coords: [43.2141, 27.9147], type: 'town', name: 'Varna', labels: { no: 'Storby', en: 'Main city', bg: 'Голям град' }, descs: { no: 'Storby. Flyplass, shopping, kultur.', en: 'Main city. Airport, shopping, culture.', bg: 'Голям град. Летище, шопинг, култура.' }},
       { coords: [43.2885, 28.0405], type: 'town', name: 'Golden Sands', labels: { no: 'Strand & resort', en: 'Beach & resort', bg: 'Плаж и курорт' }, descs: { no: 'Sandstrand og resort', en: 'Sandy beach and resort', bg: 'Пясъчен плаж и курорт' }},
       { coords: [43.2321, 27.8253], type: 'sight', name: 'Varna lufthavn', labels: { no: 'Flyplass', en: 'Airport', bg: 'Летище' }, descs: { no: 'Nærmeste flyplass', en: 'Nearest airport', bg: 'Най-близкото летище' }},
@@ -2345,6 +2084,5 @@
 
     window.addEventListener('load', function() { setTimeout(initMap, 100); });
   </script>
-
 </body>
 </html>
